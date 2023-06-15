@@ -1,38 +1,174 @@
-.App {
-  text-align: center;
+.App{
+    position: relative;
+    max-width: 1280px;
+    margin: 0 auto;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+html,
+body,
+div,
+span,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+abbr,
+address,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+samp,
+small,
+strong,
+sub,
+sup,
+var,
+b,
+i,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section,
+summary,
+time,
+mark,
+audio,
+video,
+a {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-size: 100%;
+    font-weight: normal;
+    vertical-align: baseline;
+    background: transparent;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+html {
+    box-sizing: border-box;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
 }
 
-.App-link {
-  color: #61dafb;
+a {
+    text-decoration: none;
+    color: inherit;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+ul {
+    list-style: none;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+td,
+th {
+    padding: 0;
+}
+
+input,
+select,
+button {
+    margin: 0;
+    vertical-align: middle;
+    border-radius: 0;
+    appearance: none;
+    border: 0;
+    outline: 0;
+    background: transparent;
+}
+
+img,
+video {
+    height: auto;
+    max-width: 100%;
+}
+
+iframe {
+    border: 0;
+}
+
+a,
+span,
+i,
+strong {
+    display: inline-block;
+}
+
+.cl::before {
+    content: "";
+    display: block;
+}
+
+.cl::after {
+    content: "";
+    display: block;
+    clear: both;
+}
+
+.hide {
+    width: 0;
+    height: 0;
+    line-height: 0;
+    text-indent: -9999px;
+    display: block;
+    overflow: hidden;
+    position: absolute;
+}
+
+.blind {
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    display: inline-block;
+    overflow: hidden;
+    position: absolute;
+    clip-path: polygon(0 0, 0 0, 0 0, 0 0);
 }

@@ -1,7 +1,7 @@
-.App{
-    position: relative;
-    max-width: 1280px;
-    margin: 0 auto;
+.App {
+  position: relative;
+  max-width: 1280px;
+  margin: 0 auto;
 }
 
 html,
@@ -74,101 +74,101 @@ mark,
 audio,
 video,
 a {
-    margin: 0;
-    padding: 0;
-    border: 0;
-    outline: 0;
-    font-size: 100%;
-    font-weight: normal;
-    vertical-align: baseline;
-    background: transparent;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font-size: 100%;
+  font-weight: normal;
+  vertical-align: baseline;
+  background: transparent;
 }
 
 html {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 *,
 *::before,
 *::after {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 a {
-    text-decoration: none;
-    color: inherit;
+  text-decoration: none;
+  color: inherit;
 }
 
 ul {
-    list-style: none;
+  list-style: none;
 }
 
 table {
-    border-collapse: collapse;
-    border-spacing: 0;
+  border-collapse: collapse;
+  border-spacing: 0;
 }
 
 td,
 th {
-    padding: 0;
+  padding: 0;
 }
 
 input,
 select,
 button {
-    margin: 0;
-    vertical-align: middle;
-    border-radius: 0;
-    appearance: none;
-    border: 0;
-    outline: 0;
-    background: transparent;
+  margin: 0;
+  vertical-align: middle;
+  border-radius: 0;
+  appearance: none;
+  border: 0;
+  outline: 0;
+  background: transparent;
 }
 
 img,
 video {
-    height: auto;
-    max-width: 100%;
+  height: auto;
+  max-width: 100%;
 }
 
 iframe {
-    border: 0;
+  border: 0;
 }
 
 a,
 span,
 i,
 strong {
-    display: inline-block;
+  display: inline-block;
 }
 
 .cl::before {
-    content: "";
-    display: block;
+  content: '';
+  display: block;
 }
 
 .cl::after {
-    content: "";
-    display: block;
-    clear: both;
+  content: '';
+  display: block;
+  clear: both;
 }
 
 .hide {
-    width: 0;
-    height: 0;
-    line-height: 0;
-    text-indent: -9999px;
-    display: block;
-    overflow: hidden;
-    position: absolute;
+  width: 0;
+  height: 0;
+  line-height: 0;
+  text-indent: -9999px;
+  display: block;
+  overflow: hidden;
+  position: absolute;
 }
 
 .blind {
-    width: 1px;
-    height: 1px;
-    margin: -1px;
-    display: inline-block;
-    overflow: hidden;
-    position: absolute;
-    clip-path: polygon(0 0, 0 0, 0 0, 0 0);
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  display: inline-block;
+  overflow: hidden;
+  position: absolute;
+  clip-path: polygon(0 0, 0 0, 0 0, 0 0);
 }

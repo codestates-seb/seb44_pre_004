@@ -1,7 +1,9 @@
 package fourtuna.stackoverflowclone.question.service;
 
+import fourtuna.stackoverflowclone.exception.BusinessLogicException;
+import fourtuna.stackoverflowclone.exception.ExceptionCode;
 import fourtuna.stackoverflowclone.member.entity.Member;
-import fourtuna.stackoverflowclone.member.repository.MemberRepository;
+import fourtuna.stackoverflowclone.member.service.MemberService;
 import fourtuna.stackoverflowclone.question.dto.CreateQuestion;
 import fourtuna.stackoverflowclone.question.entity.Question;
 import fourtuna.stackoverflowclone.question.repository.QuestionRepository;
@@ -28,7 +30,7 @@ class QuestionServiceTest {
     @Mock
     private QuestionRepository questionRepository;
     @Mock
-    private MemberRepository memberRepository;
+    private MemberService memberService;
 
     @InjectMocks
     private QuestionService questionService;
@@ -48,8 +50,8 @@ class QuestionServiceTest {
                 .content("새로작성한 글입니다.")
                 .member(member).build();
 
-        given(memberRepository.findByEmail(anyString()))
-                .willReturn(Optional.of(member));
+        given(memberService.findMemberByEmail(anyString()))
+                .willReturn(member);
 
         given(questionRepository.save(any()))
                 .willReturn(question);
@@ -69,25 +71,18 @@ class QuestionServiceTest {
     }
 
     @Test
-    @DisplayName("질문 생성 실패 - 멤버가 존재하지 않는 경우")
-    void createQuestion_FAIL_MemberNotFound() {
+    @DisplayName("질문이 존재하지 않을 때")
+    void findQuestion_FAIL() {
         // given
-        Member member = Member.builder()
-                .memberId(1L)
-                .email("test@test.com").build();
-
-        given(memberRepository.findByEmail(anyString()))
+        given(questionRepository.findById(anyLong()))
                 .willReturn(Optional.empty());
 
-        CreateQuestion.Request request = new CreateQuestion.Request("두번째새로작성한글", "두번쨰 새로작성한 글입니다.");
-
-
         // when
-        RuntimeException e = assertThrows(RuntimeException.class,
-                () -> questionService.createQuestion(request, "test2@test2.com"));
+        BusinessLogicException exception = assertThrows(BusinessLogicException.class,
+                () -> questionService.findQuestion(2L));
 
         // then
-        assertThat(e.getMessage()).isEqualTo("존재하지 않는 사용자입니다.");
+        assertThat(exception.getExceptionCode()).isEqualTo(ExceptionCode.QUESTION_NOT_FOUND);
     }
 
     @Test
@@ -107,8 +102,8 @@ class QuestionServiceTest {
         given(questionRepository.findById(anyLong()))
                 .willReturn(Optional.ofNullable(question));
 
-        given(memberRepository.findByEmail(anyString()))
-                .willReturn(Optional.ofNullable(member));
+        given(memberService.findMemberByEmail(anyString()))
+                .willReturn(member);
 
         ArgumentCaptor<Question> captor = ArgumentCaptor.forClass(Question.class);
         ArgumentCaptor<Long> captorLong = ArgumentCaptor.forClass(Long.class);
@@ -119,51 +114,12 @@ class QuestionServiceTest {
 
         // then
         verify(questionRepository, times(1)).findById(captorLong.capture());
-        verify(memberRepository, times(1)).findByEmail(captorString.capture());
+        verify(memberService, times(1)).findMemberByEmail(captorString.capture());
         verify(questionRepository, times(1)).delete(captor.capture());
         assertThat(captorLong.getValue()).isEqualTo(2L);
         assertThat(captorString.getValue()).isEqualTo("test2@test2.com");
         assertThat(captor.getValue().getQuestionId()).isEqualTo(1L);
         assertThat(captor.getValue().getMember().getMemberId()).isEqualTo(1L);
-    }
-
-    @Test
-    @DisplayName("질문 삭제 실패 - 질문이 존재하지 않을 때")
-    void deleteQuestion_FAIL_NotFoundQuestion() {
-        // given
-        given(questionRepository.findById(anyLong()))
-                .willReturn(Optional.empty());
-
-        // when
-        RuntimeException exception = assertThrows(RuntimeException.class,
-                () -> questionService.deleteQuestion(2L, "test2@test2.com"));
-
-        // then
-        assertThat(exception.getMessage()).isEqualTo("존재하지 않는 질문입니다.");
-    }
-
-    @Test
-    @DisplayName("질문 삭제 실패 - 멤버가 존재하지 않을 때")
-    void deleteQuestion_FAIL_NotFoundMember() {
-        Question question = Question.builder()
-                .questionId(1L)
-                .title("새로작성한글")
-                .content("새로작성한 글입니다.")
-                .member(new Member()).build();
-
-        // given
-        given(questionRepository.findById(anyLong()))
-                .willReturn(Optional.of(question));
-
-        given(memberRepository.findByEmail(anyString()))
-                .willReturn(Optional.empty());
-
-        // when
-        RuntimeException exception = assertThrows(RuntimeException.class,
-                () -> questionService.deleteQuestion(2L, "test2@test2.com"));
-
-        // then
-        assertThat(exception.getMessage()).isEqualTo("존재하지 않는 사용자입니다.");
     }
 
     @Test
@@ -187,12 +143,12 @@ class QuestionServiceTest {
         given(questionRepository.findById(anyLong()))
                 .willReturn(Optional.of(question));
 
-        given(memberRepository.findByEmail(anyString()))
-                .willReturn(Optional.of(member));
+        given(memberService.findMemberByEmail(anyString()))
+                .willReturn(member);
 
         // when
-        RuntimeException exception = assertThrows(RuntimeException.class,
-                () -> questionService.deleteQuestion(2L, "test2@test2.com"));
+        BusinessLogicException exception = assertThrows(BusinessLogicException.class,
+                () -> questionService.deleteQuestion(2L, "test@Te"));
 
         // then
         assertThat(exception.getMessage()).isEqualTo("해당 질문의 작성자가 아닙니다.");

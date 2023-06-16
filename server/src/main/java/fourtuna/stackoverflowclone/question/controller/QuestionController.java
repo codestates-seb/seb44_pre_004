@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/qna")
+@RequestMapping("/qna/question")
 @RequiredArgsConstructor
 public class QuestionController {
 
     private final QuestionService questionService;
 
     // 응답데이터에 성공응답 실패응답 어떻게 처리할 것인지 예외는 어떤 형식으로 반환할 것인지
-    @PostMapping("/ask")
+    @PostMapping
     public ResponseEntity<CreateQuestion.Response> createQuestion(
             @RequestBody @Valid CreateQuestion.Request request/*,
             @RequestHeader("Authorization") String token*/) {

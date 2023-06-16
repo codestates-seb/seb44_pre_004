@@ -1,11 +1,9 @@
 package fourtuna.stackoverflowclone.member.entity;
 
+import fourtuna.stackoverflowclone.audit.Auditable;
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Getter
 @Setter
@@ -13,13 +11,18 @@ import javax.persistence.Id;
 @NoArgsConstructor
 @Builder
 @Entity
-public class Member {
+public class Member extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
     private long memberId;
+
+    @Column(nullable = false)
     private String email;
-    private String name;
+    @Column(nullable = false)
     private String password;
+    @Column(nullable = false)
+    private String name;
     private String image;
     private String title;
     private String aboutMe;

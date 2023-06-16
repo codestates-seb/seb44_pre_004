@@ -15,7 +15,7 @@ import javax.persistence.*;
 public class Question extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(nullable = false)
     private Long questionId;
 
     @Column(nullable = false)

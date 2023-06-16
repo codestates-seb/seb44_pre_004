@@ -5,6 +5,7 @@ import fourtuna.stackoverflowclone.exception.ExceptionCode;
 import fourtuna.stackoverflowclone.member.entity.Member;
 import fourtuna.stackoverflowclone.member.service.MemberService;
 import fourtuna.stackoverflowclone.question.dto.CreateQuestion;
+import fourtuna.stackoverflowclone.question.dto.UpdateQuestion;
 import fourtuna.stackoverflowclone.question.entity.Question;
 import fourtuna.stackoverflowclone.question.repository.QuestionRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -17,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
+import static fourtuna.stackoverflowclone.exception.ExceptionCode.UNMATCHED_WRITER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.*;
@@ -151,6 +153,102 @@ class QuestionServiceTest {
                 () -> questionService.deleteQuestion(2L, "test@Te"));
 
         // then
-        assertThat(exception.getMessage()).isEqualTo("해당 질문의 작성자가 아닙니다.");
+        assertThat(exception.getExceptionCode()).isEqualTo(UNMATCHED_WRITER);
+    }
+
+    @Test
+    @DisplayName("질문 수정 성공 - 둘 다 null이 아닐 때")
+    void updateQuestion_SUCCESS_Not_Null() {
+
+        Member member = Member.builder()
+                .memberId(1L)
+                .email("test@test.com").build();
+
+        Question question = Question.builder()
+                .questionId(1L)
+                .title("새로작성한글")
+                .content("새로작성한 글입니다.")
+                .member(member).build();
+
+        UpdateQuestion.Request request = new UpdateQuestion.Request("글", "내용");
+
+        // given
+        given(questionRepository.findById(anyLong()))
+                .willReturn(Optional.of(question));
+
+        given(memberService.findMemberByEmail(anyString()))
+                .willReturn(member);
+
+        // when
+        UpdateQuestion.Response response = questionService.updateQuestion(request, 2L, "test2@test2.com");
+
+        // then
+        assertThat(response.getTitle()).isEqualTo(request.getTitle());
+        assertThat(response.getBody()).isEqualTo(request.getBody());
+        assertThat(response.getQuestionId()).isEqualTo(question.getQuestionId());
+    }
+
+    @Test
+    @DisplayName("질문 수정 성공 - title이 null일 때")
+    void updateQuestion_SUCCESS_Title_Null() {
+
+        Member member = Member.builder()
+                .memberId(1L)
+                .email("test@test.com").build();
+
+        Question question = Question.builder()
+                .questionId(1L)
+                .title("새로작성한글")
+                .content("새로작성한 글입니다.")
+                .member(member).build();
+
+        UpdateQuestion.Request request = new UpdateQuestion.Request(null, "내용");
+
+        // given
+        given(questionRepository.findById(anyLong()))
+                .willReturn(Optional.of(question));
+
+        given(memberService.findMemberByEmail(anyString()))
+                .willReturn(member);
+
+        // when
+        UpdateQuestion.Response response = questionService.updateQuestion(request, 2L, "test2@test2.com");
+
+        // then
+        assertThat(response.getTitle()).isEqualTo(question.getTitle());
+        assertThat(response.getBody()).isEqualTo(request.getBody());
+        assertThat(response.getQuestionId()).isEqualTo(question.getQuestionId());
+    }
+
+    @Test
+    @DisplayName("질문 수정 성공 - Content가 null일 때")
+    void updateQuestion_SUCCESS_Content_Null() {
+
+        Member member = Member.builder()
+                .memberId(1L)
+                .email("test@test.com").build();
+
+        Question question = Question.builder()
+                .questionId(1L)
+                .title("새로작성한글")
+                .content("새로작성한 글입니다.")
+                .member(member).build();
+
+        UpdateQuestion.Request request = new UpdateQuestion.Request("제목", null);
+
+        // given
+        given(questionRepository.findById(anyLong()))
+                .willReturn(Optional.of(question));
+
+        given(memberService.findMemberByEmail(anyString()))
+                .willReturn(member);
+
+        // when
+        UpdateQuestion.Response response = questionService.updateQuestion(request, 2L, "test2@test2.com");
+
+        // then
+        assertThat(response.getTitle()).isEqualTo(request.getTitle());
+        assertThat(response.getBody()).isEqualTo(question.getContent());
+        assertThat(response.getQuestionId()).isEqualTo(question.getQuestionId());
     }
 }

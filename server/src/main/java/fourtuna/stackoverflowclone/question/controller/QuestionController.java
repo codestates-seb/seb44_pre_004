@@ -1,6 +1,7 @@
 package fourtuna.stackoverflowclone.question.controller;
 
 import fourtuna.stackoverflowclone.question.dto.CreateQuestion;
+import fourtuna.stackoverflowclone.question.dto.UpdateQuestion;
 import fourtuna.stackoverflowclone.question.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -31,7 +32,6 @@ public class QuestionController {
         return ResponseEntity.ok(response);
     }
 
-
     @DeleteMapping("/{questionId}")
     public ResponseEntity<?> deleteQuestion(
             @PathVariable Long questionId/*,
@@ -45,4 +45,20 @@ public class QuestionController {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @PatchMapping("/{questionId}")
+    public ResponseEntity<UpdateQuestion.Response> updateQuestion(
+            @PathVariable Long questionId,
+            @RequestBody @Valid UpdateQuestion.Request request/*,
+            @RequestHeader("Authorization") String token*/) {
+
+        // 토큰에서 유저정보 꺼내기
+        // ex) String memberEmail  = tokenProvider.getAuthentication(token).getEmail();
+
+        String memberEmail = "test@test.com";
+        UpdateQuestion.Response response = questionService.updateQuestion(request, questionId, memberEmail);
+
+        return ResponseEntity.ok(response);
+    }
+
 }

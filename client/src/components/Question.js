@@ -1,26 +1,26 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
-const Question = () => {
+const Question = ({ question }) => {
   return (
     <Container>
       <div>
         <RowDiv>
-          <span>{/* votes */} vote</span>
+          <span>{question.voteCount} vote</span>
         </RowDiv>
 
         <RowDiv>
           <div>
-            <span>{/* answers */} answer</span>
+            <span>{question.answerCount} answer</span>
           </div>
         </RowDiv>
       </div>
 
       <ColumDiv>
         <H3>
-          <Link to={`/qna/:qna-id`}>{/* title */}질문 제목</Link>
+          <Link to={`/qna/:qna-id`}>{question.title}</Link>
         </H3>
-        <div>{/* body */}질문 본문</div>
+        <div>{question.body}</div>
         <ColumDiv>
           <AuthorDiv>
             <span>{/* 프로필 이미지 */}🌈</span>

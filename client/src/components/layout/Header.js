@@ -24,12 +24,23 @@ const Header = () => {
         </FlexLeft>
 
         <FlexRight>
+          {/* TODO: 로그인 상태값에 따른 변경 필요 */}
           <Link to="/user/login" onClick={() => setShowNav(false)}>
             <BorderBtn>Log in</BorderBtn>
           </Link>
           <Link to="/user/join" onClick={() => setShowNav(false)}>
             <BlueBtn>Sign up</BlueBtn>
           </Link>
+          {/* 로그인 후 버튼 */}
+          {/* <Link
+            to="/user/:member-id/:username"
+            onClick={() => setShowNav(false)}
+          >
+            <BorderBtn>Mypage</BorderBtn>
+          </Link>
+          <Link to="/logout" onClick={() => setShowNav(false)}>
+            <BlueBtn>Log out</BlueBtn>
+          </Link> */}
         </FlexRight>
       </HeaderWrapper>
     </HeaderContainer>
@@ -44,6 +55,7 @@ const HeaderContainer = styled.header`
   height: 56px;
   border-top: 3px solid var(--orange);
   border-bottom: 1px solid hsl(210, 8%, 85%);
+  background-color: #ffffff;
   .hamburger,
   .close {
     width: 24px;

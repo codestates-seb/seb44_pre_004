@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import Question from '../components/Question';
-import { Link } from 'react-router-dom';
+import Paging from '../components/Paging/Paging';
+import { useState } from 'react';
 
 const questionData = [
   {
@@ -66,6 +67,20 @@ const questionData = [
 ];
 
 const Questions = () => {
+  const itemsPerPage = 5; // Number of items to display per page
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  // Calculate the index range for the questions to display on the current page
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
+  // Get the subset of questions to display on the current page
+  const displayedQuestions = questionData.slice(startIndex, endIndex);
+
   return (
     <>
       <MainComponent>
@@ -75,30 +90,24 @@ const Questions = () => {
         </AskButton>
       </MainComponent>
       <MainComponent>
-        <TotalDiv>{/* total */}23,763,596 questions</TotalDiv>
+        <TotalDiv>{questionData.length} questions</TotalDiv>
         {/* filter 버튼 추가 필요 */}
       </MainComponent>
       <MainComponent>
         <QuestionDiv>
-          {questionData.map((question, index) => (
+          {displayedQuestions.map((question, index) => (
             <Question key={index} question={question} />
           ))}
         </QuestionDiv>
       </MainComponent>
-      <RowWrapDiv>
-        <RowDiv>
-          <Link to={`/qna`}>
-            <PagingButton>1</PagingButton>
-          </Link>
-          <Link to={`/qna`}>
-            <PagingButton>2</PagingButton>
-          </Link>
-          <Link to={`/qna`}>
-            <PagingButton>3</PagingButton>
-          </Link>
-          per page
-        </RowDiv>
-      </RowWrapDiv>
+      <MainComponent>
+        <Paging
+          currentPage={currentPage}
+          onPageChange={handlePageChange}
+          itemsPerPage={itemsPerPage}
+          totalItemsCount={questionData.length}
+        />
+      </MainComponent>
     </>
   );
 };
@@ -136,33 +145,6 @@ const QuestionDiv = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-`;
-
-const RowWrapDiv = styled.div`
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-`;
-
-const RowDiv = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-`;
-
-const PagingButton = styled.button`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  height: 1.8rem;
-  background-color: ${(props) => props.backColor || 'none'};
-  padding: 0.6rem;
-  border: 1px solid #738089;
-
-  cursor: pointer;
 `;
 
 export default Questions;

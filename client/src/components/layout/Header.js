@@ -55,6 +55,7 @@ const HeaderContainer = styled.header`
   height: 56px;
   border-top: 3px solid var(--orange);
   border-bottom: 1px solid hsl(210, 8%, 85%);
+  background-color: #ffffff;
   .hamburger,
   .close {
     width: 24px;

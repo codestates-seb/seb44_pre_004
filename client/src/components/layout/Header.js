@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { menuIdxSlice } from '../../store/menuIdxSlice';
 import { IoMenuSharp, IoCloseSharp } from 'react-icons/io5';
 import styled from 'styled-components';
 import ToggleNav from './ToggleNav';
@@ -7,6 +9,7 @@ import logo from '../../asset/logo.png';
 
 const Header = () => {
   const [showNav, setShowNav] = useState(false);
+  const dispatch = useDispatch();
 
   return (
     <HeaderContainer>
@@ -18,7 +21,13 @@ const Header = () => {
             {!showNav && <IoMenuSharp className="hamburger" />}
             {showNav && <IoCloseSharp className="close" />}
           </button>
-          <Link to="/" onClick={() => setShowNav(false)}>
+          <Link
+            to="/"
+            onClick={() => {
+              setShowNav(false);
+              dispatch(menuIdxSlice.actions.idx(0));
+            }}
+          >
             <img src={logo} alt="stackoverflow logo" />
           </Link>
         </FlexLeft>
@@ -53,6 +62,7 @@ const HeaderContainer = styled.header`
   top: 0;
   width: 100%;
   height: 56px;
+  z-index: 10;
   border-top: 3px solid var(--orange);
   border-bottom: 1px solid hsl(210, 8%, 85%);
   background-color: #ffffff;

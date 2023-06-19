@@ -54,7 +54,7 @@ const ContentsSection = styled.section`
 `;
 
 const MainComponent = styled.div`
-  width: 100%;
+  width: calc(100% - 164px);
 `;
 
 export default RoutingPages;

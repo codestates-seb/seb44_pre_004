@@ -6,7 +6,9 @@ public enum ExceptionCode {
     MEMBER_NOT_FOUND(404, "Member not found"),
     MEMBER_EXISTS(409, "Member exists"),
     QUESTION_NOT_FOUND(404, "Q&A Question not found"),
+
     UNMATCHED_WRITER(403, "작성자가 아닙니다."),
+
     CANNOT_READ_QUESTION(403, "Q&A Question can not read");
 
     @Getter
@@ -20,3 +22,4 @@ public enum ExceptionCode {
         this.message = message;
     }
 }
+

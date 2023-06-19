@@ -17,13 +17,19 @@ public class Member extends Auditable {
     @Column(nullable = false)
     private long memberId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true, updatable = false)
     private String email;
+
     @Column(nullable = false)
     private String password;
+
     @Column(nullable = false)
     private String name;
+
+    @Column(name = "imageUrl")
     private String image;
+    @Column
     private String title;
+    @Column
     private String aboutMe;
 }

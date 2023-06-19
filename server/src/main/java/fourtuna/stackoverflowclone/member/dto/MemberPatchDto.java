@@ -1,18 +1,15 @@
 package fourtuna.stackoverflowclone.member.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
-@Builder
-public class MemberResponseDto {
-
+@Setter
+public class MemberPatchDto {
     private long memberId;
-    private String email;
-    private String name;
+    //private String email;
+    private String username;
     private String image;
     private String title;
     private String aboutMe;
-
 }

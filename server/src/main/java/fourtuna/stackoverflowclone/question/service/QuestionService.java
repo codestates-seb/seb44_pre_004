@@ -4,6 +4,7 @@ import fourtuna.stackoverflowclone.exception.BusinessLogicException;
 import fourtuna.stackoverflowclone.member.entity.Member;
 import fourtuna.stackoverflowclone.member.service.MemberService;
 import fourtuna.stackoverflowclone.question.dto.CreateQuestion;
+import fourtuna.stackoverflowclone.question.dto.QuestionDto;
 import fourtuna.stackoverflowclone.question.dto.UpdateQuestion;
 import fourtuna.stackoverflowclone.question.entity.Question;
 import fourtuna.stackoverflowclone.question.repository.QuestionRepository;
@@ -18,6 +19,7 @@ import static fourtuna.stackoverflowclone.exception.ExceptionCode.UNMATCHED_WRIT
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class QuestionService {
 
     private final QuestionRepository questionRepository;
@@ -62,6 +64,12 @@ public class QuestionService {
                 .ifPresent(content -> question.setContent(content));
 
         return UpdateQuestion.Response.from(question);
+    }
+
+    public QuestionDto getQuestion(Long questionId) {
+        Question question = findQuestion(questionId);
+
+        return QuestionDto.from(question);
     }
 
     // 해당 질문의 작성자인지 검증

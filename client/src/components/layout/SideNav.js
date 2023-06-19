@@ -62,14 +62,15 @@ const SideNav = () => {
   );
 };
 
-const SideNavContainer = styled.div`
+const SideNavContainer = styled.nav`
   width: 164px;
   height: auto;
+  min-height: 200px;
   background-color: #ffffff;
   border-right: 1px solid hsl(210, 8%, 90%);
 `;
 
-const NavContainer = styled.nav`
+const NavContainer = styled.div`
   position: fixed;
   left: calc((100vw - 1280) / 2);
   width: 164px;

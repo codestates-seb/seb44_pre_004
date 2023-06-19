@@ -80,6 +80,7 @@ const FooterContainer = styled.footer`
   padding: 32px 0;
   background-color: hsl(210, 8%, 15%);
   color: #babfc4;
+  /* z-index: -1; */
   .flexRow {
     display: flex;
     img {

@@ -1,22 +1,29 @@
 package fourtuna.stackoverflowclone.member.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import fourtuna.stackoverflowclone.audit.Auditable;
+import lombok.*;
 
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Getter
 @Setter
 @AllArgsConstructor
-public class Member {
+@NoArgsConstructor
+@Builder
+@Entity
+public class Member extends Auditable {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
     private long memberId;
+
+    @Column(nullable = false)
     private String email;
-    private String name;
+    @Column(nullable = false)
     private String password;
+    @Column(nullable = false)
+    private String name;
     private String image;
     private String title;
     private String aboutMe;
-
 }

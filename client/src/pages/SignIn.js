@@ -111,20 +111,57 @@ const SignIn = () => {
     dispatch(setFooter(false));
   }, []);
 
+  // 초기값 세팅 - 이름, 이메일, 비밀번호
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [displayName, setDisplayName] = useState('');
 
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-  };
+  // 오류메세지 상태저장
+  const [nameMessage, setNameMessage] = useState('');
+  const [emailMessage, setEmailMessage] = useState('');
+  const [passwordMessage, setPasswordMessage] = useState('');
+
+  // 유효성 검사
+  const [isName, setIsName] = useState(false);
+  const [isEmail, setIsEmail] = useState(false);
+  const [isPassword, setIsPassword] = useState(false);
 
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
+    if (!setIsPassword === false) {
+      setPasswordMessage(
+        '1개의 문자와 1개의 숫자를 포함하는 8개 이상의 문자로 만들어주세요.'
+      );
+      setIsPassword(false);
+    } else {
+      setPasswordMessage('안전한 비밀번호입니다.');
+      setIsPassword(true);
+    }
+  };
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+    const emailRegExp =
+      /^[A-Za-z0-9_]+[A-Za-z0-9]*[@]{1}[A-Za-z0-9]+[A-Za-z0-9]*[.]{1}[A-Za-z]{1,3}$/;
+
+    if (!emailRegExp.test(setEmail)) {
+      setEmailMessage('이메일의 형식이 올바르지 않습니다.');
+      setIsEmail(false);
+    } else {
+      setEmailMessage('사용 가능한 이메일입니다.');
+      setIsEmail(true);
+    }
   };
 
   const handleDisplayNameChange = (e) => {
     setDisplayName(e.target.value);
+    if (setDisplayName.length < 2 || setDisplayName.length > 5) {
+      setNameMessage('닉네임은 2글자 이상 5글자 이하로 입력해주세요');
+      setIsName(false);
+    } else {
+      setNameMessage('사용 가능한 닉네임입니다.');
+      setIsName(true);
+    }
   };
 
   const handleSubmit = (e) => {
@@ -165,16 +202,23 @@ const SignIn = () => {
             </Button>
           </AnotherButton>
           <FormContainer onSubmit={handleSubmit}>
-            <Label for="Display Name">Display Name</Label>
+            <Label htmlFor="Display Name">Display Name</Label>
             <Input
+              id="name"
               type="text"
               value={displayName}
               onChange={handleDisplayNameChange}
             />
-            <Label for="Email">Email</Label>
-            <Input type="email" value={email} onChange={handleEmailChange} />
-            <Label for="Password">Password</Label>
+            <Label htmlFor="Email">Email</Label>
             <Input
+              id="email"
+              type="email"
+              value={email}
+              onChange={handleEmailChange}
+            />
+            <Label htmlFor="Password">Password</Label>
+            <Input
+              id="password"
               type="password"
               value={password}
               onChange={handlePasswordChange}

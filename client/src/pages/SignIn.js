@@ -3,10 +3,14 @@ import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { setNav, setFooter } from '../store/showComponentsSlice';
 import styled from 'styled-components';
-import { FaQuestion, FaTree, FaTags, FaTrophy } from 'react-icons/fa';
+import { FaQuestion, FaTree, FaTags, FaTrophy, FaGithub } from 'react-icons/fa';
+
+import { FcGoogle } from 'react-icons/fc';
+import { Link } from 'react-router-dom';
 
 const Container = styled.div`
   display: flex;
+  align-items: center;
   justify-content: center;
 `;
 const FormWrapper = styled.div`
@@ -14,40 +18,59 @@ const FormWrapper = styled.div`
   align-items: center;
   justify-items: center;
 `;
-const AnotherButton = styled.button``;
+const AnotherBtn = styled.button``;
+
+const AnotherButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 30px;
+  width: 245px;
+  margin: 6px 0px;
+
+  border-radius: 3px;
+  font-size: 11px;
+  color: white;
+  font-weight: lighter;
+  cursor: pointer;
+`;
 
 const LeftContainer = styled.div`
-  padding-right: 20px;
+  display: grid;
+  align-items: center;
+  margin: 110px 48px 128px 0px;
 `;
 
 const RightContainer = styled.div`
   display: grid;
+  margin-top: 15px;
   justify-items: center;
-  border-radius: 10px;
-
   border-radius: 5px;
 `;
 
 const Title = styled.h3`
   font-size: 22px;
   margin-bottom: 20px;
-  font-weight: 500;
+  font-weight: 400;
 `;
 
 const Description = styled.p`
-  font-size: 13px;
+  font-size: 12px;
 `;
 
 const FormContainer = styled.form`
-  display: flex;
-  justify-items: center;
+  max-width: 97.2307692rem;
+  /* justify-items: center;
   flex-direction: column;
-  align-items: center;
+  align-items: center; */
 
-  width: 240px;
+  width: 250px;
   height: 400px;
+  margin-left: auto;
+  margin-right: auto;
   margin-top: 15px;
-  padding-top: 20px;
+  padding: 17px;
   background-color: white;
   border-radius: 5px;
   box-shadow: 0 10px 24px hsla(0, 0%, 0%, 0.05),
@@ -57,20 +80,21 @@ const FormContainer = styled.form`
 const Input = styled.input`
   height: 25px;
   width: 215px;
+  margin-top: 2px;
   margin-bottom: 25px;
   padding: 7.8px 9px;
   border: 1px solid #ccc;
   border-radius: 3px;
-  font-size: 16px;
+  font-size: 11px;
 `;
 
 const Button = styled.button`
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
 
   height: 30px;
-  width: 215px;
+  width: 210px;
   padding: 10.4px;
   margin: 6px 0px;
 
@@ -78,26 +102,40 @@ const Button = styled.button`
   color: #fff;
   border: none;
   border-radius: 3px;
-  font-size: 12px;
-  font-weight: bold;
+  font-size: 11px;
+  font-weight: lighter;
   cursor: pointer;
 `;
 
 const Label = styled.label`
   margin-left: 2px 0px;
   padding: 0px 2px;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: bold;
 `;
-const DivBox = styled.p`
-  text-align: left;
+const DivBox1 = styled.p`
+  flex-wrap: nowrap;
   width: 210px;
-  margin: -20px 0px 20px -5px;
+  margin: -20px 0px 20px 0px;
 
   font-size: 10px;
   color: gray;
 `;
+const DivBox2 = styled.p`
+  flex-wrap: nowrap;
+  width: 210px;
+  margin: 30px 20px 20px 0px;
 
+  font-size: 10px;
+  color: gray;
+`;
+const DivBox3 = styled.p`
+  width: 210px;
+  margin: 65px 20px 10px 20px;
+
+  font-size: 11px;
+  color: #242629;
+`;
 const SignIn = () => {
   const dispatch = useDispatch();
   // 처음 렌더링 될 때 Nav와 Footer 제거
@@ -181,56 +219,89 @@ const SignIn = () => {
             <div
               style={{
                 display: 'flex',
+                marginBottom: 24,
               }}
             >
               <FaQuestion />
-              <p className="icon">
-                Unlock new privileges like voting and commenting
-              </p>
+              <p>Unlock new privileges like voting and commenting</p>
             </div>
             <div
               style={{
                 display: 'flex',
+                marginBottom: 24,
               }}
             >
               <FaTree />
-              <p className="icon">Get unstuck — ask a question</p>
-              <p className="icon">
-                Save your favorite questions, answers, watch tags, and more
-              </p>
+              <p> Get unstuck — ask a question</p>
             </div>
             <div
               style={{
                 display: 'flex',
+                marginBottom: 24,
               }}
             >
               <FaTags />
-              <p className="icon">Earn reputation and badges</p>
+              <p>Save your favorite questions, answers, watch tags, and more</p>
             </div>
             <div
               style={{
                 display: 'flex',
+                marginBottom: 24,
               }}
             >
               <FaTrophy />
-              <p className="icon">
+              <p>Earn reputation and badges</p>
+            </div>
+            <div
+              style={{
+                fontSize: 10,
+                color: 'gray',
+              }}
+            >
+              <p>
                 Collaborate and share knowledge with a private group for FREE.
               </p>
-              Get Stack Overflow for Teams free for up to 50 users.
+              <p style={{ color: '#0074cc' }}>
+                <a
+                  href="https://stackoverflow.co/teams/?utm_source=so-owned&utm_medium=product&utm_campaign=free-50&utm_content=public-sign-up"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Get Stack Overflow for Teams free for up to 50 users.
+                </a>
+              </p>
             </div>
           </Description>
         </LeftContainer>
         <RightContainer>
-          <AnotherButton>
-            <Button className="Google" type="submit">
+          <AnotherBtn>
+            <AnotherButton
+              style={{
+                backgroundColor: 'white',
+                border: '1px solid #d5d9db',
+                color: 'black',
+              }}
+              className="Google"
+              type="submit"
+            >
+              <div style={{ margin: 3, paddingLeft: 0 }}>
+                <FcGoogle size={15} />
+              </div>
               Sign up with Google
-            </Button>
-            <Button className="git" type="submit">
-              Sign up with Google
-            </Button>
-          </AnotherButton>
+            </AnotherButton>
+            <AnotherButton
+              style={{ backgroundColor: '#333538' }}
+              className="git"
+              type="submit"
+            >
+              <div style={{ margin: 5, justifyContent: 'center' }}>
+                <FaGithub size={14} color={'#fff'} />
+                Sign up with GitHub
+              </div>
+            </AnotherButton>
+          </AnotherBtn>
           <FormContainer>
-            <Label htmlFor="Display Name">Display Name</Label>
+            <Label htmlFor="Display Name">Display name</Label>
             <Input
               id="name"
               type="text"
@@ -251,17 +322,29 @@ const SignIn = () => {
               value={password}
               onChange={handlePasswordChange}
             />
-            <DivBox>
+            <DivBox1>
               <p>
                 Passwords must contain at least eight
                 <br />
                 characters, including at least 1 letter and 1 number.
               </p>
-            </DivBox>
+            </DivBox1>
             <Button type="submit" onClick={handleSignUp}>
-              {' '}
-              <a href="/">Sign Up</a>
+              <Link to="/">Sign Up</Link>
             </Button>
+            <DivBox2>
+              <p>
+                By clicking “Sign up”, you agree to our terms of service and
+                acknowledge that you have read and understand our privacy policy
+                and code of conduct.
+              </p>
+            </DivBox2>
+            <DivBox3>
+              <span style={{ marginRight: 5 }}>Already have an account?</span>
+              <span style={{ color: '#0074cc' }}>
+                <Link to="/user/login"> Log in </Link>
+              </span>
+            </DivBox3>
           </FormContainer>
         </RightContainer>
       </FormWrapper>

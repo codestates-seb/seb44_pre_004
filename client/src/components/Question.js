@@ -25,8 +25,6 @@ const Question = ({ question }) => {
           <AuthorDiv>
             <span>{/* 프로필 이미지 */}🌈</span>
             <DisplayNameSpan>{/* 닉네임 */}kim</DisplayNameSpan>
-            <BoldSpan>{/* 작성한 score..? */}1</BoldSpan>
-            <span>asked</span>
             <span>{/* 작성일 */}40 secs ago</span>
           </AuthorDiv>
         </ColumDiv>
@@ -67,10 +65,6 @@ const AuthorDiv = styled.div`
   width: 100%;
   margin-top: 0.5rem;
   gap: 0.5rem;
-`;
-
-const BoldSpan = styled.span`
-  font-weight: bold;
 `;
 
 const DisplayNameSpan = styled.span`

@@ -1,7 +1,10 @@
 import styled from 'styled-components';
 import Question from '../components/Question';
 import Paging from '../components/Paging/Paging';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { setNav, setFooter } from '../store/showComponentsSlice';
+import { Link } from 'react-router-dom';
 
 const questionData = [
   {
@@ -67,6 +70,13 @@ const questionData = [
 ];
 
 const Questions = () => {
+  const dispatch = useDispatch();
+  // 처음 렌더링 될 때 Nav와 Footer 제거
+  useEffect(() => {
+    dispatch(setNav(true));
+    dispatch(setFooter(true));
+  }, []);
+
   const itemsPerPage = 5; // Number of items to display per page
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -86,7 +96,7 @@ const Questions = () => {
       <MainComponent>
         <H1>All Questions</H1>
         <AskButton>
-          <a href="/qna/ask">Ask Question</a>
+          <Link to="/qna/ask">Ask Question</Link>
         </AskButton>
       </MainComponent>
       <MainComponent>

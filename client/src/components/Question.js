@@ -83,10 +83,12 @@ const AuthorDiv = styled.div`
 
 const DisplayNameSpan = styled.span`
   color: #488fd6;
+  font-weight: 500;
 `;
 
 const TextGreySpan = styled.span`
   color: var(--grey);
+  font-weight: 500;
 `;
 
 export default Question;

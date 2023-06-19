@@ -7,7 +7,7 @@ import styled from 'styled-components';
 const SideNav = () => {
   const dispatch = useDispatch();
   const menuIdx = useSelector((state) => {
-    console.log(state.idx.value);
+    // console.log(state.idx.value);
     return state.idx.value;
   });
 

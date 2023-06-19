@@ -1,5 +1,6 @@
 package fourtuna.stackoverflowclone.question.dto;
 
+
 import fourtuna.stackoverflowclone.answer.dto.AnswerDto;
 import fourtuna.stackoverflowclone.comment.dto.CommentDto;
 import fourtuna.stackoverflowclone.question.entity.Question;
@@ -16,7 +17,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Getter
 @Builder
-public class QuestionDto {
+public class QuestionDetailDto {
     private String title;
     private String content;
     private int answerCount;
@@ -26,14 +27,27 @@ public class QuestionDto {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public static QuestionDto from(Question question) {
-        return QuestionDto.builder()
+    private List<CommentDto> comments;
+    private List<AnswerDto> answers;
+
+    public static QuestionDetailDto from(Question question) {
+        List<AnswerDto> answers = question.getAnswers().stream()
+                .map(answer -> AnswerDto.from(answer))
+                .collect(Collectors.toList());
+
+        List<CommentDto> comments = question.getComments().stream()
+                .map(comment -> CommentDto.from(comment))
+                .collect(Collectors.toList());
+
+        return QuestionDetailDto.builder()
                 .title(question.getTitle())
                 .content(question.getContent())
                 .answerCount(question.getAnswers().size())
                 .writerName(question.getMember().getName())
                 .writerImageUrl(question.getMember().getImage())
                 .createdAt(question.getCreatedAt())
-                .updatedAt(question.getUpdatedAt()).build();
+                .updatedAt(question.getUpdatedAt())
+                .comments(comments)
+                .answers(answers).build();
     }
 }

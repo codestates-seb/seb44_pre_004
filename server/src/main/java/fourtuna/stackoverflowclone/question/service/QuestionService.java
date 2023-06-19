@@ -3,12 +3,12 @@ package fourtuna.stackoverflowclone.question.service;
 import fourtuna.stackoverflowclone.exception.BusinessLogicException;
 import fourtuna.stackoverflowclone.member.entity.Member;
 import fourtuna.stackoverflowclone.member.service.MemberService;
-import fourtuna.stackoverflowclone.question.dto.CreateQuestion;
-import fourtuna.stackoverflowclone.question.dto.QuestionDto;
-import fourtuna.stackoverflowclone.question.dto.UpdateQuestion;
+import fourtuna.stackoverflowclone.question.dto.*;
 import fourtuna.stackoverflowclone.question.entity.Question;
 import fourtuna.stackoverflowclone.question.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -66,10 +66,19 @@ public class QuestionService {
         return UpdateQuestion.Response.from(question);
     }
 
-    public QuestionDto getQuestion(Long questionId) {
+    public QuestionDetailDto getQuestion(Long questionId) {
         Question question = findQuestion(questionId);
 
-        return QuestionDto.from(question);
+        return QuestionDetailDto.from(question);
+    }
+
+    public GetQuestions.Response getQuestions(final Pageable pageable) {
+        Page<Question> questions = questionRepository.findAllByOrderByCreatedAtDesc(pageable);
+        Page<QuestionDto> questionDtos = questions.map(question -> QuestionDto.from(question));
+
+        long totalQuestionCount = questionRepository.count();
+
+        return GetQuestions.Response.from(questionDtos, totalQuestionCount);
     }
 
     // 해당 질문의 작성자인지 검증

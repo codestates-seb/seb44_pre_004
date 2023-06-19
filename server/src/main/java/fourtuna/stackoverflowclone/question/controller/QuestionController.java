@@ -1,11 +1,13 @@
 package fourtuna.stackoverflowclone.question.controller;
 
 import fourtuna.stackoverflowclone.question.dto.CreateQuestion;
-import fourtuna.stackoverflowclone.question.dto.QuestionDto;
+import fourtuna.stackoverflowclone.question.dto.GetQuestions;
+import fourtuna.stackoverflowclone.question.dto.QuestionDetailDto;
 import fourtuna.stackoverflowclone.question.dto.UpdateQuestion;
 import fourtuna.stackoverflowclone.question.service.QuestionService;
 import fourtuna.stackoverflowclone.response.SingleResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -62,7 +64,7 @@ public class QuestionController {
         return ResponseEntity.ok(new SingleResponseDto<>(response));
     }
 
-    @GetMapping ("/{questionId}")
+    @GetMapping("/{questionId}")
     public ResponseEntity<?> getQuestion(@PathVariable Long questionId/*,
             @RequestHeader("Authorization") String token*/) {
 
@@ -70,7 +72,15 @@ public class QuestionController {
         // ex) String memberEmail  = tokenProvider.getAuthentication(token).getEmail();
 
 
-        QuestionDto response = questionService.getQuestion(questionId);
+        QuestionDetailDto response = questionService.getQuestion(questionId);
+
+        return ResponseEntity.ok(new SingleResponseDto<>(response));
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getQuestions(final Pageable pageable) {
+
+        GetQuestions.Response response = questionService.getQuestions(pageable);
 
         return ResponseEntity.ok(new SingleResponseDto<>(response));
     }

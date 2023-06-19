@@ -57,4 +57,8 @@ public class MemberService {
                 new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
         return findMember;
     }
+    public Member findMemberByEmail(String email) {
+        return memberRepository.findByEmail(email)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+    }
 }

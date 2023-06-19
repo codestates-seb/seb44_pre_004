@@ -8,6 +8,7 @@ const GlobalStyle = createGlobalStyle`
     --grey: hsl(210,8%,35%);
     --black: hsl(210,8%,5%);
     --menu-hover-background:#F1F2F3;
+    --light-grey: #c7c9d2;
     
 }
 `;

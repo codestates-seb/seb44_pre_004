@@ -8,141 +8,6 @@ import { FaQuestion, FaTree, FaTags, FaTrophy, FaGithub } from 'react-icons/fa';
 import { FcGoogle } from 'react-icons/fc';
 import { Link } from 'react-router-dom';
 
-const Container = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-const FormWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-items: center;
-`;
-const AnotherBtn = styled.div``;
-
-const AnotherButton = styled.button`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  height: 30px;
-  width: 245px;
-  margin: 6px 0px;
-
-  border-radius: 3px;
-  font-size: 11px;
-  color: white;
-  font-weight: lighter;
-  cursor: pointer;
-`;
-
-const LeftContainer = styled.div`
-  display: grid;
-  align-items: center;
-  margin: 110px 48px 128px 0px;
-`;
-
-const RightContainer = styled.div`
-  display: grid;
-  margin-top: 15px;
-  justify-items: center;
-  border-radius: 5px;
-`;
-
-const Title = styled.h3`
-  font-size: 22px;
-  margin-bottom: 20px;
-  font-weight: 400;
-`;
-
-const Description = styled.div`
-  font-size: 12px;
-`;
-
-const FormContainer = styled.form`
-  max-width: 97.2307692rem;
-  /* justify-items: center;
-  flex-direction: column;
-  align-items: center; */
-
-  width: 250px;
-  height: 400px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 15px;
-  padding: 17px;
-  background-color: white;
-  border-radius: 5px;
-  box-shadow: 0 10px 24px hsla(0, 0%, 0%, 0.05),
-    0 20px 48px hsla(0, 0%, 0%, 0.05), 0 1px 4px hsla(0, 0%, 0%, 0.1);
-`;
-
-const Input = styled.input`
-  height: 25px;
-  width: 215px;
-  margin-top: 2px;
-  margin-bottom: 30px;
-  padding: 7.8px 9px;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  font-size: 11px;
-  autocomplete: 'current-password';
-`;
-
-const Button = styled.button`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  height: 30px;
-  width: 210px;
-  padding: 10.4px;
-  margin: 6px 0px;
-
-  background-color: #0a95ff;
-  color: #fff;
-  border: none;
-  border-radius: 3px;
-  font-size: 11px;
-  font-weight: lighter;
-  cursor: pointer;
-`;
-
-const Label = styled.label`
-  margin-left: 2px 0px;
-  padding: 0px 2px;
-  font-size: 12px;
-  font-weight: 700;
-`;
-const DivBox1 = styled.div`
-  flex-wrap: nowrap;
-  width: 210px;
-  margin: -20px 0px 20px 0px;
-
-  font-size: 10px;
-  color: gray;
-`;
-const DivBox2 = styled.div`
-  flex-wrap: nowrap;
-  width: 210px;
-  margin: 30px 20px 20px 0px;
-
-  font-size: 10px;
-  color: gray;
-`;
-const DivBox3 = styled.div`
-  width: 210px;
-  margin: 65px 20px 10px 25px;
-
-  font-size: 11px;
-  color: #242629;
-`;
-const ErrorMessageDiv = styled.div`
-  margin-top: -26px;
-  margin-bottom: 20px;
-  color: red;
-  font-size: 11px;
-`;
 const SignIn = () => {
   const dispatch = useDispatch();
   // 처음 렌더링 될 때 Nav와 Footer 제거
@@ -222,7 +87,7 @@ const SignIn = () => {
   };
 
   return (
-    <Container>
+    <Containor>
       <FormWrapper>
         <LeftContainer>
           <Title>Join the Stack Overflow community</Title>
@@ -358,7 +223,7 @@ const SignIn = () => {
               </div>
             </DivBox1>
             <Button type="submit" onClick={handleSignUp}>
-              <Link to="/"> Sign Up </Link>
+              Sign Up <Link to="/"> </Link>
             </Button>
             <DivBox2>
               <div>
@@ -376,8 +241,142 @@ const SignIn = () => {
           </FormContainer>
         </RightContainer>
       </FormWrapper>
-    </Container>
+    </Containor>
   );
 };
+
+const Containor = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+const FormWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-items: center;
+`;
+const AnotherBtn = styled.div``;
+
+const AnotherButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 30px;
+  width: 245px;
+  margin: 6px 0px;
+
+  border-radius: 3px;
+  font-size: 11px;
+  color: white;
+  font-weight: lighter;
+  cursor: pointer;
+`;
+
+const LeftContainer = styled.div`
+  display: grid;
+  align-items: center;
+  margin: 110px 48px 128px 0px;
+`;
+
+const RightContainer = styled.div`
+  display: grid;
+  margin-top: 15px;
+  justify-items: center;
+  border-radius: 5px;
+`;
+
+const Title = styled.h3`
+  font-size: 22px;
+  margin-bottom: 20px;
+  font-weight: 400;
+`;
+
+const Description = styled.div`
+  font-size: 12px;
+`;
+
+const FormContainer = styled.form`
+  max-width: 97.2307692rem;
+
+  width: 250px;
+  height: 450px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 15px;
+  padding: 17px;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 10px 24px hsla(0, 0%, 0%, 0.05),
+    0 20px 48px hsla(0, 0%, 0%, 0.05), 0 1px 4px hsla(0, 0%, 0%, 0.1);
+`;
+
+const Input = styled.input`
+  height: 25px;
+  width: 215px;
+  margin-top: 2px;
+  margin-bottom: 30px;
+  padding: 7.8px 9px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  font-size: 11px;
+  autocomplete: 'current-password';
+`;
+
+const Button = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 30px;
+  width: 210px;
+  padding: 10.4px;
+  margin: 6px 0px;
+
+  background-color: #0a95ff;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: lighter;
+  cursor: pointer;
+`;
+
+const Label = styled.label`
+  margin-left: 2px 0px;
+  padding: 0px 2px;
+  font-size: 12px;
+  font-weight: 700;
+`;
+const DivBox1 = styled.div`
+  flex-wrap: nowrap;
+  width: 210px;
+  margin: -20px 0px 20px 0px;
+
+  font-size: 10px;
+  color: gray;
+`;
+const DivBox2 = styled.div`
+  flex-wrap: nowrap;
+  width: 210px;
+  margin: 30px 20px 20px 0px;
+
+  font-size: 10px;
+  color: gray;
+`;
+const DivBox3 = styled.div`
+  position: absolute;
+  width: 210px;
+  margin: 70px 20px 10px 25px;
+
+  font-size: 11px;
+  color: #242629;
+`;
+const ErrorMessageDiv = styled.div`
+  margin-top: -26px;
+  margin-bottom: 20px;
+  color: red;
+  font-size: 11px;
+`;
 
 export default SignIn;

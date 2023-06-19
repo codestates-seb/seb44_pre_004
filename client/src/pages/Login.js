@@ -1,6 +1,12 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import styled from 'styled-components';
 import { setNav, setFooter } from '../store/showComponentsSlice';
+
+import { FaGithub } from 'react-icons/fa';
+import { FcGoogle } from 'react-icons/fc';
+import logo from '../asset/logo_small.png';
+import { Link } from 'react-router-dom';
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -10,7 +16,216 @@ const Login = () => {
     dispatch(setFooter(false));
   }, []);
 
-  return <div>Login</div>;
+  // 초기값 세팅 - 이름, 이메일, 비밀번호
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  // 오류메세지 상태저장
+
+  const [emailMessage, setEmailMessage] = useState(''); // eslint-disable-line no-unused-vars
+  const [passwordMessage, setPasswordMessage] = useState(''); // eslint-disable-line no-unused-vars
+
+  // 유효성 검사
+
+  const [isEmail, setIsEmail] = useState(false); // eslint-disable-line no-unused-vars
+  const [isPassword, setIsPassword] = useState(false); // eslint-disable-line no-unused-vars
+
+  const onChangeEmail = (e) => {
+    const currentEmail = e.target.value;
+    setEmail(currentEmail);
+    const emailRegExp =
+      /^[A-Za-z0-9_]+[A-Za-z0-9]*[@]{1}[A-Za-z0-9]+[A-Za-z0-9]*[.]{1}[A-Za-z]{1,3}$/;
+
+    if (!emailRegExp.test(currentEmail)) {
+      setEmailMessage('이메일의 형식이 올바르지 않습니다!');
+      setIsEmail(false);
+    } else {
+      setEmailMessage('');
+      setIsEmail(true);
+    }
+  };
+
+  const onChangePassword = (e) => {
+    const currentPassword = e.target.value;
+    setPassword(currentPassword);
+    const passwordRegExp =
+      /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
+    if (!passwordRegExp.test(currentPassword)) {
+      setPasswordMessage('비밀번호가 맞지 않습니다.');
+      setIsPassword(false);
+    }
+  };
+  const handleSignUp = () => {
+    if (email.trim() === '') {
+      setEmailMessage('Email cannot be empty.');
+      setIsEmail(false);
+    }
+    if (password.trim() === '') {
+      setPasswordMessage('Password cannot be empty.');
+      setIsPassword(false);
+    }
+  };
+  return (
+    <Containor>
+      <div>
+        <LinkWapper>
+          <Link to="/">
+            <img src={logo} alt="logo" style={{ width: 50 }} />
+          </Link>
+        </LinkWapper>
+        <div style={{ margin: '0 0 0 5' }}>
+          <AnotherButton
+            style={{
+              backgroundColor: 'white',
+              border: '1px solid #d5d9db',
+              color: 'black',
+            }}
+            className="Google"
+            type="submit"
+          >
+            <div style={{ margin: 3, paddingLeft: 0 }}>
+              <FcGoogle size={15} />
+            </div>
+            Log in with Google
+          </AnotherButton>
+          <AnotherButton
+            style={{ backgroundColor: '#333538' }}
+            className="git"
+            type="submit"
+          >
+            <div style={{ margin: 5, textAlign: 'center' }}>
+              <FaGithub size={14} color={'#fff'} />
+              Log in with GitHub
+            </div>
+          </AnotherButton>
+        </div>
+      </div>
+
+      <FormContainer>
+        <Label htmlFor="Email">Email</Label>
+        <Input
+          id="email"
+          type="text"
+          value={email}
+          autoComplete="off"
+          onChange={onChangeEmail}
+          required
+        />
+        <ErrorMessageDiv>
+          <p className="message">{emailMessage}</p>
+        </ErrorMessageDiv>
+        <Label htmlFor="password">Password</Label>
+        <Input
+          id="password"
+          type="password"
+          value={password}
+          autoComplete="current-password"
+          onChange={onChangePassword}
+          required
+        />
+        <ErrorMessageDiv>
+          <p className="message">{passwordMessage}</p>
+        </ErrorMessageDiv>
+        <Button type="submit" onClick={handleSignUp}>
+          Log in
+          <Link to="/"></Link>
+        </Button>
+      </FormContainer>
+    </Containor>
+  );
 };
+
+const Containor = styled.div`
+  display: grid;
+  align-items: center;
+  justify-content: center;
+
+  margin-top: 100px;
+`;
+
+const LinkWapper = styled.div`
+  display: grid;
+  align-items: center;
+  justify-items: center;
+`;
+
+const AnotherButton = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 37px;
+  width: 300px;
+  margin-top: 10px;
+
+  border-radius: 3px;
+  font-size: 13px;
+  color: white;
+  font-weight: 400;
+  cursor: pointer;
+`;
+const FormContainer = styled.form`
+  max-width: 97.2307692rem;
+
+  width: 300px;
+  height: 250px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 15px;
+  padding: 17px;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 10px 24px hsla(0, 0%, 0%, 0.05),
+    0 20px 48px hsla(0, 0%, 0%, 0.05), 0 1px 4px hsla(0, 0%, 0%, 0.1);
+`;
+
+const Input = styled.input`
+  display: flex;
+  /* align-items: center; */
+  /* justify-items: center; */
+  height: 30px;
+  width: 240px;
+  margin: 2px 0px 50px 12px;
+  padding: 7.8px 9px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  font-size: 11px;
+  autocomplete: 'current-password';
+`;
+const ErrorMessageDiv = styled.div`
+  margin: -45px 0px 0px 14px;
+
+  color: red;
+  font-size: 11px;
+`;
+const Label = styled.label`
+  margin-left: 10px;
+  padding: 0px 2px;
+  font-size: 13px;
+  font-weight: 700;
+`;
+
+const Button = styled.button`
+  /* display: grid;
+  justify-content: center;
+  align-items: center; */
+
+  height: 40px;
+  width: 240px;
+  padding: 10.4px;
+  margin: 20px 12px;
+
+  font-weight: 600;
+  font-size: 0.9em;
+  line-height: 1em;
+
+  background-color: #0a95ff;
+  color: #ffffff;
+  border: none;
+  border-radius: 3px;
+  box-shadow: inset 0 0 0px 0.2px #ffffff, 0 -1px 0px 1px #0a95ff;
+
+  cursor: pointer;
+`;
 
 export default Login;

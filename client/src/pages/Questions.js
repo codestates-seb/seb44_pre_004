@@ -4,6 +4,7 @@ import Paging from '../components/Paging/Paging';
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { setNav, setFooter } from '../store/showComponentsSlice';
+import { Link } from 'react-router-dom';
 
 const questionData = [
   {
@@ -95,7 +96,7 @@ const Questions = () => {
       <MainComponent>
         <H1>All Questions</H1>
         <AskButton>
-          <a href="/qna/ask">Ask Question</a>
+          <Link to="/qna/ask">Ask Question</Link>
         </AskButton>
       </MainComponent>
       <MainComponent>

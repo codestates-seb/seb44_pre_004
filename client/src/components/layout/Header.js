@@ -53,6 +53,7 @@ const HeaderContainer = styled.header`
   top: 0;
   width: 100%;
   height: 56px;
+  z-index: 10;
   border-top: 3px solid var(--orange);
   border-bottom: 1px solid hsl(210, 8%, 85%);
   background-color: #ffffff;

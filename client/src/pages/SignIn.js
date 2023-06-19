@@ -8,18 +8,11 @@ import { FaQuestion, FaTree, FaTags, FaTrophy } from 'react-icons/fa';
 const Container = styled.div`
   display: flex;
   justify-content: center;
-  align-items: center;
-
-  height: 100vw;
-  width: 100vw;
-  background-color: rgb(238, 238, 238);
 `;
 const FormWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-items: center;
-
-  margin-top: -380px;
 `;
 const AnotherButton = styled.button``;
 
@@ -57,6 +50,8 @@ const FormContainer = styled.form`
   padding-top: 20px;
   background-color: white;
   border-radius: 5px;
+  box-shadow: 0 10px 24px hsla(0, 0%, 0%, 0.05),
+    0 20px 48px hsla(0, 0%, 0%, 0.05), 0 1px 4px hsla(0, 0%, 0%, 0.1);
 `;
 
 const Input = styled.input`
@@ -89,9 +84,8 @@ const Button = styled.button`
 `;
 
 const Label = styled.label`
-  display: flex;
-  justify-items: left;
-  text-align: left;
+  margin-left: 2px 0px;
+  padding: 0px 2px;
   font-size: 13px;
   font-weight: bold;
 `;
@@ -184,22 +178,46 @@ const SignIn = () => {
         <LeftContainer>
           <Title>Join the Stack Overflow community</Title>
           <Description>
-            <FaQuestion />
-            <p className="icon">
-              Unlock new privileges like voting and commenting
-            </p>
-            <FaTree />
-            <p className="icon">Get unstuck — ask a question</p>
-            <p className="icon">
-              Save your favorite questions, answers, watch tags, and more
-            </p>
-            <FaTags />
-            <p className="icon">Earn reputation and badges</p>
-            <FaTrophy />
-            <p className="icon">
-              Collaborate and share knowledge with a private group for FREE.
-            </p>
-            Get Stack Overflow for Teams free for up to 50 users.
+            <div
+              style={{
+                display: 'flex',
+              }}
+            >
+              <FaQuestion />
+              <p className="icon">
+                Unlock new privileges like voting and commenting
+              </p>
+            </div>
+            <div
+              style={{
+                display: 'flex',
+              }}
+            >
+              <FaTree />
+              <p className="icon">Get unstuck — ask a question</p>
+              <p className="icon">
+                Save your favorite questions, answers, watch tags, and more
+              </p>
+            </div>
+            <div
+              style={{
+                display: 'flex',
+              }}
+            >
+              <FaTags />
+              <p className="icon">Earn reputation and badges</p>
+            </div>
+            <div
+              style={{
+                display: 'flex',
+              }}
+            >
+              <FaTrophy />
+              <p className="icon">
+                Collaborate and share knowledge with a private group for FREE.
+              </p>
+              Get Stack Overflow for Teams free for up to 50 users.
+            </div>
           </Description>
         </LeftContainer>
         <RightContainer>

@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import { setNav, setFooter } from '../store/showComponentsSlice';
 import { Link } from 'react-router-dom';
 
-const questionData = [
+export const questionData = [
   {
     voteCount: 10,
     answerCount: 5,
@@ -126,7 +126,7 @@ const MainComponent = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
-  padding: 1rem;
+  padding: 1rem 1rem 1rem 0;
 `;
 
 const AskButton = styled.button`
@@ -145,11 +145,13 @@ const AskButton = styled.button`
 `;
 
 const H1 = styled.h1`
+  padding: 0 1rem;
   font-size: x-large;
 `;
 
 const TotalDiv = styled.div`
   margin: 0.5rem;
+  padding: 0 1rem;
 `;
 const QuestionDiv = styled.div`
   display: flex;

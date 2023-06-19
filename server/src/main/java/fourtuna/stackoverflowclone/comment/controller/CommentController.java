@@ -1,6 +1,7 @@
 package fourtuna.stackoverflowclone.comment.controller;
 
 import fourtuna.stackoverflowclone.comment.dto.CreateComment;
+import fourtuna.stackoverflowclone.comment.dto.UpdateComment;
 import fourtuna.stackoverflowclone.comment.service.CommentService;
 import fourtuna.stackoverflowclone.response.SingleResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +34,7 @@ public class CommentController {
 
     @PostMapping("/answer/{answerId}/comment")
     public ResponseEntity<?> createCommentForAnswer(@RequestBody @Valid CreateComment.Request request,
-                                                      @PathVariable Long answerId/*,
+                                                    @PathVariable Long answerId/*,
                                                       @RequestHeader("Authorization") String token*/) {
 
         // 토큰에서 유저정보 꺼내기
@@ -46,4 +47,18 @@ public class CommentController {
         return ResponseEntity.ok(new SingleResponseDto<>(response));
     }
 
+    @PatchMapping("/comment/{commentId}")
+    public ResponseEntity<?> updateComment(@RequestBody @Valid UpdateComment.Request request,
+                                           @PathVariable Long commentId/*,
+                                           @RequestHeader("Authorization") String token*/) {
+
+        // 토큰에서 유저정보 꺼내기
+        // ex) String memberEmail  = tokenProvider.getAuthentication(token).getEmail();
+
+        String memberEmail = "test@test.com";
+
+        UpdateComment.Response response = commentService.updateComment(request, commentId, memberEmail);
+
+        return ResponseEntity.ok(new SingleResponseDto<>(response));
+    }
 }

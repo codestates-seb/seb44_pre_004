@@ -3,6 +3,7 @@ package fourtuna.stackoverflowclone.comment.service;
 import fourtuna.stackoverflowclone.answer.entity.Answer;
 import fourtuna.stackoverflowclone.answer.service.AnswerService;
 import fourtuna.stackoverflowclone.comment.dto.CreateComment;
+import fourtuna.stackoverflowclone.comment.dto.UpdateComment;
 import fourtuna.stackoverflowclone.comment.entity.Comment;
 import fourtuna.stackoverflowclone.comment.repository.CommentRepository;
 import fourtuna.stackoverflowclone.exception.BusinessLogicException;
@@ -13,6 +14,8 @@ import fourtuna.stackoverflowclone.question.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 import static fourtuna.stackoverflowclone.exception.ExceptionCode.COMMENT_NOT_FOUND;
 import static fourtuna.stackoverflowclone.exception.ExceptionCode.UNMATCHED_WRITER;
@@ -58,6 +61,22 @@ public class CommentService {
                 .content(request.getContent()).build();
 
         return CreateComment.Response.from(commentRepository.save(comment));
+    }
+
+    @Transactional
+    public UpdateComment.Response updateComment(UpdateComment.Request request,
+                                                Long commentId,
+                                                String memberEmail) {
+
+        Member member = memberService.findMemberByEmail(memberEmail);
+        Comment comment = findComment(commentId);
+
+        validateWriter(comment, member);
+
+        Optional.ofNullable(request.getContent())
+                .ifPresent(content -> comment.setContent(content));
+
+        return UpdateComment.Response.from(comment);
     }
 
     private static void validateWriter(Comment comment, Member member) {

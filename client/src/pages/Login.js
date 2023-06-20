@@ -8,6 +8,14 @@ import { FcGoogle } from 'react-icons/fc';
 import logo from '../asset/logo_small.png';
 import { Link, useNavigate } from 'react-router-dom';
 
+export const signUpData = [
+  {
+    id: 1,
+    name: 'kimcoding',
+    email: 'kimcoding@gmail.com',
+    password: 'asdfgh1!',
+  },
+];
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -38,7 +46,7 @@ const Login = () => {
       /^[A-Za-z0-9_]+[A-Za-z0-9]*[@]{1}[A-Za-z0-9]+[A-Za-z0-9]*[.]{1}[A-Za-z]{1,3}$/;
 
     if (!emailRegExp.test(currentEmail)) {
-      setEmailMessage('이메일의 형식이 올바르지 않습니다!');
+      setEmailMessage('');
       setIsEmail(false);
     } else {
       setEmailMessage('');
@@ -52,23 +60,23 @@ const Login = () => {
     const passwordRegExp =
       /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
     if (!passwordRegExp.test(currentPassword)) {
-      setPasswordMessage('비밀번호가 맞지 않습니다.');
+      setPasswordMessage('');
       setIsPassword(false);
     } else {
-      setPasswordMessage('');
-      setIsPassword(true);
+      setEmailMessage('');
+      setIsEmail(true);
     }
   };
   const handleSignUp = () => {
-    if (email.trim() === '') {
+    if (isEmail === false) {
+      alert('이메일을 다시 확인해주세요.');
       setEmailMessage('Email cannot be empty.');
       setIsEmail(false);
-    }
-    if (password.trim() === '') {
+    } else if (isPassword === false) {
+      alert('비밀번호를 다시 확인해주세요.');
       setPasswordMessage('Password cannot be empty.');
       setIsPassword(false);
-    }
-    if (isEmail && isPassword) {
+    } else if (isEmail && isPassword) {
       navigate('/');
     }
   };
@@ -201,7 +209,6 @@ const Input = styled.input`
   border: 1px solid #ccc;
   border-radius: 3px;
   font-size: 11px;
-  autocomplete: 'current-password';
 `;
 const ErrorMessageDiv = styled.div`
   margin-top: -25px;

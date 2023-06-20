@@ -63,23 +63,38 @@ const Login = () => {
       setPasswordMessage('');
       setIsPassword(false);
     } else {
-      setEmailMessage('');
-      setIsEmail(true);
+      setPasswordMessage('');
+      setIsPassword(true);
     }
   };
   const handleSignUp = () => {
     if (isEmail === false) {
       alert('이메일을 다시 확인해주세요.');
-      setEmailMessage('Email cannot be empty.');
+      // setEmailMessage('Email cannot be empty.');
       setIsEmail(false);
     } else if (isPassword === false) {
-      alert('비밀번호를 다시 확인해주세요.');
-      setPasswordMessage('Password cannot be empty.');
+      alert('입력하신 정보를 다시 확인해주세요.');
+      // setPasswordMessage('Password cannot be empty.');
       setIsPassword(false);
+      // } else if (isEmail === '' || isPassword === '') {
+      //   setEmailMessage('Email cannot be empty.');
+      //   setPasswordMessage('Password cannot be empty.');
     } else if (isEmail && isPassword) {
       navigate('/');
     }
+    // if (isEmail === false) {
+    //   alert('이메일을 다시 확인해주세요.');
+    //   setEmailMessage('Email cannot be empty.');
+    //   setIsEmail(false);
+    // } else if (isPassword === false) {
+    //   alert('비밀번호를 다시 확인해주세요.');
+    //   setPasswordMessage('Password cannot be empty.');
+    //   setIsPassword(false);
+    // } else if (isEmail && isPassword) {
+    //   navigate('/');
+    // }
   };
+
   return (
     <Containor>
       <div>

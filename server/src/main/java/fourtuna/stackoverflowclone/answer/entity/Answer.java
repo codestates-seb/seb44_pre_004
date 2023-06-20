@@ -1,11 +1,13 @@
 package fourtuna.stackoverflowclone.answer.entity;
 
 import fourtuna.stackoverflowclone.audit.Auditable;
+import fourtuna.stackoverflowclone.comment.entity.Comment;
 import fourtuna.stackoverflowclone.member.entity.Member;
 import fourtuna.stackoverflowclone.question.entity.Question;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -23,12 +25,14 @@ public class Answer extends Auditable {
     private String content;
 
     @ManyToOne
-    @JoinColumn(name = "QUESTION_ID")
+    @JoinColumn(name = "question_id")
     private Question question;
 
     @ManyToOne
-    @JoinColumn(name = "MEMBER_ID")
+    @JoinColumn(name = "member_id")
     private Member member;
 
+    @OneToMany(mappedBy = "answer")
+    private List<Comment> comments;
 }
 

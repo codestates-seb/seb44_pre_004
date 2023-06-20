@@ -1,29 +1,62 @@
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { menuIdxSlice } from '../../store/menuIdxSlice';
 import { IoEarthSharp } from 'react-icons/io5';
 import styled from 'styled-components';
 
 const ToggleNav = ({ setShowNav }) => {
+  const dispatch = useDispatch();
+
+  const menuIdx = useSelector((state) => {
+    // console.log(state.idx.value);
+    return state.idx.value;
+  });
+
   return (
     <NavContainer>
       <ul>
-        <li className="active">
-          <Link to="/" onClick={() => setShowNav(false)}>
+        <li className={menuIdx === 0 ? 'active' : ''}>
+          <Link
+            to="/"
+            onClick={() => {
+              setShowNav(false);
+              dispatch(menuIdxSlice.actions.idx(0));
+            }}
+          >
             Home
           </Link>
         </li>
-        <li>
-          <Link to="/qna" onClick={() => setShowNav(false)}>
+        <li className={menuIdx === 1 ? 'active' : ''}>
+          <Link
+            to="/qna"
+            onClick={() => {
+              setShowNav(false);
+              dispatch(menuIdxSlice.actions.idx(1));
+            }}
+          >
             <IoEarthSharp className="icon" />
             Questions
           </Link>
         </li>
-        <li>
-          <Link to="/tags" onClick={() => setShowNav(false)}>
+        <li className={menuIdx === 2 ? 'active' : ''}>
+          <Link
+            to="/tags"
+            onClick={() => {
+              setShowNav(false);
+              dispatch(menuIdxSlice.actions.idx(2));
+            }}
+          >
             Tags
           </Link>
         </li>
-        <li>
-          <Link to="/user" onClick={() => setShowNav(false)}>
+        <li className={menuIdx === 3 ? 'active' : ''}>
+          <Link
+            to="/user"
+            onClick={() => {
+              setShowNav(false);
+              dispatch(menuIdxSlice.actions.idx(3));
+            }}
+          >
             Users
           </Link>
         </li>

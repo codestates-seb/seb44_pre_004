@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { menuIdxSlice } from '../../store/menuIdxSlice';
 import { IoMenuSharp, IoCloseSharp } from 'react-icons/io5';
 import styled from 'styled-components';
 import ToggleNav from './ToggleNav';
@@ -7,6 +9,7 @@ import logo from '../../asset/logo.png';
 
 const Header = () => {
   const [showNav, setShowNav] = useState(false);
+  const dispatch = useDispatch();
 
   return (
     <HeaderContainer>
@@ -18,7 +21,13 @@ const Header = () => {
             {!showNav && <IoMenuSharp className="hamburger" />}
             {showNav && <IoCloseSharp className="close" />}
           </button>
-          <Link to="/" onClick={() => setShowNav(false)}>
+          <Link
+            to="/"
+            onClick={() => {
+              setShowNav(false);
+              dispatch(menuIdxSlice.actions.idx(0));
+            }}
+          >
             <img src={logo} alt="stackoverflow logo" />
           </Link>
         </FlexLeft>
@@ -33,8 +42,11 @@ const Header = () => {
           </Link>
           {/* 로그인 후 버튼 */}
           {/* <Link
-            to="/user/:member-id/:username"
-            onClick={() => setShowNav(false)}
+            to="/user/:memberId/:username"
+            onClick={() => {
+              setShowNav(false);
+              dispatch(menuIdxSlice.actions.idx(3));
+            }}
           >
             <BorderBtn>Mypage</BorderBtn>
           </Link>
@@ -53,6 +65,7 @@ const HeaderContainer = styled.header`
   top: 0;
   width: 100%;
   height: 56px;
+  z-index: 10;
   border-top: 3px solid var(--orange);
   border-bottom: 1px solid hsl(210, 8%, 85%);
   background-color: #ffffff;
@@ -118,6 +131,7 @@ const BorderBtn = styled.span`
 `;
 
 const BlueBtn = styled.span`
+  margin-right: 15px;
   padding: 8px 10px;
   background-color: var(--bright-blue);
   border: 1px solid var(--bright-blue);

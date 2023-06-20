@@ -25,7 +25,7 @@ const RoutingPages = () => {
     <ContentsContainer>
       <ContentsSection>
         {showNav && <SideNav />}
-        <main>
+        <MainComponent>
           <Routes>
             <Route path="/" element={<Main />} />
             <Route path="/qna" element={<Questions />} />
@@ -33,12 +33,12 @@ const RoutingPages = () => {
             <Route path="/qna/ask" element={<AskQuestion />} />
             <Route path="/tags" element={<Tags />} />
             <Route path="/user" element={<Users />} />
-            <Route path="/user/:member-id/:username" element={<Mypage />} />
-            <Route path="/user/edit/:member-id" element={<EditProfile />} />
+            <Route path="/user/:memberId/:username" element={<Mypage />} />
+            <Route path="/user/edit/:memberId" element={<EditProfile />} />
             <Route path="/user/login" element={<Login />} />
             <Route path="/user/join" element={<SignIn />} />
           </Routes>
-        </main>
+        </MainComponent>
       </ContentsSection>
       {showFooter && <Footer />}
     </ContentsContainer>
@@ -51,6 +51,11 @@ const ContentsContainer = styled.div`
 
 const ContentsSection = styled.section`
   display: flex;
+`;
+
+const MainComponent = styled.div`
+  width: calc(100% - 164px);
+  margin: 0 auto;
 `;
 
 export default RoutingPages;

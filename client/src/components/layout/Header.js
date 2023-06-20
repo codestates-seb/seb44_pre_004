@@ -42,8 +42,11 @@ const Header = () => {
           </Link>
           {/* 로그인 후 버튼 */}
           {/* <Link
-            to="/user/:member-id/:username"
-            onClick={() => setShowNav(false)}
+            to="/user/:memberId/:username"
+            onClick={() => {
+              setShowNav(false);
+              dispatch(menuIdxSlice.actions.idx(3));
+            }}
           >
             <BorderBtn>Mypage</BorderBtn>
           </Link>

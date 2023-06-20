@@ -11,14 +11,21 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.util.List;
+import fourtuna.stackoverflowclone.member.dto.MemberPostDto;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 
 @RestController
 @RequestMapping("/user")
 @Validated
+@Slf4j
 public class MemberController {
     private final MemberService memberService;
     private final MemberMapper mapper;
@@ -58,6 +65,15 @@ public class MemberController {
                 new MultiResponseDto<>(mapper.membersToMemberResponseDtos(members),
                         pageMembers),
                 HttpStatus.OK);
-
     }
+
+    @PostMapping
+    public ResponseEntity postMember(@Valid @RequestBody MemberPostDto memberPostDto){
+        Member createdMember = memberService.createMember(mapper.memberPostDtoToMember(memberPostDto));
+        //SingleResponseDto response = mapper.memberToSingleResponseDto(createdMember);
+
+        //return response;
+        return new ResponseEntity<>(mapper.memberToMemberResponseDto(createdMember), HttpStatus.CREATED);
+    }
+
 }

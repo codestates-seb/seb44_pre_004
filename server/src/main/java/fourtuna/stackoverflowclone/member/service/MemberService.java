@@ -4,27 +4,25 @@ import fourtuna.stackoverflowclone.exception.BusinessLogicException;
 import fourtuna.stackoverflowclone.exception.ExceptionCode;
 import fourtuna.stackoverflowclone.member.entity.Member;
 import fourtuna.stackoverflowclone.member.repository.MemberRepository;
-
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
+import fourtuna.stackoverflowclone.config.SecurityConfiguration;
 import java.util.Optional;
 
 @Transactional
 @Service
 public class MemberService {
     private final MemberRepository memberRepository;
+    private final SecurityConfiguration securityConfiguration;
 
-    public MemberService(MemberRepository memberRepository) {
+    public MemberService(MemberRepository memberRepository, SecurityConfiguration securityConfiguration) {
         this.memberRepository = memberRepository;
+        this.securityConfiguration = securityConfiguration;
     }
 
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
@@ -57,13 +55,30 @@ public class MemberService {
     public Member findVerifiedMember(long memberId) {
         Optional<Member> optionalMember =
                 memberRepository.findById(memberId);
-        Member findMember = optionalMember.orElseThrow(()->
+        Member findMember = optionalMember.orElseThrow(() ->
                 new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
         return findMember;
+
+    }
+
+    public Member createMember(Member member){
+        verifyExistsMember(member.getEmail());
+        member.setPassword(securityConfiguration.passwordEncoder().encode(member.getPassword()));
+        member.setImage("classpath:/static/images");
+        return memberRepository.save(member);
+    }
+
+    //email 존재 -> "이미 등로된 이메일입"
+    public void verifyExistsMember(String email) {
+        boolean exsist = memberRepository.findByEmail(email).isPresent();
+        if(exsist == true) new RuntimeException("이미 등록된 이메일입니다.");  //다른방법있으면
     }
 
     public Member findMemberByEmail(String email) {
         return memberRepository.findByEmail(email)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+
     }
+
 }
+

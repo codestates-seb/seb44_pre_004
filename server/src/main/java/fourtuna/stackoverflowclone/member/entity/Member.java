@@ -2,6 +2,10 @@ package fourtuna.stackoverflowclone.member.entity;
 
 import fourtuna.stackoverflowclone.audit.Auditable;
 import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 
@@ -23,10 +27,10 @@ public class Member extends Auditable {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
+    @Column(name = "username", nullable = false)
     private String name;
 
-    @Column(name = "imageUrl")
+    @Column(name = "imageUri")
     private String image;
     @Column
     private String title;

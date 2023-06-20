@@ -6,9 +6,10 @@ import { setNav, setFooter } from '../store/showComponentsSlice';
 import { FaGithub } from 'react-icons/fa';
 import { FcGoogle } from 'react-icons/fc';
 import logo from '../asset/logo_small.png';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Login = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   // 처음 렌더링 될 때 Nav와 Footer 제거
   useEffect(() => {
@@ -53,6 +54,9 @@ const Login = () => {
     if (!passwordRegExp.test(currentPassword)) {
       setPasswordMessage('비밀번호가 맞지 않습니다.');
       setIsPassword(false);
+    } else {
+      setPasswordMessage('');
+      setIsPassword(true);
     }
   };
   const handleSignUp = () => {
@@ -63,6 +67,9 @@ const Login = () => {
     if (password.trim() === '') {
       setPasswordMessage('Password cannot be empty.');
       setIsPassword(false);
+    }
+    if (isEmail && isPassword) {
+      navigate('/');
     }
   };
   return (
@@ -100,14 +107,13 @@ const Login = () => {
           </AnotherButton>
         </div>
       </div>
-
       <FormContainer>
         <Label htmlFor="Email">Email</Label>
         <Input
           id="email"
           type="text"
           value={email}
-          autoComplete="off"
+          autoComplete="on"
           onChange={onChangeEmail}
           required
         />
@@ -126,11 +132,12 @@ const Login = () => {
         <ErrorMessageDiv>
           <p className="message">{passwordMessage}</p>
         </ErrorMessageDiv>
+      </FormContainer>
+      <ButtonContainor>
         <Button type="submit" onClick={handleSignUp}>
           Log in
-          <Link to="/"></Link>
         </Button>
-      </FormContainer>
+      </ButtonContainor>
     </Containor>
   );
 };
@@ -165,14 +172,14 @@ const AnotherButton = styled.div`
   cursor: pointer;
 `;
 const FormContainer = styled.form`
+  display: flex;
+  flex-direction: column;
   max-width: 97.2307692rem;
 
   width: 300px;
-  height: 250px;
-  margin-left: auto;
-  margin-right: auto;
+  height: 270px;
   margin-top: 15px;
-  padding: 17px;
+  padding: 30px;
   background-color: white;
   border-radius: 5px;
   box-shadow: 0 10px 24px hsla(0, 0%, 0%, 0.05),
@@ -180,12 +187,10 @@ const FormContainer = styled.form`
 `;
 
 const Input = styled.input`
-  display: flex;
-  /* align-items: center; */
-  /* justify-items: center; */
   height: 30px;
   width: 240px;
-  margin: 2px 0px 50px 12px;
+  margin-top: 2px;
+  margin-bottom: 30px;
   padding: 7.8px 9px;
   border: 1px solid #ccc;
   border-radius: 3px;
@@ -193,27 +198,30 @@ const Input = styled.input`
   autocomplete: 'current-password';
 `;
 const ErrorMessageDiv = styled.div`
-  margin: -45px 0px 0px 14px;
-
-  color: red;
+  margin-top: -25px;
+  margin-bottom: 20px;
   font-size: 11px;
+  color: red;
 `;
+
 const Label = styled.label`
-  margin-left: 10px;
-  padding: 0px 2px;
-  font-size: 13px;
-  font-weight: 700;
+  margin-left: 5px;
+  margin-bottom: 5px;
+  font-weight: 600;
+`;
+const ButtonContainor = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const Button = styled.button`
-  /* display: grid;
-  justify-content: center;
-  align-items: center; */
+  align-items: center;
 
   height: 40px;
   width: 240px;
   padding: 10.4px;
-  margin: 20px 12px;
+  margin-top: -70px;
 
   font-weight: 600;
   font-size: 0.9em;

@@ -2,13 +2,14 @@ import { useState, useEffect } from 'react';
 
 import { useDispatch } from 'react-redux';
 import { setNav, setFooter } from '../store/showComponentsSlice';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { FaQuestion, FaTree, FaTags, FaTrophy, FaGithub } from 'react-icons/fa';
 
 import { FcGoogle } from 'react-icons/fc';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const SignIn = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   // 처음 렌더링 될 때 Nav와 Footer 제거
   useEffect(() => {
@@ -30,6 +31,19 @@ const SignIn = () => {
   const [isName, setIsName] = useState(false); // eslint-disable-line no-unused-vars
   const [isEmail, setIsEmail] = useState(false); // eslint-disable-line no-unused-vars
   const [isPassword, setIsPassword] = useState(false); // eslint-disable-line no-unused-vars
+
+  const handleDisplayNameChange = (e) => {
+    const currentName = e.target.value;
+    console.log(displayName);
+    setDisplayName(currentName);
+    if (currentName.length < 2 || currentName.length > 5) {
+      setNameMessage('닉네임은 2글자 이상 5글자 이하로 입력해주세요');
+      setIsName(false);
+    } else {
+      setNameMessage('사용 가능한 닉네임입니다.');
+      setIsName(true);
+    }
+  };
 
   const onChangePassword = (e) => {
     const currentPassword = e.target.value;
@@ -62,19 +76,6 @@ const SignIn = () => {
     }
   };
 
-  const handleDisplayNameChange = (e) => {
-    const value = e.target.value;
-    console.log(displayName);
-    setDisplayName(value);
-    if (value.length < 2 || value.length > 5) {
-      setNameMessage('닉네임은 2글자 이상 5글자 이하로 입력해주세요');
-      setIsName(false);
-    } else {
-      setNameMessage('사용 가능한 닉네임입니다.');
-      setIsName(true);
-    }
-  };
-
   const handleSignUp = () => {
     if (email.trim() === '') {
       setEmailMessage('Email cannot be empty.');
@@ -84,10 +85,13 @@ const SignIn = () => {
       setPasswordMessage('Password cannot be empty.');
       setIsPassword(false);
     }
+    if (isEmail && isPassword) {
+      navigate('/user/login');
+    }
   };
 
   return (
-    <Containor>
+    <Container>
       <FormWrapper>
         <LeftContainer>
           <Title>Join the Stack Overflow community</Title>
@@ -188,8 +192,8 @@ const SignIn = () => {
               onChange={handleDisplayNameChange}
               required
             />
-            <ErrorMessageDiv>
-              <p className="message">{nameMessage}</p>
+            <ErrorMessageDiv primary={isName}>
+              <p>{nameMessage}</p>
             </ErrorMessageDiv>
             <Label htmlFor="Email">Email</Label>
             <Input
@@ -200,7 +204,7 @@ const SignIn = () => {
               onChange={onChangeEmail}
               required
             />
-            <ErrorMessageDiv>
+            <ErrorMessageDiv primary={isEmail}>
               <p className="message">{emailMessage}</p>
             </ErrorMessageDiv>
             <Label htmlFor="Password">Password</Label>
@@ -212,40 +216,42 @@ const SignIn = () => {
               onChange={onChangePassword}
               required
             />
-            <ErrorMessageDiv>
+            <ErrorMessageDiv primary={isPassword}>
               <p className="message">{passwordMessage}</p>
             </ErrorMessageDiv>
-            <DivBox1>
-              <div>
-                Passwords must contain at least eight
-                <br />
-                characters, including at least 1 letter and 1 number.
-              </div>
-            </DivBox1>
-            <Button type="submit" onClick={handleSignUp}>
-              Sign Up <Link to="/"> </Link>
-            </Button>
-            <DivBox2>
-              <div>
-                By clicking “Sign up”, you agree to our terms of service and
-                acknowledge that you have read and understand our privacy policy
-                and code of conduct.
-              </div>
-            </DivBox2>
-            <DivBox3>
-              <span style={{ marginRight: 5 }}>Already have an account?</span>
-              <span style={{ color: '#0074cc' }}>
-                <Link to="/user/login"> Log in </Link>
-              </span>
-            </DivBox3>
           </FormContainer>
+          <DivBox1>
+            <div>
+              Passwords must contain at least eight
+              <br />
+              characters, including at least 1 letter and 1 number.
+            </div>
+          </DivBox1>
+          <Button type="submit" onClick={handleSignUp}>
+            Sign Up
+          </Button>
+
+          <DivBox2>
+            <div>
+              By clicking “Sign up”, you agree to our terms of service and
+              acknowledge that you have read and understand our privacy policy
+              and code of conduct.
+            </div>
+          </DivBox2>
+
+          <DivBox3>
+            <span style={{ marginRight: 5 }}>Already have an account?</span>
+            <span style={{ color: '#0074cc' }}>
+              <Link to="/user/login"> Log in </Link>
+            </span>
+          </DivBox3>
         </RightContainer>
       </FormWrapper>
-    </Containor>
+    </Container>
   );
 };
 
-const Containor = styled.div`
+const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -298,6 +304,9 @@ const Description = styled.div`
 
 const FormContainer = styled.form`
   max-width: 97.2307692rem;
+  /* justify-items: center;
+  flex-direction: column;
+  align-items: center; */
 
   width: 250px;
   height: 450px;
@@ -331,7 +340,7 @@ const Button = styled.button`
   height: 30px;
   width: 210px;
   padding: 10.4px;
-  margin: 6px 0px;
+  margin: -130px 0px;
 
   background-color: #0a95ff;
   color: #fff;
@@ -349,25 +358,25 @@ const Label = styled.label`
   font-weight: 700;
 `;
 const DivBox1 = styled.div`
-  flex-wrap: nowrap;
   width: 210px;
-  margin: -20px 0px 20px 0px;
-
+  text-align: left;
+  margin-top: -180px;
   font-size: 10px;
   color: gray;
 `;
 const DivBox2 = styled.div`
   flex-wrap: nowrap;
   width: 210px;
-  margin: 30px 20px 20px 0px;
+  text-align: left;
+  margin-top: -75px;
 
   font-size: 10px;
   color: gray;
 `;
 const DivBox3 = styled.div`
-  position: absolute;
+  text-align: center;
+  margin-top: 30px;
   width: 210px;
-  margin: 70px 20px 10px 25px;
 
   font-size: 11px;
   color: #242629;
@@ -375,8 +384,18 @@ const DivBox3 = styled.div`
 const ErrorMessageDiv = styled.div`
   margin-top: -26px;
   margin-bottom: 20px;
-  color: red;
   font-size: 11px;
-`;
+  color: ${(props) => (props.primary ? 'green' : 'red')};
+  ${(props) =>
+    props.primary &&
+    css`
+      color: green;
+    `}
 
+  ${(props) =>
+    !props.primary &&
+    css`
+      color: red;
+    `}
+`;
 export default SignIn;

@@ -128,6 +128,7 @@ const BorderBtn = styled.span`
 `;
 
 const BlueBtn = styled.span`
+  margin-right: 15px;
   padding: 8px 10px;
   background-color: var(--bright-blue);
   border: 1px solid var(--bright-blue);

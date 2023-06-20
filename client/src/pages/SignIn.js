@@ -219,30 +219,32 @@ const SignIn = () => {
             <ErrorMessageDiv primary={isPassword}>
               <p className="message">{passwordMessage}</p>
             </ErrorMessageDiv>
-            <DivBox1>
-              <div>
-                Passwords must contain at least eight
-                <br />
-                characters, including at least 1 letter and 1 number.
-              </div>
-            </DivBox1>
-            <Button type="submit" onClick={handleSignUp}>
-              Sign Up
-            </Button>
-            <DivBox2>
-              <div>
-                By clicking “Sign up”, you agree to our terms of service and
-                acknowledge that you have read and understand our privacy policy
-                and code of conduct.
-              </div>
-            </DivBox2>
-            <DivBox3>
-              <span style={{ marginRight: 5 }}>Already have an account?</span>
-              <span style={{ color: '#0074cc' }}>
-                <Link to="/user/login"> Log in </Link>
-              </span>
-            </DivBox3>
           </FormContainer>
+          <DivBox1>
+            <div>
+              Passwords must contain at least eight
+              <br />
+              characters, including at least 1 letter and 1 number.
+            </div>
+          </DivBox1>
+          <Button type="submit" onClick={handleSignUp}>
+            Sign Up
+          </Button>
+
+          <DivBox2>
+            <div>
+              By clicking “Sign up”, you agree to our terms of service and
+              acknowledge that you have read and understand our privacy policy
+              and code of conduct.
+            </div>
+          </DivBox2>
+
+          <DivBox3>
+            <span style={{ marginRight: 5 }}>Already have an account?</span>
+            <span style={{ color: '#0074cc' }}>
+              <Link to="/user/login"> Log in </Link>
+            </span>
+          </DivBox3>
         </RightContainer>
       </FormWrapper>
     </Container>
@@ -338,7 +340,7 @@ const Button = styled.button`
   height: 30px;
   width: 210px;
   padding: 10.4px;
-  margin: 6px 0px;
+  margin: -130px 0px;
 
   background-color: #0a95ff;
   color: #fff;
@@ -356,24 +358,25 @@ const Label = styled.label`
   font-weight: 700;
 `;
 const DivBox1 = styled.div`
-  flex-wrap: nowrap;
   width: 210px;
-  margin: -20px 0px 20px 0px;
-
+  text-align: left;
+  margin-top: -180px;
   font-size: 10px;
   color: gray;
 `;
 const DivBox2 = styled.div`
   flex-wrap: nowrap;
   width: 210px;
-  margin: 30px 20px 20px 0px;
+  text-align: left;
+  margin-top: -75px;
 
   font-size: 10px;
   color: gray;
 `;
 const DivBox3 = styled.div`
+  text-align: center;
+  margin-top: 30px;
   width: 210px;
-  margin: 85px 20px 10px 25px;
 
   font-size: 11px;
   color: #242629;

@@ -1,17 +1,11 @@
-import styled from 'styled-components';
-import Question from '../components/Question';
-import Paging from '../components/Paging/Paging';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { questionData } from '../pages/Questions';
+import styled from 'styled-components';
+import Question from './Question';
+import Paging from './Paging/Paging';
 
-const Questions = ({ questionData }) => {
-  const dispatch = useDispatch();
-  // 처음 렌더링 될 때 Nav와 Footer 제거
-  useEffect(() => {
-    dispatch(setNav(true));
-    dispatch(setFooter(true));
-  }, []);
-
+const AfterLogin = () => {
   const itemsPerPage = 5; // Number of items to display per page
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -29,15 +23,12 @@ const Questions = ({ questionData }) => {
   return (
     <>
       <MainComponent>
-        <H1>All Questions</H1>
+        <H1>Top Questions</H1>
         <AskButton>
           <Link to="/qna/ask">Ask Question</Link>
         </AskButton>
       </MainComponent>
-      <MainComponent>
-        <TotalDiv>{questionData.length} questions</TotalDiv>
-        {/* filter 버튼 추가 필요 */}
-      </MainComponent>
+      <MainComponent>{/* filter 버튼 추가 필요 */}</MainComponent>
       <MainComponent>
         <QuestionDiv>
           {displayedQuestions.map((question, index) => (
@@ -65,7 +56,7 @@ const MainComponent = styled.div`
 `;
 
 const AskButton = styled.button`
-  height: 2.5rem;
+  padding: 10px;
   background-color: var(--bright-blue);
   border-radius: 5px;
   a {
@@ -84,10 +75,6 @@ const H1 = styled.h1`
   font-size: x-large;
 `;
 
-const TotalDiv = styled.div`
-  margin: 0.5rem;
-  padding: 0 1rem;
-`;
 const QuestionDiv = styled.div`
   display: flex;
   flex-direction: column;
@@ -101,4 +88,4 @@ const PagingComponent = styled.div`
   padding: 1rem 1rem 3rem;
 `;
 
-export default Questions;
+export default AfterLogin;

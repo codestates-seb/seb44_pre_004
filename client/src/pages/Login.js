@@ -138,6 +138,12 @@ const Login = () => {
           Log in
         </Button>
       </ButtonContainor>
+      <DivBox3>
+        <span style={{ marginRight: 5 }}>Don’t have an account?</span>
+        <span style={{ color: '#0074cc' }}>
+          <Link to="/user/join"> Sign up </Link>
+        </span>
+      </DivBox3>
     </Containor>
   );
 };
@@ -177,7 +183,7 @@ const FormContainer = styled.form`
   max-width: 97.2307692rem;
 
   width: 300px;
-  height: 270px;
+  height: 290px;
   margin-top: 15px;
   padding: 30px;
   background-color: white;
@@ -221,7 +227,7 @@ const Button = styled.button`
   height: 40px;
   width: 240px;
   padding: 10.4px;
-  margin-top: -70px;
+  margin-top: -90px;
 
   font-weight: 600;
   font-size: 0.9em;
@@ -235,5 +241,15 @@ const Button = styled.button`
 
   cursor: pointer;
 `;
+const DivBox3 = styled.div`
+  justify-items: center;
+  /* text-align: center; */
+  margin-top: 40px;
+  padding-left: 55px;
+  width: 300px;
 
+  font-size: 13px;
+  font-weight: 600;
+  color: #242629;
+`;
 export default Login;

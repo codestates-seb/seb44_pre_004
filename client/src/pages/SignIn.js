@@ -77,17 +77,31 @@ const SignIn = () => {
   };
 
   const handleSignUp = () => {
-    if (email.trim() === '') {
+    if (isEmail === false) {
+      alert('이메일을 다시 확인해주세요.');
       setEmailMessage('Email cannot be empty.');
       setIsEmail(false);
-    }
-    if (password.trim() === '') {
+    } else if (isPassword === false) {
+      alert('비밀번호를 다시 확인해주세요.');
       setPasswordMessage('Password cannot be empty.');
       setIsPassword(false);
-    }
-    if (isEmail && isPassword) {
+    } else if (isEmail && isPassword) {
+      alert('회원가입이 정상적으로 완료되었습니다.');
       navigate('/user/login');
     }
+    // if (email.trim() === '') {
+    //   alert('입력하신 정보를 다시 확인해주세요.');
+    //   setEmailMessage('Email cannot be empty.');
+    //   setIsEmail(false);
+    // }
+    // if (password.trim() === '') {
+    //   alert('입력하신 정보를 다시 확인해주세요.');
+    //   setPasswordMessage('Password cannot be empty.');
+    //   setIsPassword(false);
+    // }
+    // if (isEmail && isPassword) {
+    //   navigate('/user/login');
+    // }
   };
 
   return (

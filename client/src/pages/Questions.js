@@ -1,82 +1,10 @@
 import styled from 'styled-components';
 import Question from '../components/Question';
 import Paging from '../components/Paging/Paging';
-import { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { setNav, setFooter } from '../store/showComponentsSlice';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-const questionData = [
-  {
-    voteCount: 10,
-    answerCount: 5,
-    title: 'Sample Question 1',
-    body: 'Sample question body 1',
-  },
-  {
-    voteCount: 8,
-    answerCount: 3,
-    title: 'Sample Question 2',
-    body: 'Sample question body 2',
-  },
-  {
-    voteCount: 15,
-    answerCount: 7,
-    title: 'Sample Question 3',
-    body: 'Sample question body 3',
-  },
-  {
-    voteCount: 3,
-    answerCount: 1,
-    title: 'Sample Question 4',
-    body: 'Sample question body 4',
-  },
-  {
-    voteCount: 12,
-    answerCount: 6,
-    title: 'Sample Question 5',
-    body: 'Sample question body 5',
-  },
-  {
-    voteCount: 6,
-    answerCount: 2,
-    title: 'Sample Question 6',
-    body: 'Sample question body 6',
-  },
-  {
-    voteCount: 9,
-    answerCount: 4,
-    title: 'Sample Question 7',
-    body: 'Sample question body 7',
-  },
-  {
-    voteCount: 13,
-    answerCount: 5,
-    title: 'Sample Question 8',
-    body: 'Sample question body 8',
-  },
-  {
-    voteCount: 7,
-    answerCount: 3,
-    title: 'Sample Question 9',
-    body: 'Sample question body 9',
-  },
-  {
-    voteCount: 11,
-    answerCount: 4,
-    title: 'Sample Question 10',
-    body: 'Sample question body 10',
-  },
-];
-
-const Questions = () => {
-  const dispatch = useDispatch();
-  // 처음 렌더링 될 때 Nav와 Footer 제거
-  useEffect(() => {
-    dispatch(setNav(true));
-    dispatch(setFooter(true));
-  }, []);
-
+const Questions = ({ questionData }) => {
   const itemsPerPage = 5; // Number of items to display per page
   const [currentPage, setCurrentPage] = useState(1);
 

@@ -18,14 +18,14 @@ const Question = ({ question }) => {
 
       <ColumDiv>
         <H3>
-          <Link to={`/qna/:qna-id`}>{question.title}</Link>
+          <Link to={`/qna/${question.id}`}>{question.title}</Link>
         </H3>
         <div>{question.body}</div>
         <ColumDiv>
           <AuthorDiv>
             <span>{/* 프로필 이미지 */}🌈</span>
             <DisplayNameSpan>{/* 닉네임 */}kim</DisplayNameSpan>
-            <span>{/* 작성일 */}40 secs ago</span>
+            <span>{/* 작성일 */}asked 40 secs ago</span>
           </AuthorDiv>
         </ColumDiv>
       </ColumDiv>

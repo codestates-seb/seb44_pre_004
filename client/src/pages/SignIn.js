@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 
 import { useDispatch } from 'react-redux';
 import { setNav, setFooter } from '../store/showComponentsSlice';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { FaQuestion, FaTree, FaTags, FaTrophy, FaGithub } from 'react-icons/fa';
 
 import { FcGoogle } from 'react-icons/fc';
@@ -192,7 +192,7 @@ const SignIn = () => {
               onChange={handleDisplayNameChange}
               required
             />
-            <ErrorMessageDiv>
+            <ErrorMessageDiv primary={isName}>
               <p>{nameMessage}</p>
             </ErrorMessageDiv>
             <Label htmlFor="Email">Email</Label>
@@ -204,7 +204,7 @@ const SignIn = () => {
               onChange={onChangeEmail}
               required
             />
-            <ErrorMessageDiv>
+            <ErrorMessageDiv primary={isEmail}>
               <p className="message">{emailMessage}</p>
             </ErrorMessageDiv>
             <Label htmlFor="Password">Password</Label>
@@ -216,7 +216,7 @@ const SignIn = () => {
               onChange={onChangePassword}
               required
             />
-            <ErrorMessageDiv>
+            <ErrorMessageDiv primary={isPassword}>
               <p className="message">{passwordMessage}</p>
             </ErrorMessageDiv>
             <DivBox1>
@@ -381,7 +381,18 @@ const DivBox3 = styled.div`
 const ErrorMessageDiv = styled.div`
   margin-top: -26px;
   margin-bottom: 20px;
-  color: red;
   font-size: 11px;
+  color: ${(props) => (props.primary ? 'green' : 'red')};
+  ${(props) =>
+    props.primary &&
+    css`
+      color: green;
+    `}
+
+  ${(props) =>
+    !props.primary &&
+    css`
+      color: red;
+    `}
 `;
 export default SignIn;

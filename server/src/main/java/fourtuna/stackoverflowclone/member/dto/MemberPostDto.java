@@ -1,18 +1,24 @@
 package fourtuna.stackoverflowclone.member.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import org.springframework.lang.Nullable;
 
-@Getter
+@Builder
 @AllArgsConstructor
-public class MemberResponseDto {
-
-    private long memberId;
+@Getter
+public class MemberPostDto {
+    //유효성검증 필요
     private String email;
     private String name;
     private String password;
+    @Nullable
     private String image;
-    private String title;
-    private String aboutMe;
 
+    @Nullable
+    private String title;
+
+    @Nullable
+    private String aboutMe;
 }

@@ -329,7 +329,6 @@ const Input = styled.input`
   border: 1px solid #ccc;
   border-radius: 3px;
   font-size: 11px;
-  autocomplete: 'current-password';
 `;
 
 const Button = styled.button`

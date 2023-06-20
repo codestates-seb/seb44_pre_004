@@ -1,8 +1,10 @@
 import styled from 'styled-components';
 import Question from '../components/Question';
 import Paging from '../components/Paging/Paging';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setNav, setFooter } from '../store/showComponentsSlice';
 
 const Questions = ({ questionData }) => {
   const dispatch = useDispatch();

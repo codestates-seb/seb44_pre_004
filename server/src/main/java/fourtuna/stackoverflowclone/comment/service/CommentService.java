@@ -79,6 +79,17 @@ public class CommentService {
         return UpdateComment.Response.from(comment);
     }
 
+    @Transactional
+    public void deleteComment(Long commentId, String memberEmail) {
+
+        Member member = memberService.findMemberByEmail(memberEmail);
+        Comment comment = findComment(commentId);
+
+        validateWriter(comment, member);
+
+        commentRepository.delete(comment);
+    }
+
     private static void validateWriter(Comment comment, Member member) {
         if (member.getMemberId() != comment.getMember().getMemberId()) {
             throw new BusinessLogicException(UNMATCHED_WRITER);

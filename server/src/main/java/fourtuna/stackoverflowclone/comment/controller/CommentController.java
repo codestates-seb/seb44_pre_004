@@ -5,6 +5,7 @@ import fourtuna.stackoverflowclone.comment.dto.UpdateComment;
 import fourtuna.stackoverflowclone.comment.service.CommentService;
 import fourtuna.stackoverflowclone.response.SingleResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -60,5 +61,19 @@ public class CommentController {
         UpdateComment.Response response = commentService.updateComment(request, commentId, memberEmail);
 
         return ResponseEntity.ok(new SingleResponseDto<>(response));
+    }
+
+    @DeleteMapping("/comment/{commentId}")
+    public ResponseEntity<?> deleteComment(@PathVariable Long commentId/*,
+                                           @RequestHeader("Authorization") String token*/) {
+
+        // 토큰에서 유저정보 꺼내기
+        // ex) String memberEmail  = tokenProvider.getAuthentication(token).getEmail();
+
+        String memberEmail = "test@test.com";
+
+        commentService.deleteComment(commentId, memberEmail);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

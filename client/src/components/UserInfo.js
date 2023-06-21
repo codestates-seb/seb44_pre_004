@@ -6,12 +6,12 @@ import styled from 'styled-components';
 
 const UserInfo = ({ userData }) => {
   const dispatch = useDispatch();
-  const { imageUrl, name, title, aboutMe, days } = userData;
+  const { memberId, imageUrl, name, title, aboutMe, days } = userData;
 
   return (
     <UserContainer>
       <InfoSection>
-        <Link to="/user/:memberId/:username">
+        <Link to={`/user/${memberId}`}>
           <img src={imageUrl} alt="profile" />
         </Link>
         <InfoArea>
@@ -27,7 +27,7 @@ const UserInfo = ({ userData }) => {
       <EditButton>
         <IoPencil />
         <Link
-          to="/user/edit/:memberId"
+          to={`/user/edit/${memberId}`}
           onClick={() => dispatch(menuIdxSlice.actions.idx(3))}
         >
           Edit profile

@@ -1,18 +1,60 @@
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-// import axios from 'axios';
+import axios from 'axios';
 
 import { setNav, setFooter } from '../store/showComponentsSlice';
 import styled from 'styled-components';
 import UserInfo from '../components/UserInfo';
 
-const EditProfile = ({ userData, setUserData }) => {
+const EditProfile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const [userData, setUserData] = useState({});
+  const { memberId } = userData;
+
+  const [inputs, setInputs] = useState({});
+  const { imageUrl, name, title, aboutMe } = inputs;
+
   useEffect(() => {
-    getUserInfo();
+    axios
+      .get(
+        'https://react-http-fbaa8-default-rtdb.asia-southeast1.firebasedatabase.app/user.json'
+      )
+      .then((res) => {
+        // console.log(res);
+        const {
+          memberId,
+          imageUrl,
+          name,
+          title,
+          aboutMe,
+          answers,
+          questions,
+          days,
+        } = res.data;
+        const data = {
+          memberId,
+          imageUrl,
+          name,
+          title,
+          aboutMe,
+          answers,
+          questions,
+          days,
+        };
+        setUserData(data);
+        setInputs({
+          imageUrl,
+          name,
+          title,
+          aboutMe,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
   // 처음 렌더링 될 때 Nav와 Footer 제어
@@ -21,28 +63,17 @@ const EditProfile = ({ userData, setUserData }) => {
     dispatch(setFooter(true));
   }, []);
 
-  const { memberId } = userData;
-
-  // TODO: 사용자 정보 initial value 또는 null로 지정
-  const [inputs, setInputs] = useState({
-    imageUrl: userData.imageUrl,
-    name: userData.name,
-    title: userData.title || null,
-    aboutMe: userData.aboutMe || null,
-  });
-  const { imageUrl, name, title, aboutMe } = inputs;
-
   const handleInputChange = (e) => {
     const { value, id } = e.target; // e.target에서 구조 분해 할당
     setInputs({
       ...inputs, // 기존의 input 객체를 복사
-      [id]: value || null, // id 키를 가진 값을 value 로 설정
+      [id]: value || '', // id 키를 가진 값을 value 로 설정
     });
-    // console.log(inputs);
+    console.log(inputs);
   };
 
   //이미지 파일 등록 함수
-  const onUpload = (e) => {
+  const handleUploadFile = (e) => {
     const file = e.target.files[0];
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -59,33 +90,27 @@ const EditProfile = ({ userData, setUserData }) => {
     });
   };
 
-  const onSubmit = (e) => {
-    // updateUserInfo();
-    console.log('Submitted');
+  const handleSubmit = (e) => {
+    updateUserInfo();
+    // console.log('Submitted');
     setUserData({ ...userData, ...inputs });
     alert('수정이 완료되었습니다.');
     navigate(`/user/${memberId}`);
     e.preventDefault();
   };
 
-  // 사용자 정보 GET 요청
-  const getUserInfo = /* async */ () => {
-    // try {
-    //   const response = await axios.get(`/user/edit/${memberId}`);
-    //   console.log(response);
-    // } catch (error) {
-    //   console.error('Error EditProfile get user info', error);
-    // }
-  };
-
   // 사용자 정보 변경 PATCH 요청
-  // const updateUserInfo = /* async */ () => {
-  // try {
-  //   await axios.patch(`/user/edit/${memberId}`, inputs);
-  // } catch (error) {
-  //   console.error('Error update user profile', error);
-  // }
-  // };
+  const updateUserInfo = async () => {
+    try {
+      // await axios.patch(`/user/edit/${memberId}`, inputs);
+      await axios.patch(
+        'https://react-http-fbaa8-default-rtdb.asia-southeast1.firebasedatabase.app/user.json',
+        inputs
+      );
+    } catch (error) {
+      console.error('Error update user profile', error);
+    }
+  };
 
   return (
     <>
@@ -94,7 +119,7 @@ const EditProfile = ({ userData, setUserData }) => {
         <h2>Edit your profile</h2>
         <InfoElement>
           <h3>Public information</h3>
-          <form onSubmit={onSubmit}>
+          <form onSubmit={handleSubmit}>
             <ul>
               <InputFile>
                 <h4>Profile image</h4>
@@ -103,7 +128,7 @@ const EditProfile = ({ userData, setUserData }) => {
                   <input
                     type="file"
                     id="imageUrl"
-                    onChange={(e) => onUpload(e)}
+                    onChange={(e) => handleUploadFile(e)}
                   />
                   <img src={imageUrl} alt="profile" />
                 </div>
@@ -113,7 +138,7 @@ const EditProfile = ({ userData, setUserData }) => {
                 <input
                   type="text"
                   id="name"
-                  value={name}
+                  value={name || ''}
                   onChange={handleInputChange}
                 />
               </InputText>
@@ -122,7 +147,7 @@ const EditProfile = ({ userData, setUserData }) => {
                 <input
                   type="text"
                   id="title"
-                  value={title}
+                  value={title || ''}
                   onChange={handleInputChange}
                 />
               </InputText>
@@ -131,7 +156,7 @@ const EditProfile = ({ userData, setUserData }) => {
                 <textarea
                   name="aboutMe"
                   id="aboutMe"
-                  value={aboutMe}
+                  value={aboutMe || ''}
                   onChange={handleInputChange}
                   maxLength={300}
                 ></textarea>

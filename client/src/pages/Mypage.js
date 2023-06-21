@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { setNav, setFooter } from '../store/showComponentsSlice';
-// import axios from 'axios';
+import axios from 'axios';
 
 import { menuIdxSlice } from '../store/menuIdxSlice';
 import styled from 'styled-components';
@@ -19,15 +19,45 @@ export const dummyUserData = {
   days: 200,
 };
 
-const Mypage = ({ userData }) => {
+const Mypage = () => {
   const dispatch = useDispatch();
 
-  // const [userData, setUserData] = useState(dummyUserData);
+  const [userData, setUserData] = useState({});
   const { answers, questions } = userData;
 
-  // useEffect(() => {
-  //   getUserInfo();
-  // }, []);
+  useEffect(() => {
+    axios
+      .get(
+        'https://react-http-fbaa8-default-rtdb.asia-southeast1.firebasedatabase.app/user.json'
+      )
+      .then((res) => {
+        console.log(res);
+        const {
+          memberId,
+          imageUrl,
+          name,
+          title,
+          aboutMe,
+          answers,
+          questions,
+          days,
+        } = res.data;
+        const data = {
+          memberId,
+          imageUrl,
+          name,
+          title,
+          aboutMe,
+          answers,
+          questions,
+          days,
+        };
+        setUserData(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   // 처음 렌더링 될 때 Nav와 Footer 제거
   useEffect(() => {
@@ -35,17 +65,6 @@ const Mypage = ({ userData }) => {
     dispatch(setFooter(true));
     dispatch(menuIdxSlice.actions.idx(3));
   }, []);
-
-  // 사용자 정보 GET 요청
-  // const getUserInfo = async () => {
-  //   try {
-  //     const response = await axios.get(`/user/${memberId}/${username}`);
-  //     setUserData((prev) => [...prev, response.data]);
-  //     console.log(response);
-  //   } catch (error) {
-  //     console.error('Error Mypge get user info', error);
-  //   }
-  // };
 
   return (
     <>

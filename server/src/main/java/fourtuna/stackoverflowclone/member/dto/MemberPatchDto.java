@@ -7,8 +7,7 @@ import lombok.Setter;
 @Setter
 public class MemberPatchDto {
     private long memberId;
-    //private String email;
-    private String username;
+    private String name;
     private String image;
     private String title;
     private String aboutMe;

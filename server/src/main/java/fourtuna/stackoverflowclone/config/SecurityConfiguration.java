@@ -27,10 +27,6 @@ public class SecurityConfiguration {
         this.jwtTokenizer = jwtTokenizer;
     }
 
-//    @Bean
-//    public UserDetailsManager userDetailsService() {
-//        return new InMemoryUserDetailsManager();
-//    }
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http

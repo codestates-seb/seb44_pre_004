@@ -2,6 +2,7 @@ package fourtuna.stackoverflowclone.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fourtuna.stackoverflowclone.member.dto.LoginDto;
+import fourtuna.stackoverflowclone.member.dto.LoginResponseDto;
 import fourtuna.stackoverflowclone.member.entity.Member;
 import lombok.SneakyThrows;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,9 +13,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.IOException;
+import java.util.*;
 
 // Username/Password 기반의 인증을 처리
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
@@ -47,13 +47,21 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     protected void successfulAuthentication(HttpServletRequest request,
                                             HttpServletResponse response,
                                             FilterChain chain,
-                                            Authentication authResult) {
+                                            Authentication authResult) throws IOException {
         Member member = (Member) authResult.getPrincipal(); // Member 엔티티 클래스의 객체를 얻음
         String accessToken = delegateAccessToken(member);
         String refreshToken = delegateRefreshToken(member);
 
+        ObjectMapper mapper = new ObjectMapper();
+
+        LoginResponseDto loginResponseDto = new LoginResponseDto();
+        loginResponseDto.setName(member.getName());
+        loginResponseDto.setEmail(member.getEmail());
+        loginResponseDto.setMemberId(member.getMemberId());
+
         response.setHeader("Authorization", "Bearer " + accessToken);
         response.setHeader("Refresh", refreshToken);
+        response.getWriter().write(mapper.writeValueAsString(loginResponseDto));
 
     }
 

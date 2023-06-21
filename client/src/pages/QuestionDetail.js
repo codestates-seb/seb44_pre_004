@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { setNav, setFooter } from '../store/showComponentsSlice';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import Answer from '../components/Answer';
 // import axios from 'axios';
@@ -9,9 +9,15 @@ import Answer from '../components/Answer';
 const QuestionDetail = ({ questionData }) => {
   const { qnaId } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [answers, setAnswers] = useState([]);
   const [newAnswer, setNewAnswer] = useState('');
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedQuestion, setEditedQuestion] = useState({
+    title: '',
+    body: '',
+  });
 
   useEffect(() => {
     const dummyAnswers = {
@@ -144,16 +150,101 @@ const QuestionDetail = ({ questionData }) => {
   //   }
   // };
 
+  const handleQuestionEdit = () => {
+    setIsEditing(true);
+    setEditedQuestion({
+      title: question.title,
+      body: question.body,
+    });
+  };
+
+  const handleQuestionSave = /*async 서버 구현시 추가 */ () => {
+    question.title = editedQuestion.title;
+    question.body = editedQuestion.body;
+    setIsEditing(false);
+  };
+
+  // 서버 완성 시 변경 할 수정 코드
+  //   try {
+  //     const updatedQuestion = {
+  //       id: question.id,
+  //       title: editedQuestion.title,
+  //       body: editedQuestion.body,
+  //     };
+
+  //     const response = await axios.put(`/api/questions/${question.id}`, updatedQuestion);
+
+  //     if (response.status === 200) {
+  //       setIsEditing(false);
+  //     } else {
+  //       console.error('Error updating question');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error updating question:', error);
+  //   }
+  // };
+
+  const handleQuestionCancel = () => {
+    setIsEditing(false);
+  };
+
+  const handleQuestionDelete = async () => {
+    alert('Question deleted');
+    navigate('/qna');
+  };
+  //   서버 완성 시 변경 할 삭제 코드
+  //   try {
+  //     const response = await axios.delete(`/api/questions/${question.id}`);
+
+  //     if (response.status === 200) {
+  //       // 여기서 질문 삭제 후 리다이렉트 또는 화면 전환 등의 작업을 수행할 수 있습니다.
+  //       console.log('Question deleted');
+  //     } else {
+  //       console.error('Error deleting question');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error deleting question:', error);
+  //   }
+  // };
+
   return (
     <>
       <MainComponent>
-        <H2>{question.title}</H2>
-        <RowDiv>
-          <div>asked {/* 작성일 */}today</div>
-          <div>Modified {/* 수정일 */}today</div>
-        </RowDiv>
+        {isEditing ? (
+          <QuestionInput
+            value={editedQuestion.title}
+            onChange={(e) =>
+              setEditedQuestion({
+                ...editedQuestion,
+                title: e.target.value,
+              })
+            }
+          />
+        ) : (
+          <H2>{question.title}</H2>
+        )}
+        {isEditing ? (
+          <></>
+        ) : (
+          <RowDiv>
+            <div>asked {/* 작성일 */}today</div>
+            <div>Modified {/* 수정일 */}today</div>
+          </RowDiv>
+        )}
         <BodyContainer>
-          <div>{question.body}</div>
+          {isEditing ? (
+            <QuestionTextArea
+              value={editedQuestion.body}
+              onChange={(e) =>
+                setEditedQuestion({
+                  ...editedQuestion,
+                  body: e.target.value,
+                })
+              }
+            />
+          ) : (
+            <div>{question.body}</div>
+          )}
           <AuthorDiv>
             <ColumDiv>
               <div>{/* 작성시간 */}asked 40 secs ago</div>
@@ -163,13 +254,25 @@ const QuestionDetail = ({ questionData }) => {
               </RowDiv>
             </ColumDiv>
           </AuthorDiv>
+          {isEditing ? (
+            <ButtonContainer>
+              <SaveButton onClick={handleQuestionSave}>Save</SaveButton>
+              <CancelButton onClick={handleQuestionCancel}>Cancel</CancelButton>
+              <DeleteButton onClick={handleQuestionDelete}>Delete</DeleteButton>
+            </ButtonContainer>
+          ) : (
+            <ButtonContainer>
+              <EditButton onClick={handleQuestionEdit}>Edit</EditButton>
+              <DeleteButton onClick={handleQuestionDelete}>Delete</DeleteButton>
+            </ButtonContainer>
+          )}
           <CommentButton>
             <AddComment>Add a comment</AddComment>
           </CommentButton>
         </BodyContainer>
       </MainComponent>
       <MainComponent>
-        <h3>{answers.length} Answer</h3>{' '}
+        <H3>{answers.length} Answer</H3>{' '}
         {/* 답변의 총 개수 표시 후에 변경 필요 */}
         <AnswerList>
           {answers.map((answer) => (
@@ -211,6 +314,7 @@ const H2 = styled.h2`
 
 const H3 = styled.h3`
   font-size: x-large;
+  margin-bottom: 1rem;
 `;
 
 const RowDiv = styled.div`
@@ -258,6 +362,7 @@ const CommentButton = styled.button`
 `;
 
 const AddComment = styled.p`
+  margin-top: 1rem;
   cursor: pointer;
   :hover {
     color: var(--bright-blue);
@@ -267,15 +372,14 @@ const AddComment = styled.p`
 const AnswerTextArea = styled.textarea`
   width: 100%;
   height: 5rem;
+  margin-bottom: 1rem;
 `;
 
 const AnswerForm = styled.form`
-  // 댓글 폼의 스타일을 지정해주세요.
   width: 100%;
 `;
 
 const AnswerList = styled.ul`
-  // 댓글 목록의 스타일을 지정해주세요.
   margin-top: 1rem;
 `;
 
@@ -289,4 +393,56 @@ const AnswerButton = styled.button`
     background-color: var(--dark-blue);
   }
 `;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+`;
+
+const EditButton = styled.button`
+  color: var(--light-grey);
+  cursor: pointer;
+  :hover {
+    color: var(--dark-blue);
+  }
+`;
+
+const SaveButton = styled.button`
+  color: var(--light-grey);
+  cursor: pointer;
+  :hover {
+    color: var(--dark-blue);
+  }
+`;
+
+const CancelButton = styled.button`
+  color: var(--light-grey);
+  cursor: pointer;
+  :hover {
+    color: var(--dark-blue);
+  }
+`;
+
+const DeleteButton = styled.button`
+  color: var(--light-grey);
+  cursor: pointer;
+  :hover {
+    color: var(--dark-blue);
+  }
+`;
+
+const QuestionInput = styled.input`
+  margin: 1rem;
+  padding: 0.5rem;
+  border: 1px solid var(--grey);
+  border-radius: 2px;
+`;
+
+const QuestionTextArea = styled.textarea`
+  width: 100%;
+  height: 5rem;
+  padding: 0.5rem;
+`;
+
 export default QuestionDetail;

@@ -82,7 +82,7 @@ const AskQuestion = () => {
       </MainComponent>
       <MainComponent>
         <AskButton onClick={saveQna}>
-          <Link to="/qna/:qna-id">Post your question</Link>
+          <Link to="/qna/:qnaId">Post your question</Link>
         </AskButton>
       </MainComponent>
     </>

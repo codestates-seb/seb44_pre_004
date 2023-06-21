@@ -117,7 +117,7 @@ const RoutingPages = () => {
             <Route path="/tags" element={<Tags />} />
             <Route path="/user" element={<Users />} />
             <Route
-              path="/user/:memberId/:username"
+              path="/user/:memberId"
               element={<Mypage userData={userData} />}
             />
             <Route

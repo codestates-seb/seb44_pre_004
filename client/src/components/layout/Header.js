@@ -42,7 +42,7 @@ const Header = () => {
           </Link>
           {/* 로그인 후 버튼 */}
           {/* <Link
-            to="/user/:memberId/:username"
+            to="/user/:memberId"
             onClick={() => {
               setShowNav(false);
               dispatch(menuIdxSlice.actions.idx(3));

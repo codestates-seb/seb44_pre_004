@@ -4,7 +4,7 @@ import { setNav, setFooter } from '../store/showComponentsSlice';
 import BeforeLogin from '../components/BeforeLogin';
 // import AfterLogin from '../components/AfterLogin';
 
-const Main = () => {
+const Main = (/*{ questionData }*/) => {
   const dispatch = useDispatch();
   // 처음 렌더링 될 때 Nav와 Footer 제어
   useEffect(() => {
@@ -17,7 +17,7 @@ const Main = () => {
   return (
     <>
       <BeforeLogin />
-      {/* <AfterLogin /> */}
+      {/* <AfterLogin questionData={questionData} /> */}
     </>
   );
 };

@@ -16,7 +16,7 @@ const Question = ({ question }) => {
 
       <ColumDiv>
         <H3>
-          <Link to={`/qna/:qna-id`}>{question.title}</Link>
+          <Link to={`/qna/${question.id}`}>{question.title}</Link>
         </H3>
         <TextBodyDiv>{question.body}</TextBodyDiv>
         <ColumDiv>

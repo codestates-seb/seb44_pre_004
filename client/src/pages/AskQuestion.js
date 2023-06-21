@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setNav, setFooter } from '../store/showComponentsSlice';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
@@ -9,7 +9,7 @@ import styled from 'styled-components';
 
 const AskQuestion = () => {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user);
+  // const user = useSelector((state) => state.user); 유저 정보 아직 안됨.
 
   // 처음 렌더링 될 때 Nav와 Footer 제거
   useEffect(() => {
@@ -19,10 +19,10 @@ const AskQuestion = () => {
 
   const [qna, setQna] = useState({
     title: '',
-    contents: '',
+    body: '',
   });
 
-  const { title, contents } = qna;
+  const { title, body } = qna;
 
   const onChange = (event) => {
     const { value, name } = event.target;
@@ -36,17 +36,20 @@ const AskQuestion = () => {
     // 로그인된 사용자의 정보를 서버로 전송
     const qnaData = {
       title,
-      createdBy: user?.id,
-      contents,
+      // createdBy: user?.id,  유저 정보 아직 안됨.
+      body,
     };
 
     console.log('qnaData:', qnaData);
     alert('등록되었습니다.');
-
-    // await axios.post(`//localhost:8080/qna`, qnaData).then(() => {
-    //   alert('등록되었습니다.');
-    // });
   };
+
+  //   await axios
+  //     .post(`http://13.125.205.124:8080/qna/question`, qnaData)
+  //     .then(() => {
+  //       alert('등록되었습니다.');
+  //     });
+  // };
 
   return (
     <>
@@ -73,8 +76,8 @@ const AskQuestion = () => {
         <TextAreaDiv>
           <TextDiv>Body</TextDiv>
           <BodyTextArea
-            name="contents"
-            value={contents}
+            name="body"
+            value={body}
             onChange={onChange}
             placeholder="내용을 작성해주세요."
           ></BodyTextArea>

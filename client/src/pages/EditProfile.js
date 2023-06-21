@@ -21,7 +21,7 @@ const EditProfile = ({ userData, setUserData }) => {
     dispatch(setFooter(true));
   }, []);
 
-  const { memberId, username } = userData;
+  const { memberId } = userData;
 
   // TODO: 사용자 정보 initial value 또는 null로 지정
   const [inputs, setInputs] = useState({
@@ -64,7 +64,7 @@ const EditProfile = ({ userData, setUserData }) => {
     console.log('Submitted');
     setUserData({ ...userData, ...inputs });
     alert('수정이 완료되었습니다.');
-    navigate(`/user/${memberId}/${username}`);
+    navigate(`/user/${memberId}`);
     e.preventDefault();
   };
 
@@ -140,7 +140,7 @@ const EditProfile = ({ userData, setUserData }) => {
             <ButtonArea>
               <BlueBtn type="submit">Save profile</BlueBtn>
               <Link
-                to={`/user/${memberId}/${username}`}
+                to={`/user/${memberId}`}
                 onClick={() =>
                   alert('작성하신 내용이 저장되지 않습니다. 계속하시겠습니까?')
                 }

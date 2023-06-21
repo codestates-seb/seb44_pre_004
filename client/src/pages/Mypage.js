@@ -10,7 +10,6 @@ import UserInfo from '../components/UserInfo';
 export const dummyUserData = {
   memberId: 11,
   imageUrl: 'https://picsum.photos/164',
-  username: 'rocket',
   name: 'Rocket the Raccoon',
   title: 'Gaurdians of Gallaxy',
   aboutMe:

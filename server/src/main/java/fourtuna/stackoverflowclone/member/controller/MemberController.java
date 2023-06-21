@@ -1,6 +1,7 @@
 package fourtuna.stackoverflowclone.member.controller;
 
 import fourtuna.stackoverflowclone.member.dto.MemberPatchDto;
+import fourtuna.stackoverflowclone.member.dto.MemberResponseDto;
 import fourtuna.stackoverflowclone.member.entity.Member;
 import fourtuna.stackoverflowclone.member.mapper.MemberMapper;
 import fourtuna.stackoverflowclone.member.service.MemberService;
@@ -70,9 +71,9 @@ public class MemberController {
     @PostMapping
     public ResponseEntity postMember(@Valid @RequestBody MemberPostDto memberPostDto){
         Member createdMember = memberService.createMember(mapper.memberPostDtoToMember(memberPostDto));
-        //SingleResponseDto response = mapper.memberToSingleResponseDto(createdMember);
+        MemberResponseDto response = mapper.memberToMemberResponseDto(createdMember);
 
-        //return response;
-        return new ResponseEntity<>(mapper.memberToMemberResponseDto(createdMember), HttpStatus.CREATED);
+        return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.CREATED);
+        //return new ResponseEntity<>(mapper.memberToMemberResponseDto(createdMember), HttpStatus.CREATED);
     }
 }

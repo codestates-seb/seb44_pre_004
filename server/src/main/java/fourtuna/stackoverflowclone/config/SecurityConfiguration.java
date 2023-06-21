@@ -1,4 +1,7 @@
 package fourtuna.stackoverflowclone.config;
+
+import fourtuna.stackoverflowclone.audit.filter.JwtVerificationFilter;
+import fourtuna.stackoverflowclone.auth.CustomAuthorityUtils;
 import fourtuna.stackoverflowclone.auth.JwtAuthenticationFilter;
 import fourtuna.stackoverflowclone.auth.JwtTokenizer;
 import fourtuna.stackoverflowclone.auth.handler.MemberAuthenticationFailureHandler;
@@ -8,29 +11,31 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
 import java.util.Arrays;
+import org.springframework.http.HttpMethod;
 
 import static org.springframework.security.config.Customizer.withDefaults;
+
 
 @Configuration
 public class SecurityConfiguration {
     private final JwtTokenizer jwtTokenizer;
+    private final CustomAuthorityUtils authorityUtils;
 
-    public SecurityConfiguration(JwtTokenizer jwtTokenizer) {
+    public SecurityConfiguration(JwtTokenizer jwtTokenizer,
+                                 CustomAuthorityUtils authorityUtils) {
         this.jwtTokenizer = jwtTokenizer;
+        this.authorityUtils = authorityUtils;
     }
 
-//    @Bean
-//    public UserDetailsManager userDetailsService() {
-//        return new InMemoryUserDetailsManager();
-//    }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -38,14 +43,22 @@ public class SecurityConfiguration {
                 .and()
                 .csrf().disable()
                 .cors(withDefaults())
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
                 .formLogin().disable()
                 .httpBasic().disable()
                 .apply(new CustomFilterConfigurer())
                 .and()
                 .authorizeHttpRequests(authorize -> authorize
+                        .antMatchers(HttpMethod.POST, "/*/user").permitAll()
+                        .antMatchers(HttpMethod.PATCH, "/*/user/**").hasRole("USER")
+                        //.antMatchers(HttpMethod.GET, "/*/members").hasRole("ADMIN")
+                        .antMatchers(HttpMethod.GET, "/*/user/**").hasAnyRole("USER", "ADMIN")
+                        .antMatchers(HttpMethod.DELETE, "/*/user/**").hasRole("USER")
                         .anyRequest().permitAll()
                 );
         return http.build();
+
     }
 
     @Bean
@@ -70,11 +83,15 @@ public class SecurityConfiguration {
             AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);
 
             JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer);
-            jwtAuthenticationFilter.setFilterProcessesUrl("/user/login");
+            jwtAuthenticationFilter.setFilterProcessesUrl("/v11/auth/login");
             jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler());
             jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());
 
-            builder.addFilter(jwtAuthenticationFilter);
+            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils);
+
+            builder
+                    .addFilter(jwtAuthenticationFilter)
+                    .addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class);
         }
     }
 }

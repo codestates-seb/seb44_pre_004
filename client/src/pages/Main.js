@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { setNav, setFooter } from '../store/showComponentsSlice';
 import BeforeLogin from '../components/BeforeLogin';
 // import AfterLogin from '../components/AfterLogin';
+// import LoadingSpinner from '../components/LoadingSpinner';
 
 const Main = (/*{ questionData }*/) => {
   const dispatch = useDispatch();
@@ -18,6 +19,7 @@ const Main = (/*{ questionData }*/) => {
     <>
       <BeforeLogin />
       {/* <AfterLogin questionData={questionData} /> */}
+      {/* <LoadingSpinner /> */}
     </>
   );
 };

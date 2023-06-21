@@ -6,28 +6,28 @@ import styled from 'styled-components';
 
 const UserInfo = ({ userData }) => {
   const dispatch = useDispatch();
-  const { imageUrl, name, title, aboutMe, days } = userData;
+  const { memberId, imageUrl, username, title, aboutme, createAt } = userData;
 
   return (
     <UserContainer>
       <InfoSection>
-        <Link to="/user/:memberId/:username">
+        <Link to={`/user/${memberId}`}>
           <img src={imageUrl} alt="profile" />
         </Link>
         <InfoArea>
-          <h2>{name}</h2>
+          <h2>{username}</h2>
           <h3>{title}</h3>
-          <p>{aboutMe}</p>
+          <p>{aboutme}</p>
           <p>
             <IoPeople />
-            Member for <span>{days}</span> days
+            Member for <span>{createAt}</span> days
           </p>
         </InfoArea>
       </InfoSection>
       <EditButton>
         <IoPencil />
         <Link
-          to="/user/edit/:memberId"
+          to={`/user/edit/${memberId}`}
           onClick={() => dispatch(menuIdxSlice.actions.idx(3))}
         >
           Edit profile

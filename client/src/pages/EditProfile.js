@@ -1,18 +1,53 @@
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-// import axios from 'axios';
+import axios from 'axios';
 
 import { setNav, setFooter } from '../store/showComponentsSlice';
 import styled from 'styled-components';
 import UserInfo from '../components/UserInfo';
+import LoadingSpinner from '../components/LoadingSpinner';
 
-const EditProfile = ({ userData, setUserData }) => {
+const EditProfile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const [userData, setUserData] = useState({});
+  const [updatedData, setUpdatedData] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
+  const { memberId } = userData;
+  const { imageUrl, username, title, aboutme } = updatedData;
+
   useEffect(() => {
-    getUserInfo();
+    axios
+      .get(
+        'https://react-http-fbaa8-default-rtdb.asia-southeast1.firebasedatabase.app/user.json'
+      )
+      .then((res) => {
+        // console.log(res);
+        const { memberId, imageUrl, username, title, aboutme, createAt } =
+          res.data;
+        const data = {
+          memberId,
+          imageUrl,
+          username,
+          title,
+          aboutme,
+          createAt,
+        };
+        setUserData(data);
+        setUpdatedData({
+          imageUrl,
+          username,
+          title,
+          aboutme,
+        });
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsLoading(false);
+      });
   }, []);
 
   // 처음 렌더링 될 때 Nav와 Footer 제어
@@ -21,36 +56,25 @@ const EditProfile = ({ userData, setUserData }) => {
     dispatch(setFooter(true));
   }, []);
 
-  const { memberId } = userData;
-
-  // TODO: 사용자 정보 initial value 또는 null로 지정
-  const [inputs, setInputs] = useState({
-    imageUrl: userData.imageUrl,
-    name: userData.name,
-    title: userData.title || null,
-    aboutMe: userData.aboutMe || null,
-  });
-  const { imageUrl, name, title, aboutMe } = inputs;
-
   const handleInputChange = (e) => {
     const { value, id } = e.target; // e.target에서 구조 분해 할당
-    setInputs({
-      ...inputs, // 기존의 input 객체를 복사
-      [id]: value || null, // id 키를 가진 값을 value 로 설정
+    setUpdatedData({
+      ...updatedData, // 기존의 input 객체를 복사
+      [id]: value || '', // id 키를 가진 값을 value 로 설정
     });
-    // console.log(inputs);
+    console.log(updatedData);
   };
 
   //이미지 파일 등록 함수
-  const onUpload = (e) => {
+  const handleUploadFile = (e) => {
     const file = e.target.files[0];
     const reader = new FileReader();
     reader.readAsDataURL(file);
 
     return new Promise((resolve) => {
       reader.onload = () => {
-        setInputs({
-          ...inputs,
+        setUpdatedData({
+          ...updatedData,
           imageUrl: reader.result || null,
         });
         resolve();
@@ -59,33 +83,31 @@ const EditProfile = ({ userData, setUserData }) => {
     });
   };
 
-  const onSubmit = (e) => {
-    // updateUserInfo();
-    console.log('Submitted');
-    setUserData({ ...userData, ...inputs });
+  const handleSubmit = (e) => {
+    updateUserInfo();
+    // console.log('Submitted');
+    setUserData({ ...userData, ...updatedData });
     alert('수정이 완료되었습니다.');
     navigate(`/user/${memberId}`);
     e.preventDefault();
   };
 
-  // 사용자 정보 GET 요청
-  const getUserInfo = /* async */ () => {
-    // try {
-    //   const response = await axios.get(`/user/edit/${memberId}`);
-    //   console.log(response);
-    // } catch (error) {
-    //   console.error('Error EditProfile get user info', error);
-    // }
+  // 사용자 정보 변경 PATCH 요청
+  const updateUserInfo = async () => {
+    try {
+      // await axios.patch(`/user/edit/${memberId}`, inputs);
+      await axios.patch(
+        'https://react-http-fbaa8-default-rtdb.asia-southeast1.firebasedatabase.app/user.json',
+        updatedData
+      );
+    } catch (error) {
+      console.error('Error update user profile', error);
+    }
   };
 
-  // 사용자 정보 변경 PATCH 요청
-  // const updateUserInfo = /* async */ () => {
-  // try {
-  //   await axios.patch(`/user/edit/${memberId}`, inputs);
-  // } catch (error) {
-  //   console.error('Error update user profile', error);
-  // }
-  // };
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <>
@@ -94,7 +116,7 @@ const EditProfile = ({ userData, setUserData }) => {
         <h2>Edit your profile</h2>
         <InfoElement>
           <h3>Public information</h3>
-          <form onSubmit={onSubmit}>
+          <form onSubmit={handleSubmit}>
             <ul>
               <InputFile>
                 <h4>Profile image</h4>
@@ -103,17 +125,17 @@ const EditProfile = ({ userData, setUserData }) => {
                   <input
                     type="file"
                     id="imageUrl"
-                    onChange={(e) => onUpload(e)}
+                    onChange={(e) => handleUploadFile(e)}
                   />
                   <img src={imageUrl} alt="profile" />
                 </div>
               </InputFile>
               <InputText>
-                <label htmlFor="name">Display name</label>
+                <label htmlFor="username">Display name</label>
                 <input
                   type="text"
-                  id="name"
-                  value={name}
+                  id="username"
+                  value={username || ''}
                   onChange={handleInputChange}
                 />
               </InputText>
@@ -122,16 +144,16 @@ const EditProfile = ({ userData, setUserData }) => {
                 <input
                   type="text"
                   id="title"
-                  value={title}
+                  value={title || ''}
                   onChange={handleInputChange}
                 />
               </InputText>
               <InputText>
-                <label htmlFor="aboutMe">About me</label>
+                <label htmlFor="aboutme">About me</label>
                 <textarea
-                  name="aboutMe"
-                  id="aboutMe"
-                  value={aboutMe}
+                  name="aboutme"
+                  id="aboutme"
+                  value={aboutme || ''}
                   onChange={handleInputChange}
                   maxLength={300}
                 ></textarea>

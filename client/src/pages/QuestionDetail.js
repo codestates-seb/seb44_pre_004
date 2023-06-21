@@ -223,10 +223,14 @@ const QuestionDetail = ({ questionData }) => {
         ) : (
           <H2>{question.title}</H2>
         )}
-        <RowDiv>
-          <div>asked {/* 작성일 */}today</div>
-          <div>Modified {/* 수정일 */}today</div>
-        </RowDiv>
+        {isEditing ? (
+          <></>
+        ) : (
+          <RowDiv>
+            <div>asked {/* 작성일 */}today</div>
+            <div>Modified {/* 수정일 */}today</div>
+          </RowDiv>
+        )}
         <BodyContainer>
           {isEditing ? (
             <QuestionTextArea

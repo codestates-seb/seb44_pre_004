@@ -3,18 +3,13 @@ spring:
     console:
       enabled: true
       path: /h2
-<<<<<<< HEAD
   jpa:
     spring.jpa.defer-datasource-initialization: true
-=======
->>>>>>> 8633a62902a370eb079806ad37de11817554cdf0
   datasource:
     url: jdbc:h2:mem:test
   sql:
     init:
-      schema-locations: classpath*:db/h2/schema.sql
-<<<<<<< HEAD
-=======
+      #schema-locations: classpath*:db/h2/schema.sql
       data-locations: classpath*:db/h2/data.sql
 logging:
   level:
@@ -22,4 +17,10 @@ logging:
       springframework:
         jdbc:
           core: TRACE
->>>>>>> 8633a62902a370eb079806ad37de11817554cdf0
+jwt:
+  key: ${JWT_SECRET_KEY}
+  access-token-expiration-minutes: 30
+  refresh-token-expiration-minutes: 420
+mail:
+  address:
+    admin: admin@gmail.com

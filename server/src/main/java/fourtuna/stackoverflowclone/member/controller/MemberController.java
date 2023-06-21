@@ -35,8 +35,8 @@ public class MemberController {
         this.mapper = mapper;
     }
 
-    @PatchMapping("/edit/{member-id}")
-    public ResponseEntity patchMember(@PathVariable("member-id")  @Positive long memberId,
+    @PatchMapping("/edit/{memberId}")
+    public ResponseEntity patchMember(@PathVariable("memberId")  @Positive long memberId,
                                       @Valid @RequestBody MemberPatchDto requestBody){
         requestBody.setMemberId(memberId);
         Member member = memberService.updateMember(mapper.memberPatchDtoToMember(requestBody));
@@ -47,9 +47,9 @@ public class MemberController {
         );
 
     }
-    @GetMapping("/{member-id}")
+    @GetMapping("/{memberId}")
     public ResponseEntity getMember(
-            @PathVariable("member-id") @Positive long memberId) {
+            @PathVariable("memberId") @Positive long memberId) {
         Member response = memberService.findMember(memberId); // 서비스계층과 연결 지점
 
         return new ResponseEntity<>(new SingleResponseDto<>(mapper.memberToMemberResponseDto(response)), HttpStatus.OK);
@@ -75,5 +75,4 @@ public class MemberController {
         //return response;
         return new ResponseEntity<>(mapper.memberToMemberResponseDto(createdMember), HttpStatus.CREATED);
     }
-
 }

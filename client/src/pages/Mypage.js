@@ -6,24 +6,14 @@ import axios from 'axios';
 import { menuIdxSlice } from '../store/menuIdxSlice';
 import styled from 'styled-components';
 import UserInfo from '../components/UserInfo';
-
-export const dummyUserData = {
-  memberId: 11,
-  imageUrl: 'https://picsum.photos/164',
-  name: 'Rocket the Raccoon',
-  title: 'Gaurdians of Gallaxy',
-  aboutMe:
-    'I am raccoon. Deserunt duis proident consequat enim minim nisi dolor consequat adipisicing duis nisi nostrud sint.',
-  answers: ['I am Groot', 'sssssssssssss', 'dfadf', 'dgsgfgsgwrthh'],
-  questions: null,
-  days: 200,
-};
+import LoadingSpinner from '../components/LoadingSpinner';
 
 const Mypage = () => {
   const dispatch = useDispatch();
 
   const [userData, setUserData] = useState({});
-  const { answers, questions } = userData;
+  const [isLoading, setIsLoading] = useState(true);
+  // const { answers, questions } = userData;
 
   useEffect(() => {
     axios
@@ -32,30 +22,22 @@ const Mypage = () => {
       )
       .then((res) => {
         console.log(res);
-        const {
-          memberId,
-          imageUrl,
-          name,
-          title,
-          aboutMe,
-          answers,
-          questions,
-          days,
-        } = res.data;
+        const { memberId, imageUrl, username, title, aboutme, createAt } =
+          res.data;
         const data = {
           memberId,
           imageUrl,
-          name,
+          username,
           title,
-          aboutMe,
-          answers,
-          questions,
-          days,
+          aboutme,
+          createAt,
         };
         setUserData(data);
+        setIsLoading(false);
       })
       .catch((err) => {
         console.log(err);
+        setIsLoading(false);
       });
   }, []);
 
@@ -66,6 +48,10 @@ const Mypage = () => {
     dispatch(menuIdxSlice.actions.idx(3));
   }, []);
 
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
   return (
     <>
       <UserInfo userData={userData} />
@@ -73,25 +59,27 @@ const Mypage = () => {
         <InfoElement>
           <h3>Answers</h3>
           <ul>
-            {!answers && (
+            <EmptyMsg>You have not answered any questions</EmptyMsg>
+            {/* {!answers && (
               <EmptyMsg>You have not answered any questions</EmptyMsg>
             )}
             {answers &&
               answers
                 .slice(0, 3)
-                .map((answer, idx) => <li key={idx}>{answer}</li>)}
+                .map((answer, idx) => <li key={idx}>{answer}</li>)} */}
           </ul>
         </InfoElement>
         <InfoElement>
           <h3>Questions</h3>
           <ul>
-            {!questions && (
+            <EmptyMsg>You have not asked any questions</EmptyMsg>
+            {/* {!questions && (
               <EmptyMsg>You have not asked any questions</EmptyMsg>
             )}
             {questions &&
               questions
                 .slice(0, 3)
-                .map((question, idx) => <li key={idx}>{question}</li>)}
+                .map((question, idx) => <li key={idx}>{question}</li>)} */}
           </ul>
         </InfoElement>
       </ContentsContainer>

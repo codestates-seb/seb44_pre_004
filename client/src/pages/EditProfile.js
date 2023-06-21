@@ -6,16 +6,17 @@ import axios from 'axios';
 import { setNav, setFooter } from '../store/showComponentsSlice';
 import styled from 'styled-components';
 import UserInfo from '../components/UserInfo';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 const EditProfile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [userData, setUserData] = useState({});
+  const [updatedData, setUpdatedData] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
   const { memberId } = userData;
-
-  const [inputs, setInputs] = useState({});
-  const { imageUrl, name, title, aboutMe } = inputs;
+  const { imageUrl, username, title, aboutme } = updatedData;
 
   useEffect(() => {
     axios
@@ -24,36 +25,28 @@ const EditProfile = () => {
       )
       .then((res) => {
         // console.log(res);
-        const {
-          memberId,
-          imageUrl,
-          name,
-          title,
-          aboutMe,
-          answers,
-          questions,
-          days,
-        } = res.data;
+        const { memberId, imageUrl, username, title, aboutme, createAt } =
+          res.data;
         const data = {
           memberId,
           imageUrl,
-          name,
+          username,
           title,
-          aboutMe,
-          answers,
-          questions,
-          days,
+          aboutme,
+          createAt,
         };
         setUserData(data);
-        setInputs({
+        setUpdatedData({
           imageUrl,
-          name,
+          username,
           title,
-          aboutMe,
+          aboutme,
         });
+        setIsLoading(false);
       })
       .catch((err) => {
         console.log(err);
+        setIsLoading(false);
       });
   }, []);
 
@@ -65,11 +58,11 @@ const EditProfile = () => {
 
   const handleInputChange = (e) => {
     const { value, id } = e.target; // e.target에서 구조 분해 할당
-    setInputs({
-      ...inputs, // 기존의 input 객체를 복사
+    setUpdatedData({
+      ...updatedData, // 기존의 input 객체를 복사
       [id]: value || '', // id 키를 가진 값을 value 로 설정
     });
-    console.log(inputs);
+    console.log(updatedData);
   };
 
   //이미지 파일 등록 함수
@@ -80,8 +73,8 @@ const EditProfile = () => {
 
     return new Promise((resolve) => {
       reader.onload = () => {
-        setInputs({
-          ...inputs,
+        setUpdatedData({
+          ...updatedData,
           imageUrl: reader.result || null,
         });
         resolve();
@@ -93,7 +86,7 @@ const EditProfile = () => {
   const handleSubmit = (e) => {
     updateUserInfo();
     // console.log('Submitted');
-    setUserData({ ...userData, ...inputs });
+    setUserData({ ...userData, ...updatedData });
     alert('수정이 완료되었습니다.');
     navigate(`/user/${memberId}`);
     e.preventDefault();
@@ -105,12 +98,16 @@ const EditProfile = () => {
       // await axios.patch(`/user/edit/${memberId}`, inputs);
       await axios.patch(
         'https://react-http-fbaa8-default-rtdb.asia-southeast1.firebasedatabase.app/user.json',
-        inputs
+        updatedData
       );
     } catch (error) {
       console.error('Error update user profile', error);
     }
   };
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <>
@@ -134,11 +131,11 @@ const EditProfile = () => {
                 </div>
               </InputFile>
               <InputText>
-                <label htmlFor="name">Display name</label>
+                <label htmlFor="username">Display name</label>
                 <input
                   type="text"
-                  id="name"
-                  value={name || ''}
+                  id="username"
+                  value={username || ''}
                   onChange={handleInputChange}
                 />
               </InputText>
@@ -152,11 +149,11 @@ const EditProfile = () => {
                 />
               </InputText>
               <InputText>
-                <label htmlFor="aboutMe">About me</label>
+                <label htmlFor="aboutme">About me</label>
                 <textarea
-                  name="aboutMe"
-                  id="aboutMe"
-                  value={aboutMe || ''}
+                  name="aboutme"
+                  id="aboutme"
+                  value={aboutme || ''}
                   onChange={handleInputChange}
                   maxLength={300}
                 ></textarea>

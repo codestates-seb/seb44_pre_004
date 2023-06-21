@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { questionData } from '../pages/Questions';
+// import { questionData } from '../pages/Questions';
 import styled from 'styled-components';
 import Question from './Question';
 import Paging from './Paging/Paging';
 
-const AfterLogin = () => {
+const AfterLogin = ({ questionData }) => {
   const itemsPerPage = 5; // Number of items to display per page
   const [currentPage, setCurrentPage] = useState(1);
 

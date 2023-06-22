@@ -1,6 +1,8 @@
 package fourtuna.stackoverflowclone.question.service;
 
+import fourtuna.stackoverflowclone.answer.entity.Answer;
 import fourtuna.stackoverflowclone.exception.BusinessLogicException;
+import fourtuna.stackoverflowclone.like.entitiy.Like;
 import fourtuna.stackoverflowclone.member.entity.Member;
 import fourtuna.stackoverflowclone.member.service.MemberService;
 import fourtuna.stackoverflowclone.question.dto.*;
@@ -14,8 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-import static fourtuna.stackoverflowclone.exception.ExceptionCode.QUESTION_NOT_FOUND;
-import static fourtuna.stackoverflowclone.exception.ExceptionCode.UNMATCHED_WRITER;
+import static fourtuna.stackoverflowclone.exception.ExceptionCode.*;
 
 @Service
 @RequiredArgsConstructor

@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,5 +36,15 @@ public class QuestionDto {
                 .writerImageUrl(question.getMember().getImage())
                 .createdAt(question.getCreatedAt())
                 .updatedAt(question.getUpdatedAt()).build();
+    }
+
+
+    //like 기능 추가
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Getter
+    public static class Like {
+        @NotNull
+        private Long questionId;
     }
 }

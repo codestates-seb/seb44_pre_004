@@ -9,7 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,8 +21,8 @@ public class AnswerDto {
     private int likeCount;
     private String writerName;
     private String writerImageUrl;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private String createdAt;
+    private String updatedAt;
 
     private List<CommentDto> comments;
 
@@ -36,8 +35,8 @@ public class AnswerDto {
                 .content(answer.getContent())
                 .writerName(answer.getMember().getName())
                 .writerImageUrl(answer.getMember().getImage())
-                .createdAt(answer.getCreatedAt())
-                .updatedAt(answer.getUpdatedAt())
+                .createdAt(answer.getCreatedAt().toString())
+                .updatedAt(answer.getUpdatedAt().toString())
                 .comments(comments).build();
     }
 
@@ -76,7 +75,6 @@ public class AnswerDto {
                     .answerId(answer.getAnswerId())
                     .content(answer.getContent()).build();
         }
-
     }
 
     @NoArgsConstructor
@@ -92,6 +90,5 @@ public class AnswerDto {
                     .answerId(answer.getAnswerId())
                     .content(answer.getContent()).build();
         }
-
     }
 }

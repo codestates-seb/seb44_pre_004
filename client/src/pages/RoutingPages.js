@@ -101,7 +101,7 @@ const RoutingPages = () => {
         {showNav && <SideNav />}
         <MainComponent>
           <Routes>
-            <Route path="/" element={<Main />} />
+            <Route path="/" element={<Main questionData={questionData} />} />
             <Route
               path="/qna"
               element={<Questions questionData={questionData} />}
@@ -113,7 +113,7 @@ const RoutingPages = () => {
             <Route path="/qna/ask" element={<AskQuestion />} />
             <Route path="/tags" element={<Tags />} />
             <Route path="/user" element={<Users />} />
-            <Route path="/user/:memberId/:username" element={<Mypage />} />
+            <Route path="/user/:memberId" element={<Mypage />} />
             <Route path="/user/edit/:memberId" element={<EditProfile />} />
             <Route path="/user/login" element={<Login />} />
             <Route path="/user/join" element={<SignIn />} />

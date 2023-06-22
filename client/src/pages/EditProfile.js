@@ -1,96 +1,174 @@
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
 import { setNav, setFooter } from '../store/showComponentsSlice';
 import styled from 'styled-components';
 import UserInfo from '../components/UserInfo';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 const EditProfile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // TODO: 사용자 정보 initial value 또는 null로 지정
-  const [imageSrc, setImageSrc] = useState('https://picsum.photos/164');
-  // const [displayName, setDisplayName] = useState(null);
-  // const [title, setTitle] = useState(null);
-  // const [textBody, setTextBody] = useState(null);
+  const [userData, setUserData] = useState({});
+  const [updatedData, setUpdatedData] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
+  const { memberId } = userData;
+  const { imageUrl, username, title, aboutme } = updatedData;
+
+  useEffect(() => {
+    axios
+      .get(
+        'https://react-http-fbaa8-default-rtdb.asia-southeast1.firebasedatabase.app/user.json'
+      )
+      .then((res) => {
+        // console.log(res);
+        const { memberId, imageUrl, username, title, aboutme, createAt } =
+          res.data;
+        const data = {
+          memberId,
+          imageUrl,
+          username,
+          title,
+          aboutme,
+          createAt,
+        };
+        setUserData(data);
+        setUpdatedData({
+          imageUrl,
+          username,
+          title,
+          aboutme,
+        });
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsLoading(false);
+      });
+  }, []);
+
   // 처음 렌더링 될 때 Nav와 Footer 제어
   useEffect(() => {
     dispatch(setNav(true));
     dispatch(setFooter(true));
   }, []);
 
+  const handleInputChange = (e) => {
+    const { value, id } = e.target; // e.target에서 구조 분해 할당
+    setUpdatedData({
+      ...updatedData, // 기존의 input 객체를 복사
+      [id]: value || '', // id 키를 가진 값을 value 로 설정
+    });
+    console.log(updatedData);
+  };
+
   //이미지 파일 등록 함수
-  const onUpload = (e) => {
+  const handleUploadFile = (e) => {
     const file = e.target.files[0];
     const reader = new FileReader();
     reader.readAsDataURL(file);
 
     return new Promise((resolve) => {
       reader.onload = () => {
-        setImageSrc(reader.result || null); // 파일의 컨텐츠
+        setUpdatedData({
+          ...updatedData,
+          imageUrl: reader.result || null,
+        });
         resolve();
-        console.log(reader.result);
+        // console.log(reader.result);
       };
     });
   };
 
+  const handleSubmit = (e) => {
+    updateUserInfo();
+    // console.log('Submitted');
+    setUserData({ ...userData, ...updatedData });
+    alert('수정이 완료되었습니다.');
+    navigate(`/user/${memberId}`);
+    e.preventDefault();
+  };
+
+  // 사용자 정보 변경 PATCH 요청
+  const updateUserInfo = async () => {
+    try {
+      // await axios.patch(`/user/edit/${memberId}`, inputs);
+      await axios.patch(
+        'https://react-http-fbaa8-default-rtdb.asia-southeast1.firebasedatabase.app/user.json',
+        updatedData
+      );
+    } catch (error) {
+      console.error('Error update user profile', error);
+    }
+  };
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
   return (
     <>
-      <UserInfo />
+      <UserInfo userData={userData} />
       <ContentsContainer>
         <h2>Edit your profile</h2>
         <InfoElement>
           <h3>Public information</h3>
-          <form>
+          <form onSubmit={handleSubmit}>
             <ul>
               <InputFile>
                 <h4>Profile image</h4>
                 <div>
-                  <label htmlFor="changeImage">Change picture</label>
+                  <label htmlFor="imageUrl">Change picture</label>
                   <input
                     type="file"
-                    id="changeImage"
-                    onChange={(e) => onUpload(e)}
+                    id="imageUrl"
+                    onChange={(e) => handleUploadFile(e)}
                   />
-                  {/* TODO: 사용자 정보 value로 받아오기 */}
-                  <img src={imageSrc} alt="profile" />
+                  <img src={imageUrl} alt="profile" />
                 </div>
               </InputFile>
               <InputText>
-                <label htmlFor="name">Display name</label>
-                {/* TODO: 사용자 정보 value로 받아오기 */}
+                <label htmlFor="username">Display name</label>
                 <input
                   type="text"
-                  id="name"
-                  // value={displayName}
+                  id="username"
+                  value={username || ''}
+                  onChange={handleInputChange}
                 />
               </InputText>
               <InputText>
                 <label htmlFor="title">Title</label>
-                {/* TODO: 사용자 정보 value로 받아오기. 초기값 = null */}
                 <input
                   type="text"
                   id="title"
-                  // value={title}
+                  value={title || ''}
+                  onChange={handleInputChange}
                 />
               </InputText>
               <InputText>
-                <label htmlFor="aboutMe">About me</label>
-                {/* TODO: 사용자 정보 value로 받아오기. 초기값 = null */}
+                <label htmlFor="aboutme">About me</label>
                 <textarea
-                  name="aboutMe"
-                  id="aboutMe"
-                  // value={textBody}
+                  name="aboutme"
+                  id="aboutme"
+                  value={aboutme || ''}
+                  onChange={handleInputChange}
                   maxLength={300}
                 ></textarea>
               </InputText>
             </ul>
             <ButtonArea>
-              <BlueBtn onClick={() => navigate('/user/:memberId/:username')}>
-                Save profile
-              </BlueBtn>
-              <Link to="/user/:memberId/:username">Cancel</Link>
+              <BlueBtn type="submit">Save profile</BlueBtn>
+              <Link
+                to={`/user/${memberId}`}
+                onClick={() =>
+                  alert('작성하신 내용이 저장되지 않습니다. 계속하시겠습니까?')
+                }
+              >
+                Cancel
+              </Link>
             </ButtonArea>
           </form>
         </InfoElement>
@@ -209,7 +287,7 @@ const ButtonArea = styled.div`
   }
 `;
 
-const BlueBtn = styled.span`
+const BlueBtn = styled.button`
   margin-right: 15px;
   padding: 8px 10px;
   background-color: var(--bright-blue);

@@ -4,33 +4,30 @@ import { menuIdxSlice } from '../store/menuIdxSlice';
 import { IoPeople, IoPencil } from 'react-icons/io5';
 import styled from 'styled-components';
 
-const UserInfo = () => {
+const UserInfo = ({ userData }) => {
   const dispatch = useDispatch();
+  const { memberId, imageUrl, username, title, aboutme, createAt } = userData;
+
   return (
     <UserContainer>
       <InfoSection>
-        <Link to="/user/:memberId/:username">
-          <img src="https://picsum.photos/128" alt="profile" />
+        <Link to={`/user/${memberId}`}>
+          <img src={imageUrl} alt="profile" />
         </Link>
         <InfoArea>
-          <h2>Hong Gildong</h2>
-          <h3>Developer</h3>
-          <p>
-            Deserunt duis proident consequat enim minim nisi dolor consequat
-            adipisicing duis nisi nostrud sint. Pariatur sunt irure consectetur
-            tempor. Ex reprehenderit nostrud consequat incididunt in. Sunt
-            fugiat duis quis culpa in sunt dolore aliquip est dolor eu est.
-          </p>
+          <h2>{username}</h2>
+          <h3>{title}</h3>
+          <p>{aboutme}</p>
           <p>
             <IoPeople />
-            Member for <span>200</span> days
+            Member for <span>{createAt}</span> days
           </p>
         </InfoArea>
       </InfoSection>
       <EditButton>
         <IoPencil />
         <Link
-          to="/user/edit/:memberId"
+          to={`/user/edit/${memberId}`}
           onClick={() => dispatch(menuIdxSlice.actions.idx(3))}
         >
           Edit profile
@@ -93,6 +90,10 @@ const EditButton = styled.span`
   &:hover {
     color: hsl(210, 8%, 35%);
     background-color: hsl(210, 8%, 97.5%);
+  }
+  svg {
+    margin-right: 4px;
+    vertical-align: middle;
   }
 `;
 

@@ -39,6 +39,7 @@ public class MemberDetailsService implements UserDetailsService {
             setEmail(member.getEmail());
             setPassword(member.getPassword());
             setRoles(member.getRoles());
+            setName(member.getName());
         }
 
         // User의 권한 정보 생성

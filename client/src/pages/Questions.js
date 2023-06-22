@@ -2,74 +2,11 @@ import styled from 'styled-components';
 import Question from '../components/Question';
 import Paging from '../components/Paging/Paging';
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setNav, setFooter } from '../store/showComponentsSlice';
-import { Link } from 'react-router-dom';
 
-const questionData = [
-  {
-    voteCount: 10,
-    answerCount: 5,
-    title: 'Sample Question 1',
-    body: 'Sample question body 1',
-  },
-  {
-    voteCount: 8,
-    answerCount: 3,
-    title: 'Sample Question 2',
-    body: 'Sample question body 2',
-  },
-  {
-    voteCount: 15,
-    answerCount: 7,
-    title: 'Sample Question 3',
-    body: 'Sample question body 3',
-  },
-  {
-    voteCount: 3,
-    answerCount: 1,
-    title: 'Sample Question 4',
-    body: 'Sample question body 4',
-  },
-  {
-    voteCount: 12,
-    answerCount: 6,
-    title: 'Sample Question 5',
-    body: 'Sample question body 5',
-  },
-  {
-    voteCount: 6,
-    answerCount: 2,
-    title: 'Sample Question 6',
-    body: 'Sample question body 6',
-  },
-  {
-    voteCount: 9,
-    answerCount: 4,
-    title: 'Sample Question 7',
-    body: 'Sample question body 7',
-  },
-  {
-    voteCount: 13,
-    answerCount: 5,
-    title: 'Sample Question 8',
-    body: 'Sample question body 8',
-  },
-  {
-    voteCount: 7,
-    answerCount: 3,
-    title: 'Sample Question 9',
-    body: 'Sample question body 9',
-  },
-  {
-    voteCount: 11,
-    answerCount: 4,
-    title: 'Sample Question 10',
-    body: 'Sample question body 10',
-  },
-];
-
-const Questions = () => {
+const Questions = ({ questionData }) => {
   const dispatch = useDispatch();
   // 처음 렌더링 될 때 Nav와 Footer 제거
   useEffect(() => {
@@ -110,14 +47,14 @@ const Questions = () => {
           ))}
         </QuestionDiv>
       </MainComponent>
-      <MainComponent>
+      <PagingComponent>
         <Paging
           currentPage={currentPage}
           onPageChange={handlePageChange}
           itemsPerPage={itemsPerPage}
           totalItemsCount={questionData.length}
         />
-      </MainComponent>
+      </PagingComponent>
     </>
   );
 };
@@ -126,7 +63,7 @@ const MainComponent = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
-  padding: 1rem;
+  padding: 1rem 1rem 1rem 0;
 `;
 
 const AskButton = styled.button`
@@ -145,16 +82,25 @@ const AskButton = styled.button`
 `;
 
 const H1 = styled.h1`
+  padding: 0 1rem;
   font-size: x-large;
 `;
 
 const TotalDiv = styled.div`
   margin: 0.5rem;
+  padding: 0 1rem;
 `;
 const QuestionDiv = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+`;
+
+const PagingComponent = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 1rem 1rem 3rem;
 `;
 
 export default Questions;

@@ -42,8 +42,11 @@ const Header = () => {
           </Link>
           {/* 로그인 후 버튼 */}
           {/* <Link
-            to="/user/:member-id/:username"
-            onClick={() => setShowNav(false)}
+            to="/user/:memberId"
+            onClick={() => {
+              setShowNav(false);
+              dispatch(menuIdxSlice.actions.idx(3));
+            }}
           >
             <BorderBtn>Mypage</BorderBtn>
           </Link>
@@ -128,6 +131,7 @@ const BorderBtn = styled.span`
 `;
 
 const BlueBtn = styled.span`
+  margin-right: 15px;
   padding: 8px 10px;
   background-color: var(--bright-blue);
   border: 1px solid var(--bright-blue);

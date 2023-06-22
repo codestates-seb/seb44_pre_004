@@ -3,11 +3,15 @@ package fourtuna.stackoverflowclone.question.entity;
 import fourtuna.stackoverflowclone.answer.entity.Answer;
 import fourtuna.stackoverflowclone.audit.Auditable;
 import fourtuna.stackoverflowclone.comment.entity.Comment;
+import fourtuna.stackoverflowclone.like.entitiy.Like;
 import fourtuna.stackoverflowclone.member.entity.Member;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -35,4 +39,8 @@ public class Question extends Auditable {
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     private List<Comment> comments;
+
+//    @OneToMany(mappedBy = "question")
+//    private Set<Like> likes = new HashSet<>();
+
 }

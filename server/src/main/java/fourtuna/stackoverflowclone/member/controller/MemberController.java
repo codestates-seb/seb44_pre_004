@@ -68,12 +68,11 @@ public class MemberController {
                 HttpStatus.OK);
     }
 
-    @PostMapping
+    @PostMapping("/join")
     public ResponseEntity postMember(@Valid @RequestBody MemberPostDto memberPostDto){
         Member createdMember = memberService.createMember(mapper.memberPostDtoToMember(memberPostDto));
         MemberResponseDto response = mapper.memberToMemberResponseDto(createdMember);
 
         return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.CREATED);
-        //return new ResponseEntity<>(mapper.memberToMemberResponseDto(createdMember), HttpStatus.CREATED);
     }
 }

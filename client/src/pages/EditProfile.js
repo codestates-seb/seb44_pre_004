@@ -20,9 +20,7 @@ const EditProfile = () => {
 
   useEffect(() => {
     axios
-      .get(
-        'https://react-http-fbaa8-default-rtdb.asia-southeast1.firebasedatabase.app/user.json'
-      )
+      .get(`${process.env.REACT_APP_API_TEMP}/user.json`)
       .then((res) => {
         // console.log(res);
         const { memberId, imageUrl, username, title, aboutme, createAt } =
@@ -62,7 +60,7 @@ const EditProfile = () => {
       ...updatedData, // 기존의 input 객체를 복사
       [id]: value || '', // id 키를 가진 값을 value 로 설정
     });
-    console.log(updatedData);
+    // console.log(updatedData);
   };
 
   //이미지 파일 등록 함수
@@ -97,7 +95,7 @@ const EditProfile = () => {
     try {
       // await axios.patch(`/user/edit/${memberId}`, inputs);
       await axios.patch(
-        'https://react-http-fbaa8-default-rtdb.asia-southeast1.firebasedatabase.app/user.json',
+        `${process.env.REACT_APP_API_TEMP}/user.json`,
         updatedData
       );
     } catch (error) {

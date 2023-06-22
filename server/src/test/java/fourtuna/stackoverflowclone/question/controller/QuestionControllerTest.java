@@ -51,9 +51,9 @@ class QuestionControllerTest {
 
         // then
         result.andExpect(status().isOk())
-                .andExpect(jsonPath("$.questionId").value(response.getQuestionId()))
-                .andExpect(jsonPath("$.title").value(response.getTitle()))
-                .andExpect(jsonPath("$.body").value(response.getBody()))
+                .andExpect(jsonPath("$.data.questionId").value(response.getQuestionId()))
+                .andExpect(jsonPath("$.data.title").value(response.getTitle()))
+                .andExpect(jsonPath("$.data.body").value(response.getBody()))
                 .andDo(print());
     }
 
@@ -76,9 +76,9 @@ class QuestionControllerTest {
 
         // then
         result.andExpect(status().isOk())
-                .andExpect(jsonPath("$.questionId").value(response.getQuestionId()))
-                .andExpect(jsonPath("$.title").value(response.getTitle()))
-                .andExpect(jsonPath("$.body").value(response.getBody()))
+                .andExpect(jsonPath("$.data.questionId").value(response.getQuestionId()))
+                .andExpect(jsonPath("$.data.title").value(response.getTitle()))
+                .andExpect(jsonPath("$.data.body").value(response.getBody()))
                 .andDo(print());
     }
 
@@ -101,9 +101,9 @@ class QuestionControllerTest {
 
         // then
         result.andExpect(status().isOk())
-                .andExpect(jsonPath("$.questionId").value(response.getQuestionId()))
-                .andExpect(jsonPath("$.title").value(response.getTitle()))
-                .andExpect(jsonPath("$.body").value(response.getBody()))
+                .andExpect(jsonPath("$.data.questionId").value(response.getQuestionId()))
+                .andExpect(jsonPath("$.data.title").value(response.getTitle()))
+                .andExpect(jsonPath("$.data.body").value(response.getBody()))
                 .andDo(print());
     }
 }

@@ -9,6 +9,8 @@ import fourtuna.stackoverflowclone.question.dto.*;
 import fourtuna.stackoverflowclone.question.entity.Question;
 import fourtuna.stackoverflowclone.question.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,7 @@ import java.util.Optional;
 
 import static fourtuna.stackoverflowclone.exception.ExceptionCode.*;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -67,7 +70,9 @@ public class QuestionService {
         return UpdateQuestion.Response.from(question);
     }
 
+    @Cacheable(key = "#questionId", value = "questions")
     public QuestionDetailDto getQuestion(Long questionId) {
+        log.info("[QuestionService] getQuestion called");
         Question question = findQuestion(questionId);
 
         return QuestionDetailDto.from(question);

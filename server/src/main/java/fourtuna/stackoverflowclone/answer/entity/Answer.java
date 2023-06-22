@@ -35,7 +35,7 @@ public class Answer extends Auditable {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "answer")
+    @OneToMany(mappedBy = "answer", cascade = CascadeType.ALL)
     private List<Comment> comments;
 
 //    @OneToMany(mappedBy = "answer")

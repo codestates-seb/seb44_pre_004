@@ -4,6 +4,7 @@ import fourtuna.stackoverflowclone.question.dto.*;
 import fourtuna.stackoverflowclone.question.service.QuestionService;
 import fourtuna.stackoverflowclone.response.SingleResponseDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 
+@Slf4j
 @RestController
 @RequestMapping("/qna/question")
 @RequiredArgsConstructor
@@ -19,7 +21,6 @@ public class QuestionController {
 
     private final QuestionService questionService;
 
-    // 응답데이터에 성공응답 실패응답 어떻게 처리할 것인지 예외는 어떤 형식으로 반환할 것인지
     @PostMapping
     public ResponseEntity<?> createQuestion(
             @RequestBody @Valid CreateQuestion.Request request/*,
@@ -69,6 +70,7 @@ public class QuestionController {
         // 토큰에서 유저정보 꺼내기
         // ex) String memberEmail  = tokenProvider.getAuthentication(token).getEmail();
 
+        log.info("[QuestionController] getQuestion called");
 
         QuestionDetailDto response = questionService.getQuestion(questionId);
 

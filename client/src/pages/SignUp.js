@@ -7,8 +7,9 @@ import { FaQuestion, FaTree, FaTags, FaTrophy, FaGithub } from 'react-icons/fa';
 
 import { FcGoogle } from 'react-icons/fc';
 import { Link, useNavigate } from 'react-router-dom';
+// import axios from 'axios';
 
-const SignIn = () => {
+const SignUp = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   // 처음 렌더링 될 때 Nav와 Footer 제거
@@ -86,22 +87,20 @@ const SignIn = () => {
       setPasswordMessage('Password cannot be empty.');
       setIsPassword(false);
     } else if (isEmail && isPassword) {
-      alert('회원가입이 정상적으로 완료되었습니다.');
       navigate('/user/login');
+      console.log(displayName, email, password);
+      // 회원가입 정보를 서버로 전송
+      //   axios
+      //     .post('/user/join', { displayName,email, password  })
+      //     .then((response) => {
+      //       console.log(response);
+      //       alert('회원가입이 정상적으로 완료되었습니다.');
+      //       navigate('/user/login');
+      //     })
+      //     .catch((err) => {
+      //       console.error('회원가입 실패:', err);
+      //     });
     }
-    // if (email.trim() === '') {
-    //   alert('입력하신 정보를 다시 확인해주세요.');
-    //   setEmailMessage('Email cannot be empty.');
-    //   setIsEmail(false);
-    // }
-    // if (password.trim() === '') {
-    //   alert('입력하신 정보를 다시 확인해주세요.');
-    //   setPasswordMessage('Password cannot be empty.');
-    //   setIsPassword(false);
-    // }
-    // if (isEmail && isPassword) {
-    //   navigate('/user/login');
-    // }
   };
 
   return (
@@ -411,4 +410,4 @@ const ErrorMessageDiv = styled.div`
       color: red;
     `}
 `;
-export default SignIn;
+export default SignUp;

@@ -5,23 +5,26 @@ import { persistReducer } from 'redux-persist';
 
 import { showComponents } from './showComponentsSlice';
 import { menuIdxSlice } from './menuIdxSlice';
+import { userSlice } from './userSlice';
 
 // export const store = configureStore({
 //   reducer: {
 //     showComponents: showComponents.reducer,
 //     idx: menuIdxSlice.reducer,
+//     user: userSlice.reducer,
 //   },
 // });
 
 const reducers = combineReducers({
   showComponents: showComponents.reducer,
   idx: menuIdxSlice.reducer,
+  user: userSlice.reducer,
 });
 
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['showComponents', 'idx'],
+  whitelist: ['showComponents', 'idx', 'user'],
 };
 
 const persistedReducer = persistReducer(persistConfig, reducers);

@@ -61,31 +61,28 @@ const AskQuestion = () => {
       <MainComponent>
         <TextAreaDiv>
           <TextDiv>Title</TextDiv>
-          <textarea
+          <TitleTextArea
             name="title"
-            cols={146}
             value={title}
             onChange={onChange}
             placeholder="제목을 작성해주세요."
-          ></textarea>
+          ></TitleTextArea>
         </TextAreaDiv>
       </MainComponent>
       <MainComponent>
         <TextAreaDiv>
           <TextDiv>Body</TextDiv>
-          <textarea
+          <BodyTextArea
             name="contents"
-            cols={146}
-            rows={20}
             value={contents}
             onChange={onChange}
             placeholder="내용을 작성해주세요."
-          ></textarea>
+          ></BodyTextArea>
         </TextAreaDiv>
       </MainComponent>
       <MainComponent>
         <AskButton onClick={saveQna}>
-          <Link to="/qna/:qna-id">Post your question</Link>
+          <Link to="/qna/:qnaId">Post your question</Link>
         </AskButton>
       </MainComponent>
     </>
@@ -136,4 +133,15 @@ const TextAreaDiv = styled.div`
 const TextDiv = styled.div`
   margin-bottom: 0.5rem;
 `;
+
+const TitleTextArea = styled.textarea`
+  width: 100%;
+  height: 2rem;
+`;
+
+const BodyTextArea = styled.textarea`
+  width: 100%;
+  height: 10rem;
+`;
+
 export default AskQuestion;

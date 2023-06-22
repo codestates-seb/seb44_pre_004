@@ -18,9 +18,15 @@ const Container = styled.div`
   height: 70vh;
   margin-top: 10vh;
   h2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: fit-content;
     font-size: 20px;
   }
   svg {
+    width: 30px;
+    height: 30px;
     margin-right: 10px;
   }
 `;

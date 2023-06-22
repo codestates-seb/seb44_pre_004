@@ -2,12 +2,15 @@ package fourtuna.stackoverflowclone.answer.entity;
 
 import fourtuna.stackoverflowclone.audit.Auditable;
 import fourtuna.stackoverflowclone.comment.entity.Comment;
+import fourtuna.stackoverflowclone.like.entitiy.Like;
 import fourtuna.stackoverflowclone.member.entity.Member;
 import fourtuna.stackoverflowclone.question.entity.Question;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -34,5 +37,9 @@ public class Answer extends Auditable {
 
     @OneToMany(mappedBy = "answer")
     private List<Comment> comments;
+
+//    @OneToMany(mappedBy = "answer")
+//    private Set<Like> likes = new HashSet<>();
+
 }
 

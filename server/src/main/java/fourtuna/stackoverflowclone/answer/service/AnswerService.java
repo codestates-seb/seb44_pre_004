@@ -5,6 +5,7 @@ import fourtuna.stackoverflowclone.answer.entity.Answer;
 import fourtuna.stackoverflowclone.answer.repository.AnswerRepository;
 import fourtuna.stackoverflowclone.exception.BusinessLogicException;
 import fourtuna.stackoverflowclone.exception.ExceptionCode;
+import fourtuna.stackoverflowclone.like.entitiy.Like;
 import fourtuna.stackoverflowclone.member.entity.Member;
 import fourtuna.stackoverflowclone.question.entity.Question;
 import fourtuna.stackoverflowclone.member.service.MemberService;
@@ -14,10 +15,9 @@ import org.springframework.expression.spel.ast.OpAnd;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static fourtuna.stackoverflowclone.exception.ExceptionCode.CANNOT_READ_QUESTION;
-import static fourtuna.stackoverflowclone.exception.ExceptionCode.UNMATCHED_WRITER;
-
 import java.util.Optional;
+
+import static fourtuna.stackoverflowclone.exception.ExceptionCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -68,7 +68,6 @@ public class AnswerService {
     }
 
 
-    //확인해야될 사항 1. 답변 삭제시, 답변을 등록한 회원이 맞는가?
     @Transactional
     public void deleteAnswer(Long answerId, String memberEmail) {
         Member member = memberService.findMemberByEmail(memberEmail);

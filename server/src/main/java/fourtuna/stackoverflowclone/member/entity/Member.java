@@ -1,9 +1,12 @@
 package fourtuna.stackoverflowclone.member.entity;
 
 import fourtuna.stackoverflowclone.audit.Auditable;
+import fourtuna.stackoverflowclone.like.entitiy.Like;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -26,4 +29,8 @@ public class Member extends Auditable {
     private String image;
     private String title;
     private String aboutMe;
+
+//    @Builder.Default
+//    @OneToMany(mappedBy = "member")
+//    private Set<Like> likes = new HashSet<>();
 }

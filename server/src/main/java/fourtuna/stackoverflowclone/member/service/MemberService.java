@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
+
 @Service
 @RequiredArgsConstructor
 public class MemberService {
@@ -23,5 +25,19 @@ public class MemberService {
         Member findMember = memberRepository.findById(memberId).orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
         return findMember;
+    }
+
+    @PostConstruct
+    public void init() {
+        Member member = Member.builder()
+                .email("test@test.com")
+                .password("test")
+                .title("이명규소개")
+                .name("이명규")
+                .aboutMe("이명규입니다.")
+                .build();
+
+        memberRepository.save(member);
+
     }
 }

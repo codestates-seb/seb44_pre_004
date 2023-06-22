@@ -7,15 +7,8 @@ import { FaGithub } from 'react-icons/fa';
 import { FcGoogle } from 'react-icons/fc';
 import logo from '../asset/logo_small.png';
 import { Link, useNavigate } from 'react-router-dom';
+// import axios from 'axios';
 
-export const signUpData = [
-  {
-    id: 1,
-    name: 'kimcoding',
-    email: 'kimcoding@gmail.com',
-    password: 'asdfgh1!',
-  },
-];
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -24,6 +17,38 @@ const Login = () => {
     dispatch(setNav(false));
     dispatch(setFooter(false));
   }, []);
+
+  // axios 요청 확인
+
+  // .get('https://koreanjson.com/users/1')
+  // .then((response) => {
+  //   console.log(response);
+  //   const { data } = response;
+  //   console.log(data);
+  // })
+  // .catch((error) => console.log(error));
+
+  // axios POST 요청 예시
+  // .post('https://koreanjson.com/users', { nickName: 'ApeachIcetea', age: '20' })
+  // .then((response) => {
+  //   const { data } = response;
+  //   console.log(data);
+  // })
+  // .catch((error) => console.log(error));
+
+  // Dummy Data 통신
+  // useEffect(() => {
+  //   axios.get('https://jsonplaceholder.typicode.com/users').then((response) => {
+  //     console.log(response);
+  //     setUsers(response.data);
+  //   });
+  // }, []);
+  // useEffect(() => {
+  //   console.log(users);
+  // }, [users]);
+
+  //데이터 불러와 확인 axios
+  // const [users, setUsers] = useState([]);
 
   // 초기값 세팅 - 이름, 이메일, 비밀번호
   const [email, setEmail] = useState('');

@@ -8,6 +8,7 @@ import Footer from '../components/layout/Footer';
 import AskQuestion from './AskQuestion';
 import EditProfile from './EditProfile';
 import Login from './Login';
+import Logout from './Logout';
 import Main from './Main';
 import Mypage from './Mypage';
 import QuestionDetail from './QuestionDetail';
@@ -15,6 +16,7 @@ import Questions from './Questions';
 import SignIn from './SignIn';
 import Tags from './Tags';
 import Users from './Users';
+import NotFound from './NotFound';
 
 const RoutingPages = () => {
   // showNav, showFooter 상태를 불러옴
@@ -116,7 +118,9 @@ const RoutingPages = () => {
             <Route path="/user/:memberId" element={<Mypage />} />
             <Route path="/user/edit/:memberId" element={<EditProfile />} />
             <Route path="/user/login" element={<Login />} />
+            <Route path="/user/logout" element={<Logout />} />
             <Route path="/user/join" element={<SignIn />} />
+            <Route path="/*" element={<NotFound />} />
           </Routes>
         </MainComponent>
       </ContentsSection>

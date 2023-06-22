@@ -21,7 +21,7 @@ const Mypage = () => {
         'https://react-http-fbaa8-default-rtdb.asia-southeast1.firebasedatabase.app/user.json'
       )
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         const { memberId, imageUrl, username, title, aboutme, createAt } =
           res.data;
         const data = {

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { menuIdxSlice } from '../../store/menuIdxSlice';
 import { IoMenuSharp, IoCloseSharp } from 'react-icons/io5';
 import styled from 'styled-components';
@@ -10,6 +10,7 @@ import logo from '../../asset/logo.png';
 const Header = () => {
   const [showNav, setShowNav] = useState(false);
   const dispatch = useDispatch();
+  const showHamberger = useSelector((state) => state.showComponents.showNav);
 
   return (
     <HeaderContainer>
@@ -17,10 +18,12 @@ const Header = () => {
         {showNav && <ToggleNav setShowNav={setShowNav} />}
         <FlexLeft>
           {/* TODO: 로그인 상태값에 따른 숨김 처리 필요 */}
-          <button onClick={() => setShowNav((prev) => !prev)}>
-            {!showNav && <IoMenuSharp className="hamburger" />}
-            {showNav && <IoCloseSharp className="close" />}
-          </button>
+          {!showHamberger && (
+            <button onClick={() => setShowNav((prev) => !prev)}>
+              {!showNav && <IoMenuSharp className="hamburger" />}
+              {showNav && <IoCloseSharp className="close" />}
+            </button>
+          )}
           <Link
             to="/"
             onClick={() => {
@@ -50,7 +53,7 @@ const Header = () => {
           >
             <BorderBtn>Mypage</BorderBtn>
           </Link>
-          <Link to="/logout" onClick={() => setShowNav(false)}>
+          <Link to="/user/logout" onClick={() => setShowNav(false)}>
             <BlueBtn>Log out</BlueBtn>
           </Link> */}
         </FlexRight>

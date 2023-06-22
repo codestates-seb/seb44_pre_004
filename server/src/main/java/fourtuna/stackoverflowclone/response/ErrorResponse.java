@@ -13,8 +13,8 @@ import java.util.stream.Collectors;
 public class ErrorResponse {
     private int status;
     private String message;
-    private List<FieldError> fieldErrors;
-    private List<ConstraintViolationError> violationErrors;
+    private List<FieldError> fieldErrors; // MethodArgumentNotValidException(DTO 클래스의 유효성 검증) 에러 정보 담은 멤버 변수
+    private List<ConstraintViolationError> violationErrors;// ConstraintViolationException(URI 변수 값 검증) 에러 정보 담은 변수
 
     private ErrorResponse(int status, String message) {
         this.status = status;

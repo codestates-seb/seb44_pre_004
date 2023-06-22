@@ -4,7 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import fourtuna.stackoverflowclone.member.dto.LoginDto;
 import fourtuna.stackoverflowclone.member.dto.LoginResponseDto;
 import fourtuna.stackoverflowclone.member.entity.Member;
+import fourtuna.stackoverflowclone.member.mapper.MemberMapper;
+import fourtuna.stackoverflowclone.response.SingleResponseDto;
 import lombok.SneakyThrows;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -62,6 +66,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         response.setHeader("Authorization", "Bearer " + accessToken);
         response.setHeader("Refresh", refreshToken);
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html; charset-UTF-8");
         response.getWriter().write(mapper.writeValueAsString(loginResponseDto));
 
         this.getSuccessHandler().onAuthenticationSuccess(request, response, authResult);

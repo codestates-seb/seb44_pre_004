@@ -1,5 +1,6 @@
 package fourtuna.stackoverflowclone.member.mapper;
 
+import fourtuna.stackoverflowclone.member.dto.LoginResponseDto;
 import fourtuna.stackoverflowclone.member.dto.MemberPatchDto;
 import fourtuna.stackoverflowclone.member.dto.MemberResponseDto;
 import fourtuna.stackoverflowclone.member.entity.Member;
@@ -20,7 +21,7 @@ public interface MemberMapper {
     List<MemberResponseDto> membersToMemberResponseDtos(List<Member> members);
 
     Member memberPostDtoToMember(MemberPostDto memberPostDto);
-
+    LoginResponseDto loginToLoginResponsDto(Member member);
 }
 
 

@@ -51,7 +51,7 @@ public class MemberController {
     @GetMapping("/{memberId}")
     public ResponseEntity getMember(
             @PathVariable("memberId") @Positive long memberId) {
-        Member response = memberService.findMember(memberId); // 서비스계층과 연결 지점
+        Member response = memberService.findMember(memberId);
 
         return new ResponseEntity<>(new SingleResponseDto<>(mapper.memberToMemberResponseDto(response)), HttpStatus.OK);
     }
@@ -68,12 +68,11 @@ public class MemberController {
                 HttpStatus.OK);
     }
 
-    @PostMapping
+    @PostMapping("/join")
     public ResponseEntity postMember(@Valid @RequestBody MemberPostDto memberPostDto){
         Member createdMember = memberService.createMember(mapper.memberPostDtoToMember(memberPostDto));
         MemberResponseDto response = mapper.memberToMemberResponseDto(createdMember);
 
         return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.CREATED);
-        //return new ResponseEntity<>(mapper.memberToMemberResponseDto(createdMember), HttpStatus.CREATED);
     }
 }

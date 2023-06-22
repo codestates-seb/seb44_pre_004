@@ -13,6 +13,6 @@ public class MemberPatchDto {
     private String image;
     private String title;
     private String aboutMe;
-    private LocalDateTime creatAt;
-    private LocalDateTime updateAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

@@ -17,7 +17,7 @@ public class MemberResponseDto {
     private String image;
     private String title;
     private String aboutMe;
-    private LocalDateTime createAt;
-    private LocalDateTime updataAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
 }

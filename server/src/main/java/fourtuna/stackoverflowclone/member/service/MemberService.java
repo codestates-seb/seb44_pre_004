@@ -1,5 +1,6 @@
 package fourtuna.stackoverflowclone.member.service;
 
+import fourtuna.stackoverflowclone.answer.entity.Answer;
 import fourtuna.stackoverflowclone.auth.CustomAuthorityUtils;
 import fourtuna.stackoverflowclone.exception.BusinessLogicException;
 import fourtuna.stackoverflowclone.exception.ExceptionCode;
@@ -49,6 +50,7 @@ public class MemberService {
         return memberRepository.save(findMember);
     }
 
+    //
     public Member findMember(long memberId) {
         return findVerifiedMember(memberId);
     }
@@ -59,15 +61,6 @@ public class MemberService {
     }
 
 
-    @Transactional(readOnly = true)
-    public Member findVerifiedMember(long memberId) {
-        Optional<Member> optionalMember =
-                memberRepository.findById(memberId);
-        Member findMember = optionalMember.orElseThrow(() ->
-                new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-        return findMember;
-
-    }
 
     public Member createMember(Member member){
         verifyExistsMember(member.getEmail());
@@ -81,13 +74,24 @@ public class MemberService {
 
     public void verifyExistsMember(String email) {
         boolean exsist = memberRepository.findByEmail(email).isPresent();
-        if(exsist == true) new BusinessLogicException(ExceptionCode.MEMBER_EXISTS);
+        if(exsist == true) throw new BusinessLogicException(ExceptionCode.MEMBER_EXISTS);
     }
 
     public Member findMemberByEmail(String email) {
-        return memberRepository.findByEmail(email)
+        Member findMember = memberRepository.findByEmail(email)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+        return findMember;
+    }
+
+    @Transactional(readOnly = true)
+    public Member findVerifiedMember(long memberId) {
+        Optional<Member> optionalMember =
+                memberRepository.findById(memberId);
+        Member findMember = optionalMember.orElseThrow(() ->
+                new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+        return findMember;
 
     }
+
 }
 

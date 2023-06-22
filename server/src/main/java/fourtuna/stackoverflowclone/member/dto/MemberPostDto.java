@@ -5,20 +5,24 @@ import lombok.Builder;
 import lombok.Getter;
 import org.springframework.lang.Nullable;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+
 @Builder
 @AllArgsConstructor
 @Getter
 public class MemberPostDto {
-    //유효성검증 필요
+    @NotBlank
+    @Email
     private String email;
+    @NotBlank
     private String name;
+    @NotBlank
     private String password;
     @Nullable
     private String image;
-
     @Nullable
     private String title;
-
     @Nullable
     private String aboutMe;
 }

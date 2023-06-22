@@ -17,9 +17,7 @@ const Mypage = () => {
 
   useEffect(() => {
     axios
-      .get(
-        'https://react-http-fbaa8-default-rtdb.asia-southeast1.firebasedatabase.app/user.json'
-      )
+      .get(`${process.env.REACT_APP_API_TEMP}/user.json`)
       .then((res) => {
         // console.log(res);
         const { memberId, imageUrl, username, title, aboutme, createAt } =

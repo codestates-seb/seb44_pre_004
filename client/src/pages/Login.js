@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { setNav, setFooter } from '../store/showComponentsSlice';
 
@@ -8,8 +8,9 @@ import { FcGoogle } from 'react-icons/fc';
 import logo from '../asset/logo_small.png';
 import { Link, useNavigate } from 'react-router-dom';
 // import axios from 'axios';
+import { login } from '../store/userSlice';
 
-const Login = () => {
+const Login = (/*{ setUserInfo, setIsLogin }*/) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   // 처음 렌더링 될 때 Nav와 Footer 제거
@@ -71,10 +72,8 @@ const Login = () => {
       /^[A-Za-z0-9_]+[A-Za-z0-9]*[@]{1}[A-Za-z0-9]+[A-Za-z0-9]*[.]{1}[A-Za-z]{1,3}$/;
 
     if (!emailRegExp.test(currentEmail)) {
-      setEmailMessage('');
       setIsEmail(false);
     } else {
-      setEmailMessage('');
       setIsEmail(true);
     }
   };
@@ -85,43 +84,55 @@ const Login = () => {
     const passwordRegExp =
       /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
     if (!passwordRegExp.test(currentPassword)) {
-      setPasswordMessage('');
       setIsPassword(false);
     } else {
-      setPasswordMessage('');
       setIsPassword(true);
     }
   };
-  const handleSignUp = () => {
+  const handleLogin = () => {
     if (isEmail === false) {
       alert('이메일을 다시 확인해주세요.');
-      // setEmailMessage('Email cannot be empty.');
       setIsEmail(false);
     } else if (isPassword === false) {
       alert('입력하신 정보를 다시 확인해주세요.');
-      // setPasswordMessage('Password cannot be empty.');
       setIsPassword(false);
-      // } else if (isEmail === '' || isPassword === '') {
-      //   setEmailMessage('Email cannot be empty.');
-      //   setPasswordMessage('Password cannot be empty.');
-    } else if (isEmail && isPassword) {
+    } else {
+      // 로그인 성공 시 토큰을 로컬 스토리지에 저장 테스트
+      // const token = login({
+      //   memberId: 'memberIdValue',
+      //   name: 'nameValue',
+      //   email: 'emailValue',
+      // });
+      // localStorage.setItem('token', JSON.stringify(token));
+
+      dispatch(
+        login({
+          memberId: 'memberIdValue',
+          name: 'nameValue',
+          email: 'emailValue',
+        })
+      );
       navigate('/');
+      // axios
+      //     .post('/user/join', { displayName,email, password  })
+      //     .then((response) => {
+      //        localStorage.setItem('token', response.data.token);
+      //       console.log(response);
+      //       navigate('/user/login');
+      //     })
+      //     .catch((err) => {
+      //       alert('ID 또는 비밀번호가 틀립니다.');
+      //       if (err.response.status === 401) {
+      //       console.error('로그인 실패:', err);}
+      //     //});
     }
-    // if (isEmail === false) {
-    //   alert('이메일을 다시 확인해주세요.');
-    //   setEmailMessage('Email cannot be empty.');
-    //   setIsEmail(false);
-    // } else if (isPassword === false) {
-    //   alert('비밀번호를 다시 확인해주세요.');
-    //   setPasswordMessage('Password cannot be empty.');
-    //   setIsPassword(false);
-    // } else if (isEmail && isPassword) {
-    //   navigate('/');
-    // }
   };
 
+  const user = useSelector((state) => state.user);
+  console.log(user);
+
   return (
-    <Containor>
+    <Container>
       <div>
         <LinkWapper>
           <Link to="/">
@@ -181,22 +192,22 @@ const Login = () => {
           <p className="message">{passwordMessage}</p>
         </ErrorMessageDiv>
       </FormContainer>
-      <ButtonContainor>
-        <Button type="submit" onClick={handleSignUp}>
+      <ButtonContainer>
+        <Button type="submit" onClick={handleLogin}>
           Log in
         </Button>
-      </ButtonContainor>
+      </ButtonContainer>
       <DivBox3>
         <span style={{ marginRight: 5 }}>Don’t have an account?</span>
         <span style={{ color: '#0074cc' }}>
           <Link to="/user/join"> Sign up </Link>
         </span>
       </DivBox3>
-    </Containor>
+    </Container>
   );
 };
 
-const Containor = styled.div`
+const Container = styled.div`
   display: grid;
   align-items: center;
   justify-content: center;
@@ -262,7 +273,7 @@ const Label = styled.label`
   margin-bottom: 5px;
   font-weight: 600;
 `;
-const ButtonContainor = styled.div`
+const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;

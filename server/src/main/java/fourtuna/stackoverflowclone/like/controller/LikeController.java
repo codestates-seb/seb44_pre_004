@@ -1,5 +1,6 @@
 package fourtuna.stackoverflowclone.like.controller;
 
+import fourtuna.stackoverflowclone.auth.JwtTokenizer;
 import fourtuna.stackoverflowclone.like.dto.LikeDto;
 import fourtuna.stackoverflowclone.like.service.LikeService;
 import fourtuna.stackoverflowclone.response.SingleResponseDto;
@@ -19,19 +20,18 @@ import javax.validation.constraints.Positive;
 @Slf4j
 public class LikeController {
     private final LikeService likeService;
-    public LikeController(LikeService likeService) {
+    private final JwtTokenizer jwtTokenizer;
 
+    public LikeController(LikeService likeService, JwtTokenizer jwtTokenizer) {
+        this.jwtTokenizer = jwtTokenizer;
         this.likeService = likeService;
     }
 
     @PostMapping("/answer/{answerId}/like")
     public ResponseEntity<SingleResponseDto<LikeDto.LikeAnswerResponse>> createAnswerLike(@Positive @PathVariable("answerId") Long answerId,
-                                                           @Valid @RequestBody LikeDto.LikeAnswerResponse request/*,
-                                                           @RequestHeader("Authorization") String token*/) {
-        // 토큰에서 유저정보 꺼내기
-        // ex) String memberEmail  = tokenProvider.getAuthentication(token).getEmail();
-
-        String memberEmail = "test@test.com";
+                                                           @Valid @RequestBody LikeDto.LikeAnswerResponse request,
+                                                           @RequestHeader("Authorization") String token) {
+        String memberEmail = jwtTokenizer.getUsername(token);
 
         LikeDto.LikeAnswerResponse response = likeService.createAnswerLike(answerId, request, memberEmail);
         return ResponseEntity.ok(new SingleResponseDto<>(response));
@@ -40,23 +40,20 @@ public class LikeController {
 
     @PostMapping("/question/{questionId}/like")
     public ResponseEntity<SingleResponseDto<LikeDto.LikeQuestionResponse>> createQuestionLike(@Positive @PathVariable("questionId") Long questionId,
-                                                                   @Valid @RequestBody LikeDto.LikeQuestionResponse request/*,
-                                     @RequestHeader("Authorization") String token*/) {
-        // 토큰에서 유저정보 꺼내기
-        // ex) String memberEmail  = tokenProvider.getAuthentication(token).getEmail();
+                                                                   @Valid @RequestBody LikeDto.LikeQuestionResponse request,
+                                     @RequestHeader("Authorization") String token) {
 
-        String memberEmail = "test@test.com";
+        String memberEmail = jwtTokenizer.getUsername(token);
 
         LikeDto.LikeQuestionResponse response = likeService.createQuestionLike(questionId, request, memberEmail);
         return ResponseEntity.ok(new SingleResponseDto<>(response));
     }
 
     @DeleteMapping("/like/{likeId}")
-    public ResponseEntity<Void> deleteLike(@Positive @PathVariable("likeId") Long likeId/*, @RequestHeader("Authorization") String token*/) {
-        // 토큰에서 유저정보 꺼내기
-        // ex) String memberEmail  = tokenProvider.getAuthentication(token).getEmail();
+    public ResponseEntity<Void> deleteLike(@Positive @PathVariable("likeId") Long likeId,
+                                           @RequestHeader("Authorization") String token) {
+        String memberEmail = jwtTokenizer.getUsername(token);
 
-        String memberEmail = "test@test.com";
         likeService.deleteLike(likeId, memberEmail);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

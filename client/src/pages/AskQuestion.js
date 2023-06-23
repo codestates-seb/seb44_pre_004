@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setNav, setFooter } from '../store/showComponentsSlice';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-// import axios from 'axios';
+import axios from 'axios';
 
 // 로그인 시에만 이용 가능하도록 작성 필요
 
 const AskQuestion = () => {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user);
+  // const user = useSelector((state) => state.user);
 
   // 처음 렌더링 될 때 Nav와 Footer 제거
   useEffect(() => {
@@ -19,10 +19,10 @@ const AskQuestion = () => {
 
   const [qna, setQna] = useState({
     title: '',
-    contents: '',
+    body: '',
   });
 
-  const { title, contents } = qna;
+  const { title, body } = qna;
 
   const onChange = (event) => {
     const { value, name } = event.target;
@@ -33,19 +33,32 @@ const AskQuestion = () => {
   };
 
   const saveQna = async () => {
-    // 로그인된 사용자의 정보를 서버로 전송
-    const qnaData = {
-      title,
-      createdBy: user?.id,
-      contents,
-    };
+    // 로그인된 사용자의 정보를 서버로 전
 
-    console.log('qnaData:', qnaData);
+    const qnaData = { title, body };
     alert('등록되었습니다.');
 
-    // await axios.post(`//localhost:8080/qna`, qnaData).then(() => {
-    //   alert('등록되었습니다.');
-    // });
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/qna/question`,
+        // createdBy: user?.id,
+        qnaData,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: process.env.ACCESS_TOKEN,
+          },
+        }
+      );
+
+      console.log('response:', response.data);
+      alert('Question submitted successfully.');
+    } catch (error) {
+      console.error(error.response);
+      alert(
+        'An error occurred while submitting the question. Please try again.'
+      );
+    }
   };
 
   return (
@@ -73,8 +86,8 @@ const AskQuestion = () => {
         <TextAreaDiv>
           <TextDiv>Body</TextDiv>
           <BodyTextArea
-            name="contents"
-            value={contents}
+            name="body"
+            value={body}
             onChange={onChange}
             placeholder="내용을 작성해주세요."
           ></BodyTextArea>
@@ -82,7 +95,7 @@ const AskQuestion = () => {
       </MainComponent>
       <MainComponent>
         <AskButton onClick={saveQna}>
-          <Link to="/qna/:qnaId">Post your question</Link>
+          <Link to={`/qna`}>Post your question</Link>
         </AskButton>
       </MainComponent>
     </>

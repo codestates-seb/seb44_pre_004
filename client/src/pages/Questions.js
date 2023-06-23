@@ -5,9 +5,27 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setNav, setFooter } from '../store/showComponentsSlice';
+import LoadingSpinner from '../components/LoadingSpinner';
+import axios from 'axios';
 
-const Questions = ({ questionData }) => {
+const Questions = () => {
   const dispatch = useDispatch();
+
+  const [questionData, setQuestionData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/qna/question`)
+      .then((res) => {
+        setQuestionData(res.data.data.questions.content);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsLoading(false);
+      });
+  }, []);
   // 처음 렌더링 될 때 Nav와 Footer 제거
   useEffect(() => {
     dispatch(setNav(true));
@@ -27,6 +45,10 @@ const Questions = ({ questionData }) => {
 
   // Get the subset of questions to display on the current page
   const displayedQuestions = questionData.slice(startIndex, endIndex);
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <>

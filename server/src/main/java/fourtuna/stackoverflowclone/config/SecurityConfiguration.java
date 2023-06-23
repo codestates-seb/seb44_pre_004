@@ -50,13 +50,26 @@ public class SecurityConfiguration {
                 .apply(new CustomFilterConfigurer())
                 .and()
                 .authorizeHttpRequests(authorize -> authorize
-                        .antMatchers(HttpMethod.POST, "/*/user").permitAll()
-                        .antMatchers(HttpMethod.PATCH, "/*/user/**").hasRole("USER")
+                        .antMatchers(HttpMethod.POST, "/*/user/**").permitAll()
+                        .antMatchers(HttpMethod.GET, "/*/user/**").permitAll()
+                        .antMatchers(HttpMethod.POST,"/*/qna/**").authenticated()
+                        .antMatchers(HttpMethod.GET, "/*/qna/**").permitAll()
+                        .antMatchers(HttpMethod.PATCH,"/**").authenticated()
+                        .antMatchers(HttpMethod.DELETE,"/**").authenticated()
+
+                        //user role에 따른 권한부여X
+                        //.antMatchers(HttpMethod.PATCH, "/*/user/**").hasRole("USER")
+
                         //.antMatchers(HttpMethod.GET, "/*/members").hasRole("ADMIN")
-                        .antMatchers(HttpMethod.GET, "/*/user/**").hasAnyRole("USER", "ADMIN")
-                        .antMatchers(HttpMethod.DELETE, "/*/user/**").hasRole("USER")
-                        .anyRequest().permitAll()
+                        //.antMatchers(HttpMethod.GET, "/*/user/**").hasAnyRole("USER", "ADMIN")
+
+
+                        //.anyRequest().permitAll()
+                        //.anyRequest().authenticated()
+
                 );
+
+
         return http.build();
 
     }

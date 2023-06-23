@@ -11,6 +11,8 @@ const Header = () => {
   const [showNav, setShowNav] = useState(false);
   const dispatch = useDispatch();
   const showHamberger = useSelector((state) => state.showComponents.showNav);
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  const memberId = useSelector((state) => state.user.memberId);
 
   return (
     <HeaderContainer>
@@ -37,25 +39,34 @@ const Header = () => {
 
         <FlexRight>
           {/* TODO: 로그인 상태값에 따른 변경 필요 */}
-          <Link to="/user/login" onClick={() => setShowNav(false)}>
-            <BorderBtn>Log in</BorderBtn>
-          </Link>
-          <Link to="/user/join" onClick={() => setShowNav(false)}>
-            <BlueBtn>Sign up</BlueBtn>
-          </Link>
+
+          {!isLoggedIn && (
+            <div>
+              <Link to="/user/login" onClick={() => setShowNav(false)}>
+                <BorderBtn>Log in</BorderBtn>
+              </Link>
+              <Link to="/user/join" onClick={() => setShowNav(false)}>
+                <BlueBtn>Sign up</BlueBtn>
+              </Link>
+            </div>
+          )}
           {/* 로그인 후 버튼 */}
-          {/* <Link
-            to="/user/:memberId"
-            onClick={() => {
-              setShowNav(false);
-              dispatch(menuIdxSlice.actions.idx(3));
-            }}
-          >
-            <BorderBtn>Mypage</BorderBtn>
-          </Link>
-          <Link to="/user/logout" onClick={() => setShowNav(false)}>
-            <BlueBtn>Log out</BlueBtn>
-          </Link> */}
+          {isLoggedIn && (
+            <div>
+              <Link
+                to={`/user/${memberId}`}
+                onClick={() => {
+                  setShowNav(false);
+                  dispatch(menuIdxSlice.actions.idx(3));
+                }}
+              >
+                <BorderBtn>Mypage</BorderBtn>
+              </Link>
+              <Link to="/user/logout" onClick={() => setShowNav(false)}>
+                <BlueBtn>Log out</BlueBtn>
+              </Link>
+            </div>
+          )}
         </FlexRight>
       </HeaderWrapper>
     </HeaderContainer>

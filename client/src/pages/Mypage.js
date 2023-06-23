@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setNav, setFooter } from '../store/showComponentsSlice';
 import axios from 'axios';
 
@@ -13,22 +13,23 @@ const Mypage = () => {
 
   const [userData, setUserData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
-  // const { answers, questions } = userData;
+  const memberId = useSelector((state) => state.user.memberId);
 
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_API_TEMP}/user.json`)
+      .get(`${process.env.REACT_APP_API_URL}/user/${memberId}`)
       .then((res) => {
-        // console.log(res);
-        const { memberId, imageUrl, username, title, aboutme, createAt } =
-          res.data;
+        // console.log(res.data.data);
+        const { memberId, image, name, title, aboutme, createAt, updatedAt } =
+          res.data.data;
         const data = {
           memberId,
-          imageUrl,
-          username,
+          image,
+          name,
           title,
           aboutme,
           createAt,
+          updatedAt,
         };
         setUserData(data);
         setIsLoading(false);

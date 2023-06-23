@@ -6,16 +6,19 @@ import styled from 'styled-components';
 
 const UserInfo = ({ userData }) => {
   const dispatch = useDispatch();
-  const { memberId, imageUrl, username, title, aboutme, createAt } = userData;
+  const { memberId, image, name, title, aboutme, createAt, updatedAt } =
+    userData;
+
+  console.log(updatedAt);
 
   return (
     <UserContainer>
       <InfoSection>
         <Link to={`/user/${memberId}`}>
-          <img src={imageUrl} alt="profile" />
+          <img src={image} alt="profile" />
         </Link>
         <InfoArea>
-          <h2>{username}</h2>
+          <h2>{name}</h2>
           <h3>{title}</h3>
           <p>{aboutme}</p>
           <p>

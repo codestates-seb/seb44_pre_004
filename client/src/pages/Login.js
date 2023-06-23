@@ -94,9 +94,9 @@ const Login = (/*{ setUserInfo, setIsLogin }*/) => {
 
           dispatch(
             login({
-              memberId: response.data.memberId,
-              email: response.data.email,
-              name: response.data.name,
+              memberId: response.data.data.memberId,
+              email: response.data.data.email,
+              name: response.data.data.name,
               isLoggedIn: true,
             })
           );

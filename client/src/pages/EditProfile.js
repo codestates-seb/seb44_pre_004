@@ -20,23 +20,24 @@ const EditProfile = () => {
 
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_API_TEMP}/user.json`)
+      .get(`${process.env.REACT_APP_API_URL}/user/${memberId}`)
       .then((res) => {
-        // console.log(res);
-        const { memberId, imageUrl, username, title, aboutme, createAt } =
-          res.data;
+        console.log(res.data.data);
+        const { memberId, image, name, title, aboutme, createAt, updatedAt } =
+          res.data.data;
         const data = {
           memberId,
-          imageUrl,
-          username,
+          image,
+          name,
           title,
           aboutme,
           createAt,
+          updatedAt,
         };
         setUserData(data);
         setUpdatedData({
-          imageUrl,
-          username,
+          image,
+          name,
           title,
           aboutme,
         });
@@ -95,7 +96,7 @@ const EditProfile = () => {
     try {
       // await axios.patch(`/user/edit/${memberId}`, inputs);
       await axios.patch(
-        `${process.env.REACT_APP_API_TEMP}/user.json`,
+        `${process.env.REACT_APP_API_URL}/user/edit/${memberId}`,
         updatedData
       );
     } catch (error) {

@@ -6,6 +6,7 @@ import { HiExternalLink } from 'react-icons/hi';
 import styled from 'styled-components';
 
 import { setNav, setFooter } from '../store/showComponentsSlice';
+import { logout } from '../store/userSlice';
 import logo from '../asset/logo.png';
 
 const Logout = () => {
@@ -19,10 +20,9 @@ const Logout = () => {
 
   const handleLogout = (e) => {
     e.preventDefault();
+    localStorage.removeItem('token');
+    dispatch(logout());
     navigate('/');
-    // axios.post('/user/logout').then(() => {
-    //   navigate('/');
-    // });
   };
 
   return (

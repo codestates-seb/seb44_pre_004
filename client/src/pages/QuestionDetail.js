@@ -73,16 +73,17 @@ const QuestionDetail = () => {
       // },       답변 작성자 정보
     };
 
-    //   // 임시로 답변 데이터 저장
-    //   setAnswers((prevAnswers) => [...prevAnswers, newAnswerObj]);
-    //   setNewAnswer('');
-    // };
-
-    // 서버 완성 시 전송 할 답변 코드
+    // 답변 작성 코드
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_API_URL}/qna/question/${questionId}/answer`,
-        newAnswerObj
+        { newAnswerObj },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: process.env.ACCESS_TOKEN,
+          },
+        }
       );
       setAnswers((prevAnswers) => [...prevAnswers, response.data]);
       setNewAnswer('');
@@ -92,15 +93,7 @@ const QuestionDetail = () => {
   };
 
   const handleAnswerEdit = async (answerId, editedContent) => {
-    // 답변 수정 처리 변경 예정
-    //   setAnswers((prevAnswers) =>
-    //     prevAnswers.map((answer) =>
-    //       answer.id === answerId ? { ...answer, content: editedContent } : answer
-    //     )
-    //   );
-    // };
-
-    // 서버 완성 시 변경 할 답변 코드
+    // 답변 수정 코드
     try {
       const updatedAnswer = {
         id: answerId,
@@ -109,7 +102,13 @@ const QuestionDetail = () => {
 
       const response = await axios.put(
         `${process.env.REACT_APP_API_URL}/qna/answer/${answerId}`,
-        updatedAnswer
+        { updatedAnswer },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: process.env.ACCESS_TOKEN,
+          },
+        }
       );
       setAnswers((prevAnswers) =>
         prevAnswers.map((answer) =>
@@ -122,16 +121,16 @@ const QuestionDetail = () => {
   };
 
   const handleAnswerDelete = async (answerId) => {
-    // 답변 삭제 처리 변경 예정
-    //   setAnswers((prevAnswers) =>
-    //     prevAnswers.filter((answer) => answer.id !== answerId)
-    //   );
-    // };
-
-    // 서버 완성 시 변경 할 삭제 코드
+    // 답변 삭제 코드
     try {
       await axios.delete(
-        `${process.env.REACT_APP_API_URL}/qna/answer/${answerId}`
+        `${process.env.REACT_APP_API_URL}/qna/answer/${answerId}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: process.env.ACCESS_TOKEN,
+          },
+        }
       );
       setAnswers((prevAnswers) =>
         prevAnswers.filter((answer) => answer.id !== answerId)
@@ -150,13 +149,7 @@ const QuestionDetail = () => {
   };
 
   const handleQuestionSave = async () => {
-    // 변경 예정
-    //   questionData.title = editedQuestion.title;
-    //   questionData.content = editedQuestion.content;
-    //   setIsEditing(false);
-    // };
-
-    // 서버 완성 시 변경 할 수정 코드
+    // 질문 수정 코드
     try {
       const updatedQuestion = {
         // id: questionId,
@@ -165,13 +158,12 @@ const QuestionDetail = () => {
       };
 
       const response = await axios.patch(
-        `${process.env.REACT_APP_API_URL}/api/questions/${questionId}`,
+        `${process.env.REACT_APP_API_URL}/qna/questions/${questionId}`,
         { updatedQuestion },
         {
           headers: {
             'Content-Type': 'application/json',
-            Authorization:
-              'Bearer eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6W10sInVzZXJuYW1lIjoidGVzdEB0ZXN0LmNvbSIsInN1YiI6InRlc3RAdGVzdC5jb20iLCJpYXQiOjE2ODc1MDc1NjUsImV4cCI6MTY4NzUwOTM2NX0.r2QkZPPij7f0PFOZnRPo11CrB21nx_E7rSoOtCPVhOLzQ3y0khjLk-1bOK2tl16x',
+            Authorization: process.env.ACCESS_TOKEN,
           },
         }
       );
@@ -196,18 +188,16 @@ const QuestionDetail = () => {
     //   서버 완성 시 변경 할 삭제 코드
     try {
       const response = await axios.delete(
-        `${process.env.REACT_APP_API_URL}/api/questions/${questionId}`,
+        `${process.env.REACT_APP_API_URL}/qna/questions/${questionId}`,
         {
           headers: {
             'Content-Type': 'application/json',
-            Authorization:
-              'Bearer eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6W10sInVzZXJuYW1lIjoidGVzdEB0ZXN0LmNvbSIsInN1YiI6InRlc3RAdGVzdC5jb20iLCJpYXQiOjE2ODc1MDc1NjUsImV4cCI6MTY4NzUwOTM2NX0.r2QkZPPij7f0PFOZnRPo11CrB21nx_E7rSoOtCPVhOLzQ3y0khjLk-1bOK2tl16x',
+            Authorization: process.env.ACCESS_TOKEN,
           },
         }
       );
 
       if (response.status === 200) {
-        // 여기서 질문 삭제 후 리다이렉트 또는 화면 전환 등의 작업을 수행할 수 있습니다.
         console.log('Question deleted');
       } else {
         console.error('Error deleting question');
@@ -220,29 +210,33 @@ const QuestionDetail = () => {
   const handleLikeClick = () => {
     setIsLiked((prevIsLiked) => !prevIsLiked);
 
-    // 변경 예정
-    setLikeCount((prevLikeCount) =>
-      isLiked ? prevLikeCount - 1 : prevLikeCount + 1
-    );
+    // 서버에 좋아요 상태 전송
+    const requestData = {
+      // postId: questionData.questionId, // 좋아요를 누른 게시물의 식별자 (예: 질문의 id)
+      liked: !isLiked, // 좋아요 상태
+    };
+
+    // 서버로 POST 요청 보내기
+    axios
+      .post(
+        `${process.env.REACT_APP_API_URL}/qna/questions/${questionId}/like`,
+        { requestData },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: process.env.ACCESS_TOKEN,
+          },
+        }
+      )
+      .then((response) => {
+        // POST 요청이 성공적으로 처리된 경우
+        console.log('Like status sent to server:', response.data);
+      })
+      .catch((error) => {
+        // POST 요청이 실패한 경우
+        console.error('Error sending like status to server:', error);
+      });
   };
-
-  //   // 서버에 좋아요 상태 전송
-  //   const requestData = {
-  //     postId: question.id, // 좋아요를 누른 게시물의 식별자 (예: 질문의 id)
-  //     liked: !isLiked, // 좋아요 상태
-  //   };
-
-  //   // 서버로 POST 요청 보내기
-  //   axios.post('/api/like', requestData)
-  //     .then((response) => {
-  //       // POST 요청이 성공적으로 처리된 경우
-  //       console.log('Like status sent to server:', response.data);
-  //     })
-  //     .catch((error) => {
-  //       // POST 요청이 실패한 경우
-  //       console.error('Error sending like status to server:', error);
-  //     });
-  // };
 
   // 댓글 작성 처리 함수
   const handleCommentSubmit = (e) => {
@@ -263,12 +257,6 @@ const QuestionDetail = () => {
   };
 
   const handleCommentDelete = async (commentId) => {
-    // 답변 삭제 처리 변경 예정
-    //   setAnswers((prevAnswers) =>
-    //     prevAnswers.filter((answer) => answer.id !== answerId)
-    //   );
-    // };
-
     // 서버 완성 시 변경 할 삭제 코드
     try {
       await axios.delete(

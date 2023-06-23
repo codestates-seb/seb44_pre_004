@@ -46,8 +46,7 @@ const AskQuestion = () => {
         {
           headers: {
             'Content-Type': 'application/json',
-            Authorization:
-              'Bearer eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6W10sInVzZXJuYW1lIjoidGVzdEB0ZXN0LmNvbSIsInN1YiI6InRlc3RAdGVzdC5jb20iLCJpYXQiOjE2ODc1MDc1NjUsImV4cCI6MTY4NzUwOTM2NX0.r2QkZPPij7f0PFOZnRPo11CrB21nx_E7rSoOtCPVhOLzQ3y0khjLk-1bOK2tl16x',
+            Authorization: process.env.ACCESS_TOKEN,
           },
         }
       );

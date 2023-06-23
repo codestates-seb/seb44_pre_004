@@ -1,5 +1,6 @@
 package fourtuna.stackoverflowclone.member.controller;
 
+import fourtuna.stackoverflowclone.auth.JwtTokenizer;
 import fourtuna.stackoverflowclone.member.dto.MemberPatchDto;
 import fourtuna.stackoverflowclone.member.dto.MemberResponseDto;
 import fourtuna.stackoverflowclone.member.entity.Member;
@@ -12,9 +13,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.util.List;
+
 import fourtuna.stackoverflowclone.member.dto.MemberPostDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,24 +33,29 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberController {
     private final MemberService memberService;
     private final MemberMapper mapper;
+    private final JwtTokenizer jwtTokenizer;
 
-    public MemberController(MemberService memberService, MemberMapper mapper) {
+    public MemberController(MemberService memberService, MemberMapper mapper, JwtTokenizer jwtTokenizer) {
         this.memberService = memberService;
         this.mapper = mapper;
+        this.jwtTokenizer = jwtTokenizer;
     }
 
     @PatchMapping("/edit/{memberId}")
-    public ResponseEntity patchMember(@PathVariable("memberId")  @Positive long memberId,
-                                      @Valid @RequestBody MemberPatchDto requestBody){
+    public ResponseEntity patchMember(@PathVariable("memberId") @Positive long memberId,
+                                      @Valid @RequestBody MemberPatchDto requestBody,
+                                      @RequestHeader("Authorization") String token) {
+
+        String memberEmail = jwtTokenizer.getUsername(token);
         requestBody.setMemberId(memberId);
-        Member member = memberService.updateMember(mapper.memberPatchDtoToMember(requestBody));
+        Member member = memberService.updateMember(mapper.memberPatchDtoToMember(requestBody), memberEmail);
 
         return new ResponseEntity<>(
                 new SingleResponseDto<>(mapper.memberToMemberResponseDto(member)),
                 HttpStatus.OK
         );
-
     }
+
     @GetMapping("/{memberId}")
     public ResponseEntity getMember(
             @PathVariable("memberId") @Positive long memberId) {
@@ -69,7 +77,7 @@ public class MemberController {
     }
 
     @PostMapping
-    public ResponseEntity postMember(@Valid @RequestBody MemberPostDto memberPostDto){
+    public ResponseEntity postMember(@Valid @RequestBody MemberPostDto memberPostDto) {
         Member createdMember = memberService.createMember(mapper.memberPostDtoToMember(memberPostDto));
         MemberResponseDto response = mapper.memberToMemberResponseDto(createdMember);
 

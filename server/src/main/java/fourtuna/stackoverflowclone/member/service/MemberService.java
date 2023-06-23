@@ -17,6 +17,8 @@ import fourtuna.stackoverflowclone.config.SecurityConfiguration;
 import java.util.List;
 import java.util.Optional;
 
+import static fourtuna.stackoverflowclone.exception.ExceptionCode.UNMATCHED_WRITER;
+
 @Transactional
 @Service
 public class MemberService {
@@ -34,8 +36,13 @@ public class MemberService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-    public Member updateMember(Member member) {
+    public Member updateMember(Member member, String memberEmail) {
         Member findMember = findVerifiedMember(member.getMemberId());
+        Member loginMember = findMemberByEmail(memberEmail);
+
+        if (findMember.getMemberId() != loginMember.getMemberId()) {
+            throw new BusinessLogicException(UNMATCHED_WRITER);
+        }
 
         Optional.ofNullable(member.getName())
                 .ifPresent(name -> findMember.setName(name));

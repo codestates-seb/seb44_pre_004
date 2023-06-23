@@ -17,7 +17,7 @@ public class MemberPostDto {
     @NotBlank
     @Email
     private String email;
-    @NotNull
+    @NotBlank
     private String name;
 
     @Pattern(regexp = "^(?=.*[!@#$%^&*()_+\\\\-\\\\[\\\\]{};':\\\"\\\\\\\\|,.<>/?]).{8,}$" ,

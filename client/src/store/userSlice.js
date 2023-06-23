@@ -6,20 +6,20 @@ export const userSlice = createSlice({
     memberId: '',
     name: '',
     email: '',
-    isloggedIn: false,
+    isLoggedIn: false,
   },
   reducers: {
     login: (state, action) => {
       state.memberId = action.payload.memberId;
       state.name = action.payload.name;
       state.email = action.payload.email;
-      state.isloggedIn = action.payload.isloggedIn;
+      state.isLoggedIn = action.payload.isLoggedIn;
     },
     logout: (state) => {
       state.memberId = null;
       state.name = null;
       state.email = null;
-      state.isloggedIn = null;
+      state.isLoggedIn = null;
     },
   },
 });

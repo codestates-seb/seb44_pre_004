@@ -7,7 +7,7 @@ import { FaQuestion, FaTree, FaTags, FaTrophy, FaGithub } from 'react-icons/fa';
 
 import { FcGoogle } from 'react-icons/fc';
 import { Link, useNavigate } from 'react-router-dom';
-// import axios from 'axios';
+import axios from 'axios';
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -35,7 +35,7 @@ const SignUp = () => {
 
   const handleDisplayNameChange = (e) => {
     const currentName = e.target.value;
-    console.log(displayName);
+    // console.log(displayName);
     setDisplayName(currentName);
     if (currentName.length < 2 || currentName.length > 5) {
       setNameMessage('닉네임은 2글자 이상 5글자 이하로 입력해주세요');
@@ -87,19 +87,37 @@ const SignUp = () => {
       setPasswordMessage('Password cannot be empty.');
       setIsPassword(false);
     } else if (isEmail && isPassword) {
-      navigate('/user/login');
-      console.log(displayName, email, password);
+      // navigate('/user/login');
+      // console.log(displayName, email, password);
       // 회원가입 정보를 서버로 전송
-      //   axios
-      //     .post('/user/join', { displayName,email, password  })
-      //     .then((response) => {
-      //       console.log(response);
-      //       alert('회원가입이 정상적으로 완료되었습니다.');
-      //       navigate('/user/login');
-      //     })
-      //     .catch((err) => {
-      //       console.error('회원가입 실패:', err);
-      //     });
+      const name = displayName;
+      axios
+        .post(
+          `${process.env.REACT_APP_API_URL}/user/join`,
+          {
+            name,
+            email,
+            password,
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              // 'Access-Control-Allow-Origin': '*',
+              'Access-Control-Allow-Headers':
+                'Origin, X-Requested-With, Content-Type, Accept',
+            },
+          }
+
+          // { withCredentials: true }
+        )
+        .then((response) => {
+          console.log(response);
+          alert('회원가입이 정상적으로 완료되었습니다.');
+          navigate('/user/login');
+        })
+        .catch((err) => {
+          console.error('회원가입 실패:', err);
+        });
     }
   };
 

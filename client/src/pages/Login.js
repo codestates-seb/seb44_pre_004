@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { setNav, setFooter } from '../store/showComponentsSlice';
 
@@ -7,7 +7,7 @@ import { FaGithub } from 'react-icons/fa';
 import { FcGoogle } from 'react-icons/fc';
 import logo from '../asset/logo_small.png';
 import { Link, useNavigate } from 'react-router-dom';
-// import axios from 'axios';
+import axios from 'axios';
 import { login } from '../store/userSlice';
 
 const Login = (/*{ setUserInfo, setIsLogin }*/) => {
@@ -18,38 +18,6 @@ const Login = (/*{ setUserInfo, setIsLogin }*/) => {
     dispatch(setNav(false));
     dispatch(setFooter(false));
   }, []);
-
-  // axios 요청 확인
-
-  // .get('https://koreanjson.com/users/1')
-  // .then((response) => {
-  //   console.log(response);
-  //   const { data } = response;
-  //   console.log(data);
-  // })
-  // .catch((error) => console.log(error));
-
-  // axios POST 요청 예시
-  // .post('https://koreanjson.com/users', { nickName: 'ApeachIcetea', age: '20' })
-  // .then((response) => {
-  //   const { data } = response;
-  //   console.log(data);
-  // })
-  // .catch((error) => console.log(error));
-
-  // Dummy Data 통신
-  // useEffect(() => {
-  //   axios.get('https://jsonplaceholder.typicode.com/users').then((response) => {
-  //     console.log(response);
-  //     setUsers(response.data);
-  //   });
-  // }, []);
-  // useEffect(() => {
-  //   console.log(users);
-  // }, [users]);
-
-  //데이터 불러와 확인 axios
-  // const [users, setUsers] = useState([]);
 
   // 초기값 세팅 - 이름, 이메일, 비밀번호
   const [email, setEmail] = useState('');
@@ -97,39 +65,53 @@ const Login = (/*{ setUserInfo, setIsLogin }*/) => {
       alert('입력하신 정보를 다시 확인해주세요.');
       setIsPassword(false);
     } else {
-      // 로그인 성공 시 토큰을 로컬 스토리지에 저장 테스트
-      // const token = login({
-      //   memberId: 'memberIdValue',
-      //   name: 'nameValue',
-      //   email: 'emailValue',
-      // });
-      // localStorage.setItem('token', JSON.stringify(token));
+      const username = email;
 
-      dispatch(
-        login({
-          memberId: 'memberIdValue',
-          name: 'nameValue',
-          email: 'emailValue',
+      axios
+        .post(
+          `${process.env.REACT_APP_API_URL}/user/login`,
+          {
+            username,
+            password,
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Access-Control-Allow-Headers':
+                'Origin, X-Requested-With, Content-Type, Accept',
+            },
+          }
+        )
+        .then((response) => {
+          const accessToken = response.headers['authorization'];
+          const refreshToken = response.headers['refresh'];
+          const token = {
+            accessToken,
+            refreshToken,
+          };
+          localStorage.setItem('token', JSON.stringify(token));
+          navigate('/');
+
+          dispatch(
+            login({
+              memberId: response.data.memberId,
+              email: response.data.email,
+              name: response.data.name,
+              isLoggedIn: true,
+            })
+          );
         })
-      );
-      navigate('/');
-      // axios
-      //     .post('/user/join', { displayName,email, password  })
-      //     .then((response) => {
-      //        localStorage.setItem('token', response.data.token);
-      //       console.log(response);
-      //       navigate('/user/login');
-      //     })
-      //     .catch((err) => {
-      //       alert('ID 또는 비밀번호가 틀립니다.');
-      //       if (err.response.status === 401) {
-      //       console.error('로그인 실패:', err);}
-      //     //});
+        .catch((err) => {
+          alert('ID 또는 비밀번호가 틀립니다.');
+          if (err.response.status === 401) {
+            console.error('로그인 실패:', err);
+          }
+        });
     }
   };
 
-  const user = useSelector((state) => state.user);
-  console.log(user);
+  // const user = useSelector((state) => state.user);
+  // console.log(user);
 
   return (
     <Container>

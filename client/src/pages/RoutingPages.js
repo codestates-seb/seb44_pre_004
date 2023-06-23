@@ -31,7 +31,7 @@ const RoutingPages = () => {
           <Routes>
             <Route path="/" element={<Main />} />
             <Route path="/qna" element={<Questions />} />
-            <Route path="/qna/:qnaId" element={<QuestionDetail />} />
+            <Route path="/qna/:questionId" element={<QuestionDetail />} />
             <Route path="/qna/ask" element={<AskQuestion />} />
             <Route path="/tags" element={<Tags />} />
             <Route path="/user" element={<Users />} />

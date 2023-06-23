@@ -4,59 +4,30 @@ import { setNav, setFooter } from '../store/showComponentsSlice';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import Answer from '../components/Answer';
-// import axios from 'axios';
+import { IoMdArrowDropupCircle } from 'react-icons/io';
+import Comment from '../components/Comment';
+import axios from 'axios';
+import LoadingSpinner from '../components/LoadingSpinner';
 
-const QuestionDetail = ({ questionData }) => {
-  const { qnaId } = useParams();
+const QuestionDetail = () => {
+  const { questionId } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [answers, setAnswers] = useState([]);
   const [newAnswer, setNewAnswer] = useState('');
   const [isEditing, setIsEditing] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(0);
   const [editedQuestion, setEditedQuestion] = useState({
     title: '',
     body: '',
   });
-
-  useEffect(() => {
-    const dummyAnswers = {
-      1: [
-        {
-          id: 1,
-          content: '각각 저장되는지 확인만 하자..',
-        },
-        {
-          id: 2,
-          content: '2번째..',
-        },
-        {
-          id: 7,
-          content: '3번 댓글..',
-        },
-      ],
-      2: [
-        {
-          id: 3,
-          content: '2번째 페이지 1번 답변이요',
-        },
-        {
-          id: 4,
-          content: '2번재 페이지 2번 답변이유',
-        },
-      ],
-      3: [
-        { id: 5, content: 'Hi' },
-        { id: 6, content: '3번 페이지 확인' },
-      ],
-    };
-
-    if (dummyAnswers[qnaId]) {
-      setAnswers(dummyAnswers[qnaId]);
-    } else {
-      setAnswers([]);
-    }
-  }, [qnaId]);
+  const [newComment, setNewComment] = useState('');
+  const [showCommentForm, setShowCommentForm] = useState(false);
+  const [comments, setComments] = useState([]);
+  const [questionData, setQuestionData] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
 
   // 처음 렌더링 될 때 Nav와 Footer 제거
   useEffect(() => {
@@ -64,22 +35,37 @@ const QuestionDetail = ({ questionData }) => {
     dispatch(setFooter(true));
   }, []);
 
-  // 해당 id의 질문을 찾기 위해 questionData에서 필터링
-  const question = questionData.find(
-    (question) => question.id === parseInt(qnaId)
-  );
+  useEffect(() => {
+    // Fetch the question data using the qnaId
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/qna/question/${questionId}`)
+      .then((res) => {
+        // Set the question data in state or do something with it
+        console.log(res.data);
+        const questionData = res.data?.data || {};
+        setQuestionData(questionData);
+        setAnswers(questionData.answers);
+        setComments(questionData.comments);
+        setLikeCount(questionData.likeCount || 0);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsLoading(false);
+      });
+  }, [questionId]);
 
-  if (!question) {
+  if (!questionData) {
     return <div>Question not found.</div>;
   }
 
   // 답변 작성 처리 함수
-  const handleAnswerSubmit = /*async 서버 구현시 추가 */ (e) => {
+  const handleAnswerSubmit = async (e) => {
     e.preventDefault();
     if (newAnswer.trim() === '') return;
 
     const newAnswerObj = {
-      id: Date.now(),
+      // id: answerId,
       content: newAnswer,
       // author: {
       //   userId: loggedInUser.id,
@@ -87,102 +73,118 @@ const QuestionDetail = ({ questionData }) => {
       // },       답변 작성자 정보
     };
 
-    // 임시로 답변 데이터 저장
-    setAnswers((prevAnswers) => [...prevAnswers, newAnswerObj]);
-    setNewAnswer('');
+    //   // 임시로 답변 데이터 저장
+    //   setAnswers((prevAnswers) => [...prevAnswers, newAnswerObj]);
+    //   setNewAnswer('');
+    // };
+
+    // 서버 완성 시 전송 할 답변 코드
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/qna/question/${questionId}/answer`,
+        newAnswerObj
+      );
+      setAnswers((prevAnswers) => [...prevAnswers, response.data]);
+      setNewAnswer('');
+    } catch (error) {
+      console.error('Error submitting answer:', error);
+    }
   };
 
-  // 서버 완성 시 전송 할 답변 코드
-  //   try {
-  //     const response = await axios.post('/api/answers', newAnswerObj);
-  //     setAnswers((prevAnswers) => [...answers, response.data]);
-  //     setNewAnswer('');
-  //   } catch (error) {
-  //     console.error('Error submitting answer:', error);
-  //   }
-  // };
+  const handleAnswerEdit = async (answerId, editedContent) => {
+    // 답변 수정 처리 변경 예정
+    //   setAnswers((prevAnswers) =>
+    //     prevAnswers.map((answer) =>
+    //       answer.id === answerId ? { ...answer, content: editedContent } : answer
+    //     )
+    //   );
+    // };
 
-  const handleAnswerEdit = /*async 서버 구현시 추가 */ (
-    answerId,
-    editedContent
-  ) => {
-    // 답변 수정 처리
-    setAnswers((prevAnswers) =>
-      prevAnswers.map((answer) =>
-        answer.id === answerId ? { ...answer, content: editedContent } : answer
-      )
-    );
+    // 서버 완성 시 변경 할 답변 코드
+    try {
+      const updatedAnswer = {
+        id: answerId,
+        content: editedContent,
+      };
+
+      const response = await axios.put(
+        `${process.env.REACT_APP_API_URL}/qna/answer/${answerId}`,
+        updatedAnswer
+      );
+      setAnswers((prevAnswers) =>
+        prevAnswers.map((answer) =>
+          answer.id === answerId ? response.data : answer
+        )
+      );
+    } catch (error) {
+      console.error('Error updating answer:', error);
+    }
   };
 
-  // 서버 완성 시 변경 할 답변 코드
-  //   try {
-  //     const updatedAnswer = {
-  //       id: answerId,
-  //       content: editedContent,
-  //     };
+  const handleAnswerDelete = async (answerId) => {
+    // 답변 삭제 처리 변경 예정
+    //   setAnswers((prevAnswers) =>
+    //     prevAnswers.filter((answer) => answer.id !== answerId)
+    //   );
+    // };
 
-  //     const response = await axios.put(`/api/answers/${answerId}`, updatedAnswer);
-  //     setAnswers((prevAnswers) =>
-  //       prevAnswers.map((answer) =>
-  //         answer.id === answerId ? response.data : answer
-  //       )
-  //     );
-  //   } catch (error) {
-  //     console.error('Error updating answer:', error);
-  //   }
-  // };
-
-  const handleAnswerDelete = /*async 서버 구현시 추가 */ (answerId) => {
-    // 답변 삭제 처리
-    setAnswers((prevAnswers) =>
-      prevAnswers.filter((answer) => answer.id !== answerId)
-    );
+    // 서버 완성 시 변경 할 삭제 코드
+    try {
+      await axios.delete(
+        `${process.env.REACT_APP_API_URL}/qna/answer/${answerId}`
+      );
+      setAnswers((prevAnswers) =>
+        prevAnswers.filter((answer) => answer.id !== answerId)
+      );
+    } catch (error) {
+      console.error('Error deleting answer:', error);
+    }
   };
-
-  // 서버 완성 시 변경 할 삭제 코드
-  //   try {
-  //     await axios.delete(`/api/answers/${answerId}`);
-  //     setAnswers((prevAnswers) =>
-  //       prevAnswers.filter((answer) => answer.id !== answerId)
-  //     );
-  //   } catch (error) {
-  //     console.error('Error deleting answer:', error);
-  //   }
-  // };
 
   const handleQuestionEdit = () => {
     setIsEditing(true);
     setEditedQuestion({
-      title: question.title,
-      body: question.body,
+      title: questionData.title,
+      content: questionData.content,
     });
   };
 
-  const handleQuestionSave = /*async 서버 구현시 추가 */ () => {
-    question.title = editedQuestion.title;
-    question.body = editedQuestion.body;
-    setIsEditing(false);
+  const handleQuestionSave = async () => {
+    // 변경 예정
+    //   questionData.title = editedQuestion.title;
+    //   questionData.content = editedQuestion.content;
+    //   setIsEditing(false);
+    // };
+
+    // 서버 완성 시 변경 할 수정 코드
+    try {
+      const updatedQuestion = {
+        // id: questionId,
+        title: editedQuestion.title,
+        body: editedQuestion.body,
+      };
+
+      const response = await axios.patch(
+        `${process.env.REACT_APP_API_URL}/api/questions/${questionId}`,
+        { updatedQuestion },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization:
+              'Bearer eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6W10sInVzZXJuYW1lIjoidGVzdEB0ZXN0LmNvbSIsInN1YiI6InRlc3RAdGVzdC5jb20iLCJpYXQiOjE2ODc1MDc1NjUsImV4cCI6MTY4NzUwOTM2NX0.r2QkZPPij7f0PFOZnRPo11CrB21nx_E7rSoOtCPVhOLzQ3y0khjLk-1bOK2tl16x',
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        setIsEditing(false);
+      } else {
+        console.error('Error updating question');
+      }
+    } catch (error) {
+      console.error('Error updating question:', error);
+    }
   };
-
-  // 서버 완성 시 변경 할 수정 코드
-  //   try {
-  //     const updatedQuestion = {
-  //       id: question.id,
-  //       title: editedQuestion.title,
-  //       body: editedQuestion.body,
-  //     };
-
-  //     const response = await axios.put(`/api/questions/${question.id}`, updatedQuestion);
-
-  //     if (response.status === 200) {
-  //       setIsEditing(false);
-  //     } else {
-  //       console.error('Error updating question');
-  //     }
-  //   } catch (error) {
-  //     console.error('Error updating question:', error);
-  //   }
-  // };
 
   const handleQuestionCancel = () => {
     setIsEditing(false);
@@ -191,21 +193,98 @@ const QuestionDetail = ({ questionData }) => {
   const handleQuestionDelete = async () => {
     alert('Question deleted');
     navigate('/qna');
-  };
-  //   서버 완성 시 변경 할 삭제 코드
-  //   try {
-  //     const response = await axios.delete(`/api/questions/${question.id}`);
+    //   서버 완성 시 변경 할 삭제 코드
+    try {
+      const response = await axios.delete(
+        `${process.env.REACT_APP_API_URL}/api/questions/${questionId}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization:
+              'Bearer eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6W10sInVzZXJuYW1lIjoidGVzdEB0ZXN0LmNvbSIsInN1YiI6InRlc3RAdGVzdC5jb20iLCJpYXQiOjE2ODc1MDc1NjUsImV4cCI6MTY4NzUwOTM2NX0.r2QkZPPij7f0PFOZnRPo11CrB21nx_E7rSoOtCPVhOLzQ3y0khjLk-1bOK2tl16x',
+          },
+        }
+      );
 
-  //     if (response.status === 200) {
-  //       // 여기서 질문 삭제 후 리다이렉트 또는 화면 전환 등의 작업을 수행할 수 있습니다.
-  //       console.log('Question deleted');
-  //     } else {
-  //       console.error('Error deleting question');
-  //     }
-  //   } catch (error) {
-  //     console.error('Error deleting question:', error);
-  //   }
+      if (response.status === 200) {
+        // 여기서 질문 삭제 후 리다이렉트 또는 화면 전환 등의 작업을 수행할 수 있습니다.
+        console.log('Question deleted');
+      } else {
+        console.error('Error deleting question');
+      }
+    } catch (error) {
+      console.error('Error deleting question:', error);
+    }
+  };
+
+  const handleLikeClick = () => {
+    setIsLiked((prevIsLiked) => !prevIsLiked);
+
+    // 변경 예정
+    setLikeCount((prevLikeCount) =>
+      isLiked ? prevLikeCount - 1 : prevLikeCount + 1
+    );
+  };
+
+  //   // 서버에 좋아요 상태 전송
+  //   const requestData = {
+  //     postId: question.id, // 좋아요를 누른 게시물의 식별자 (예: 질문의 id)
+  //     liked: !isLiked, // 좋아요 상태
+  //   };
+
+  //   // 서버로 POST 요청 보내기
+  //   axios.post('/api/like', requestData)
+  //     .then((response) => {
+  //       // POST 요청이 성공적으로 처리된 경우
+  //       console.log('Like status sent to server:', response.data);
+  //     })
+  //     .catch((error) => {
+  //       // POST 요청이 실패한 경우
+  //       console.error('Error sending like status to server:', error);
+  //     });
   // };
+
+  // 댓글 작성 처리 함수
+  const handleCommentSubmit = (e) => {
+    e.preventDefault();
+    if (newComment.trim() === '') return;
+
+    const newCommentObj = {
+      id: Date.now(),
+      content: newComment,
+      // 작성자 정보 등 필요한 댓글 데이터 추가
+    };
+
+    // 임시로 댓글 데이터 저장
+    setComments((prevComments) => [...prevComments, newCommentObj]);
+    setNewComment('');
+
+    setShowCommentForm(false);
+  };
+
+  const handleCommentDelete = async (commentId) => {
+    // 답변 삭제 처리 변경 예정
+    //   setAnswers((prevAnswers) =>
+    //     prevAnswers.filter((answer) => answer.id !== answerId)
+    //   );
+    // };
+
+    // 서버 완성 시 변경 할 삭제 코드
+    try {
+      await axios.delete(
+        `${process.env.REACT_APP_API_URL}/qna/comment/${commentId}`
+      );
+      setAnswers((prevComments) =>
+        prevComments.filter((comment) => comment.id !== commentId)
+      );
+    } catch (error) {
+      console.error('Error deleting comment:', error);
+    }
+  };
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <>
@@ -221,36 +300,44 @@ const QuestionDetail = ({ questionData }) => {
             }
           />
         ) : (
-          <H2>{question.title}</H2>
+          <H2>{questionData.title}</H2>
         )}
         {isEditing ? (
           <></>
         ) : (
           <RowDiv>
-            <div>asked {/* 작성일 */}today</div>
-            <div>Modified {/* 수정일 */}today</div>
+            <div>asked {questionData.createdAt}</div>
+            <div>Modified {questionData.updatedAt}</div>
           </RowDiv>
         )}
         <BodyContainer>
           {isEditing ? (
             <QuestionTextArea
-              value={editedQuestion.body}
+              value={editedQuestion.content}
               onChange={(e) =>
                 setEditedQuestion({
                   ...editedQuestion,
-                  body: e.target.value,
+                  content: e.target.value,
                 })
               }
             />
           ) : (
-            <div>{question.body}</div>
+            <RowDiv>
+              <LikeContainer>
+                <LikeButton onClick={handleLikeClick} isLiked={isLiked}>
+                  <IoMdArrowDropupCircle size="46" />
+                </LikeButton>
+                <LikeCount>{likeCount}</LikeCount>
+              </LikeContainer>
+              <div>{questionData.content}</div>
+            </RowDiv>
           )}
           <AuthorDiv>
             <ColumDiv>
-              <div>{/* 작성시간 */}asked 40 secs ago</div>
+              <div>asked {questionData.createdAt}</div>
               <RowDiv>
                 <div>{/* 프로필 이미지 */}🌈</div>
-                <DisplayNameSpan>{/* 닉네임 */}kim</DisplayNameSpan>
+                <DisplayNameSpan>{questionData.writerName}</DisplayNameSpan>
               </RowDiv>
             </ColumDiv>
           </AuthorDiv>
@@ -267,8 +354,30 @@ const QuestionDetail = ({ questionData }) => {
             </ButtonContainer>
           )}
           <CommentButton>
-            <AddComment>Add a comment</AddComment>
+            <AddComment onClick={() => setShowCommentForm(true)}>
+              Add a comment
+            </AddComment>
           </CommentButton>
+          {showCommentForm && (
+            <>
+              <CommentForm onSubmit={handleCommentSubmit}>
+                <CommentTextArea
+                  value={newComment}
+                  onChange={(e) => setNewComment(e.target.value)}
+                  placeholder="Write a comment..."
+                />
+                <CommentButton type="submit">Post Comment</CommentButton>
+              </CommentForm>
+              {/* 댓글 목록 렌더링 */}
+            </>
+          )}
+          {comments.map((comment) => (
+            <Comment
+              key={comment.id}
+              comment={comment}
+              onDelete={handleCommentDelete}
+            />
+          ))}
         </BodyContainer>
       </MainComponent>
       <MainComponent>
@@ -443,6 +552,37 @@ const QuestionTextArea = styled.textarea`
   width: 100%;
   height: 5rem;
   padding: 0.5rem;
+`;
+
+const LikeButton = styled.button`
+  color: ${(props) => (props.isLiked ? 'var(--orange)' : 'black')};
+  cursor: pointer;
+  :hover {
+    color: var(--bright-blue);
+  }
+  :active {
+    transform: scale(1.1);
+  }
+`;
+
+const LikeCount = styled.span`
+  display: flex;
+  justify-content: center;
+`;
+
+const LikeContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const CommentForm = styled.form`
+  width: 100%;
+`;
+
+const CommentTextArea = styled.textarea`
+  width: 100%;
+  height: 5rem;
+  margin-bottom: 1rem;
 `;
 
 export default QuestionDetail;

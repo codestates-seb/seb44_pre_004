@@ -175,7 +175,7 @@ const QuestionDetail = () => {
         .then(() => {
           setIsLiked(false);
           setLikeCount((prevCount) => prevCount - 1);
-          navigator(`/qna/questions/${questionId}`);
+          window.location.reload();
         })
         .catch((error) => {
           console.error('Error sending like status to server:', error);
@@ -196,40 +196,41 @@ const QuestionDetail = () => {
   };
 
   // 댓글 작성 처리 함수
-  const handleCommentSubmit = async (e) => {
+  const handleCommentSubmit = (e) => {
     e.preventDefault();
     if (newComment.trim() === '') return;
 
     const newCommentObj = {
       content: newComment,
-      // 작성자 정보 등 필요한 댓글 데이터 추가
     };
-    try {
-      const response = await instance.post(
-        `/qna/question/${questionId}/comment/`,
-        newCommentObj
-      );
-      const createdComment = response.data;
-      setComments((prevComments) => [...prevComments, createdComment]);
-      setNewComment('');
-      setShowCommentForm(false);
-      window.location.reload();
-    } catch (error) {
-      console.error(error);
-    }
+
+    instance
+      .post(`/qna/question/${questionId}/comment/`, newCommentObj)
+      .then((response) => {
+        const createdComment = response.data;
+        setComments((prevComments) => [...prevComments, createdComment]);
+        setNewComment('');
+        setShowCommentForm(false);
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
-  const handleCommentDelete = async (commentId) => {
+  const handleCommentDelete = (commentId) => {
     // 서버 완성 시 변경 할 삭제 코드
-    try {
-      await instance.delete(`/qna/comment/${commentId}`);
-      setAnswers((prevComments) =>
-        prevComments.filter((comment) => comment.id !== commentId)
-      );
-      window.location.reload();
-    } catch (error) {
-      console.error('Error deleting comment:', error);
-    }
+    instance
+      .delete(`/qna/comment/${commentId}`)
+      .then(() => {
+        setAnswers((prevComments) =>
+          prevComments.filter((comment) => comment.id !== commentId)
+        );
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.error('Error deleting comment:', error);
+      });
   };
 
   if (isLoading) {

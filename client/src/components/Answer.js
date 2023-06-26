@@ -31,7 +31,7 @@ const Answer = ({ answer, onEdit, onDelete /*, author*/ }) => {
         .then(() => {
           setIsLiked(false);
           setLikeCount((prevCount) => prevCount - 1);
-          navigator(`/qna/questions/${answerId}`);
+          window.location.reload();
         })
         .catch((error) => {
           console.error('Error sending like status to server:', error);

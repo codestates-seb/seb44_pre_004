@@ -2,6 +2,7 @@ package fourtuna.stackoverflowclone.like.service;
 
 import fourtuna.stackoverflowclone.answer.entity.Answer;
 import fourtuna.stackoverflowclone.answer.repository.AnswerRepository;
+import fourtuna.stackoverflowclone.answer.service.AnswerService;
 import fourtuna.stackoverflowclone.exception.BusinessLogicException;
 import fourtuna.stackoverflowclone.exception.ExceptionCode;
 import fourtuna.stackoverflowclone.like.dto.LikeDto;
@@ -11,6 +12,7 @@ import fourtuna.stackoverflowclone.member.entity.Member;
 import fourtuna.stackoverflowclone.member.service.MemberService;
 import fourtuna.stackoverflowclone.question.entity.Question;
 import fourtuna.stackoverflowclone.question.repository.QuestionRepository;
+import fourtuna.stackoverflowclone.question.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +28,8 @@ public class LikeService {
     private final AnswerRepository answerRepository;
     private final LikeRepository likeRepository;
     private final MemberService memberService;
-
+    private final AnswerService answerService;
+    private final QuestionService questionService;
     private final QuestionRepository questionRepository;
 
 
@@ -74,25 +77,80 @@ public class LikeService {
         return LikeDto.LikeQuestionResponse.from(savedLike);
     }
 
+
     @Transactional
-    public void deleteLike(Long likeId, String memberEmail) {
-    Member member = memberService.findMemberByEmail(memberEmail);
-    Like like = findLike(likeId);
-//    Like like = likeRepository.findById(likeId).orElseThrow(() -> new BusinessLogicException(ExceptionCode.NOT_LIKED));
+    public void deleteAnswerLike(Long answerId, Long memberId) {
+//        Member member = memberService.findMember(memberId);
+//        Like like = findAnswerLike(likeId);
+//        validateLiker(like, member);
 
-    validateLiker(like, member);
-    likeRepository.delete(like);
-    }
-
-    private static void validateLiker(Like Like, Member member) {
-        if(member.getMemberId() != Like.getMember().getMemberId()) {
-            throw new BusinessLogicException(UNMATCHED_LIKER);
+        Like existingLike = likeRepository.findByAnswerAnswerIdAndMemberMemberId(answerId, memberId);
+        if (existingLike == null) {
+            throw new BusinessLogicException(ExceptionCode.NOT_LIKED);
         }
+
+        likeRepository.delete(existingLike);
     }
 
     @Transactional
-    public Like findLike(Long likeId) {
-        Like findLike = likeRepository.findById(likeId).orElseThrow(() -> new BusinessLogicException(ExceptionCode.NOT_LIKED));
+    public void deleteQuestionLike(Long questionId, Long memberId) {
+//        Member member = memberService.findMemberByEmail(memberId);
+//        Like like = findQuestionLike(likeId);
+//        validateLiker(like, member);
+
+        Like existingLike = likeRepository.findByQuestionQuestionIdAndMemberMemberId(questionId, memberId);
+        if (existingLike == null) {
+            throw new BusinessLogicException(ExceptionCode.NOT_LIKED);
+        }
+
+        likeRepository.delete(existingLike);
+    }
+
+
+
+//    private static void validateLiker(Like like, Member member) {
+//        if(member.getMemberId() != like.getMember().getMemberId()) {
+//            throw new BusinessLogicException(UNMATCHED_LIKER);
+//        }
+//    }
+
+//    private static void validateLiker(Answer answer, Member member) {
+//
+//        if(member.getMemberId() != Like.getMember().getMemberId()) {
+//            throw new BusinessLogicException(UNMATCHED_LIKER);
+//        }
+//    }
+
+
+    @Transactional
+    public Like findAnswerLike(Long likeId) {
+        Like findLike = likeRepository.findById(likeId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.NOT_LIKED));
+
         return findLike;
     }
+
+    @Transactional
+    public Like findQuestionLike(Long likeId) {
+        Like findLike = likeRepository.findById(likeId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.NOT_LIKED));
+
+        return findLike;
+    }
+
+//    @Transactional
+//    public void deleteLike(Long likeId, String memberEmail) {
+//    Member member = memberService.findMemberByEmail(memberEmail);
+//    Like like = findLike(likeId);
+////    Like like = likeRepository.findById(likeId).orElseThrow(() -> new BusinessLogicException(ExceptionCode.NOT_LIKED));
+//
+//    validateLiker(like, member);
+//    likeRepository.delete(like);
+//    }
+
+//    @Transactional
+//    public Like findLike(Long likeId) {
+//        Like findLike = likeRepository.findById(likeId).orElseThrow(() -> new BusinessLogicException(ExceptionCode.NOT_LIKED));
+//        return findLike;
+//    }
 }

@@ -20,15 +20,15 @@ const Mypage = () => {
     instance
       .get(`${process.env.REACT_APP_API_URL}/user/${memberId}`)
       .then((res) => {
-        // console.log(res.data.data);
-        const { memberId, image, name, title, aboutme, createdAt, updatedAt } =
+        console.log(res.data.data);
+        const { memberId, image, name, title, aboutMe, createdAt, updatedAt } =
           res.data.data;
         const data = {
           memberId,
           image,
           name,
           title,
-          aboutme,
+          aboutMe,
           createdAt,
           updatedAt,
         };

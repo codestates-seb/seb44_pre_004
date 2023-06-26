@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+// import axios from 'axios';
+import instance from '../util/ApiController';
 
 import { setNav, setFooter } from '../store/showComponentsSlice';
 import styled from 'styled-components';
@@ -14,34 +15,38 @@ const EditProfile = () => {
 
   const [userData, setUserData] = useState({});
   const [updatedData, setUpdatedData] = useState({});
-  const [imageFile, setImageFile] = useState();
+  //formData용
+  const [imageFile, setImageFile] = useState(null);
+  //img src용
+  const [imageUrl, setImageUrl] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const { memberId } = userData;
-  const { image, username, title, aboutme } = updatedData;
+  const memberId = useSelector((state) => state.user.memberId);
+
+  const { name, title, aboutMe } = updatedData;
 
   useEffect(() => {
-    axios
+    instance
       .get(`${process.env.REACT_APP_API_URL}/user/${memberId}`)
       .then((res) => {
-        console.log(res.data.data);
-        const { memberId, image, name, title, aboutme, createdAt, updatedAt } =
+        // console.log(res.data.data);
+        const { memberId, image, name, title, aboutMe, createdAt, updatedAt } =
           res.data.data;
         const data = {
           memberId,
           image,
           name,
           title,
-          aboutme,
+          aboutMe,
           createdAt,
           updatedAt,
         };
         setUserData(data);
         setUpdatedData({
-          image,
           name,
           title,
-          aboutme,
+          aboutMe,
         });
+        setImageUrl(`${process.env.REACT_APP_API_URL}${data.image}`);
         setIsLoading(false);
       })
       .catch((err) => {
@@ -66,27 +71,18 @@ const EditProfile = () => {
   };
 
   //이미지 파일 등록 함수
-  // const handleUploadFile = (e) => {
-  //   const file = e.target.files[0];
-  //   const reader = new FileReader();
-  //   reader.readAsDataURL(file);
-
-  //   return new Promise((resolve) => {
-  //     reader.onload = () => {
-  //       setUpdatedData({
-  //         ...updatedData,
-  //         imageUrl: reader.result || null,
-  //       });
-  //       resolve();
-  //       // console.log(reader.result);
-  //     };
-  //   });
-  // };
-
   const handleUploadFile = (e) => {
     const file = e.target.files[0];
-    // console.log(file);
     setImageFile(file);
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+
+    return new Promise((resolve) => {
+      reader.onload = () => {
+        setImageUrl(reader.result || null);
+        resolve();
+      };
+    });
   };
 
   const handleSubmit = (e) => {
@@ -94,21 +90,30 @@ const EditProfile = () => {
     e.persist();
 
     let formData = new FormData(); // formData 객체를 생성한다.
-    console.log(imageFile);
-    formData.append('files', imageFile);
-    formData.append('data', JSON.stringify(updatedData));
+    formData.append('image', imageFile || null);
+    const blobJson = new Blob([JSON.stringify(updatedData)], {
+      type: 'application/json',
+    });
+    formData.append('requestBody', blobJson);
 
-    console.log(formData);
+    // FormData의 key 확인
+    // for (let key of formData.keys()) {
+    //   console.log(key);
+    // }
+
+    // FormData의 value 확인
+    // for (let value of formData.values()) {
+    //   console.log(value);
+    // }
 
     updateUserInfo(formData);
     setUserData({ ...userData, ...updatedData });
     alert('수정이 완료되었습니다.');
-    navigate(`/user/${memberId}`);
   };
 
   // 사용자 정보 변경 PATCH 요청
   const updateUserInfo = async (formData) => {
-    await axios
+    await instance
       .patch(
         `${process.env.REACT_APP_API_URL}/user/edit/${memberId}`,
         formData,
@@ -120,6 +125,7 @@ const EditProfile = () => {
       )
       .then((res) => {
         console.log(res);
+        navigate(`/user/${memberId}`);
       })
       .catch((err) => {
         console.error('Error update user profile', err);
@@ -150,15 +156,15 @@ const EditProfile = () => {
                     multiple="multiple"
                     onChange={(e) => handleUploadFile(e)}
                   />
-                  <img src={image} alt="profile" />
+                  <img src={imageUrl} alt="profile" />
                 </div>
               </InputFile>
               <InputText>
-                <label htmlFor="username">Display name</label>
+                <label htmlFor="name">Display name</label>
                 <input
                   type="text"
-                  id="username"
-                  value={username || ''}
+                  id="name"
+                  value={name || ''}
                   onChange={handleInputChange}
                 />
               </InputText>
@@ -172,11 +178,11 @@ const EditProfile = () => {
                 />
               </InputText>
               <InputText>
-                <label htmlFor="aboutme">About me</label>
+                <label htmlFor="aboutMe">About me</label>
                 <textarea
-                  name="aboutme"
-                  id="aboutme"
-                  value={aboutme || ''}
+                  name="aboutMe"
+                  id="aboutMe"
+                  value={aboutMe || ''}
                   onChange={handleInputChange}
                   maxLength={300}
                 ></textarea>

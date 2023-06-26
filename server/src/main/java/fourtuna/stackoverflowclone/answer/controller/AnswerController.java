@@ -63,5 +63,4 @@ public class AnswerController {
         answerService.deleteAnswer(answerId, memberEmail);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
 }

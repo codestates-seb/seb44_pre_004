@@ -14,7 +14,7 @@ import java.util.List;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface MemberMapper {
 
-    Member memberPatchDtoToMember(MemberPatchDto memberPatchDto);
+    //Member memberPatchDtoToMember(MemberPatchDto memberPatchDto);
 
     MemberResponseDto memberToMemberResponseDto(Member member);
 

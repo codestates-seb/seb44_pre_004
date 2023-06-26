@@ -34,8 +34,13 @@ public class Member extends Auditable {
 
     @Column(name = "imageUri")
     private String image;
+
+    //@Column
+    //private String imageName;
+
     @Column
     private String title;
+
     @Column
     private String aboutMe;
 

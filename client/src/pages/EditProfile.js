@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -16,22 +16,23 @@ const EditProfile = () => {
   const [updatedData, setUpdatedData] = useState({});
   const [imageFile, setImageFile] = useState();
   const [isLoading, setIsLoading] = useState(true);
-  const { memberId } = userData;
-  const { image, username, title, aboutme } = updatedData;
+  const memberId = useSelector((state) => state.user.memberId);
+  // const { memberId } = userData;
+  const { image, name, title, aboutMe } = updatedData;
 
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_API_URL}/user/${memberId}`)
       .then((res) => {
         console.log(res.data.data);
-        const { memberId, image, name, title, aboutme, createdAt, updatedAt } =
+        const { memberId, image, name, title, aboutMe, createdAt, updatedAt } =
           res.data.data;
         const data = {
           memberId,
           image,
           name,
           title,
-          aboutme,
+          aboutMe,
           createdAt,
           updatedAt,
         };
@@ -40,7 +41,7 @@ const EditProfile = () => {
           image,
           name,
           title,
-          aboutme,
+          aboutMe,
         });
         setIsLoading(false);
       })
@@ -154,11 +155,11 @@ const EditProfile = () => {
                 </div>
               </InputFile>
               <InputText>
-                <label htmlFor="username">Display name</label>
+                <label htmlFor="name">Display name</label>
                 <input
                   type="text"
-                  id="username"
-                  value={username || ''}
+                  id="name"
+                  value={name || ''}
                   onChange={handleInputChange}
                 />
               </InputText>
@@ -172,11 +173,11 @@ const EditProfile = () => {
                 />
               </InputText>
               <InputText>
-                <label htmlFor="aboutme">About me</label>
+                <label htmlFor="aboutMe">About me</label>
                 <textarea
-                  name="aboutme"
-                  id="aboutme"
-                  value={aboutme || ''}
+                  name="aboutMe"
+                  id="aboutMe"
+                  value={aboutMe || ''}
                   onChange={handleInputChange}
                   maxLength={300}
                 ></textarea>

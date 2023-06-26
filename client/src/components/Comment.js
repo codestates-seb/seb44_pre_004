@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 const Comment = ({ comment, onDelete }) => {
   const handleDelete = () => {
-    onDelete(comment.id);
+    onDelete(comment.commentId);
   };
 
   return (
@@ -10,8 +10,8 @@ const Comment = ({ comment, onDelete }) => {
       <div>
         <RowDiv>
           <p>{comment.content} -</p>
-          <DisplayNameSpan>{comment.writerName}kim</DisplayNameSpan>
-          <div>asked {comment.createdAt}</div>
+          <DisplayNameSpan>{comment.writerName}</DisplayNameSpan>
+          <div>작성일 {comment.createdAt}</div>
         </RowDiv>
         <CommentButton onClick={handleDelete}>Delete</CommentButton>
       </div>

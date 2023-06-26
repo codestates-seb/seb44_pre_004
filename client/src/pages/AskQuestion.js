@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { setNav, setFooter } from '../store/showComponentsSlice';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import instance from '../util/ApiController';
 
@@ -9,6 +9,7 @@ import instance from '../util/ApiController';
 
 const AskQuestion = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   // const user = useSelector((state) => state.user);
 
   // 처음 렌더링 될 때 Nav와 Footer 제거
@@ -34,18 +35,36 @@ const AskQuestion = () => {
 
   const saveQna = async () => {
     const qnaData = { title, content };
-    alert('등록되었습니다.');
+    // alert('등록되었습니다.');
 
-    try {
-      const response = await instance.post('/qna/question', qnaData);
-      console.log('response:', response.data);
-      alert('Question submitted successfully.');
-    } catch (error) {
-      console.error(error.response);
-      alert(
-        'An error occurred while submitting the question. Please try again.'
-      );
-    }
+    instance
+      .post('/qna/question', qnaData)
+      .then((res) => {
+        const { questionId } = res.data.data;
+        alert('Question submitted successfully.');
+        navigate(`/qna/${questionId}`);
+        // setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        alert(
+          'An error occurred while submitting the question. Please try again.'
+        );
+        // setIsLoading(false);
+      });
+
+    // try {
+    //   const response = await instance.post('/qna/question', qnaData);
+    //   console.log('response:', response.data);
+    //   const { questionId } = response.data.data;
+    //   navigate(`/qna/${questionId}`);
+    //   alert('Question submitted successfully.');
+    // } catch (error) {
+    //   console.error(error.response);
+    //   alert(
+    //     'An error occurred while submitting the question. Please try again.'
+    //   );
+    // }
   };
 
   return (
@@ -81,9 +100,7 @@ const AskQuestion = () => {
         </TextAreaDiv>
       </MainComponent>
       <MainComponent>
-        <AskButton onClick={saveQna}>
-          <Link to={`/qna`}>Post your question</Link>
-        </AskButton>
+        <AskButton onClick={saveQna}>Post your question</AskButton>
       </MainComponent>
     </>
   );
@@ -112,12 +129,8 @@ const AskButton = styled.button`
   height: 2.5rem;
   background-color: var(--bright-blue);
   border-radius: 5px;
-  a {
-    color: white;
-    border: none;
-    cursor: pointer;
-    text-decoration: none;
-  }
+  color: white;
+  cursor: pointer;
   :hover {
     background-color: var(--dark-blue);
   }

@@ -46,8 +46,8 @@ public class MemberController {
 
     @PatchMapping("/edit/{memberId}")
     public ResponseEntity patchMember(@PathVariable("memberId") @Positive long memberId,
-                                      @Valid @RequestPart MemberPatchDto requestBody,
-                                      @RequestPart MultipartFile image) throws IOException {
+                                      @Valid @RequestPart(required = false) MemberPatchDto requestBody,
+                                      @RequestPart(required = false) MultipartFile image) throws IOException {
         log.info("[MemberController] patchMember called");
         requestBody.setMemberId(memberId);
         //Member member = mapper.memberPatchDtoToMember(requestBody);
@@ -67,11 +67,12 @@ public class MemberController {
 
     @GetMapping("/images/{imageFileName}")
     public Resource showImage(@PathVariable String imageFileName) throws MalformedURLException {
-        return new UrlResource("file:" + System.getProperty("user.dir") + "/" + imageFileName);
+        return new UrlResource("file:" + System.getProperty("user.dir") + "/images/" + imageFileName);
     }
 
     @GetMapping("/edit/{memberId}")
     public ResponseEntity getMemberInfo(@PathVariable("memberId") @Positive long memberId) {
+        log.info("[MemberController] geMemberInfo called");
         Member response = memberService.findMember(memberId);
         return new ResponseEntity<>(new SingleResponseDto<>(mapper.memberToMemberResponseDto(response)), HttpStatus.OK);
     }
@@ -79,6 +80,7 @@ public class MemberController {
     @GetMapping("/{memberId}")
     public ResponseEntity getMember(
             @PathVariable("memberId") @Positive long memberId) {
+        log.info("[MemberController] geMemberInfo called");
         Member response = memberService.findMember(memberId);
 
         return new ResponseEntity<>(new SingleResponseDto<>(mapper.memberToMemberResponseDto(response)), HttpStatus.OK);

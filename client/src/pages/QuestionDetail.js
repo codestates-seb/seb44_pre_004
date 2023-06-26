@@ -7,7 +7,7 @@ import Answer from '../components/Answer';
 import { IoMdArrowDropupCircle } from 'react-icons/io';
 import Comment from '../components/Comment';
 import LoadingSpinner from '../components/LoadingSpinner';
-import instance, { getApi } from '../util/ApiController';
+import instance from '../util/ApiController';
 
 const QuestionDetail = () => {
   const { questionId } = useParams();
@@ -38,81 +38,72 @@ const QuestionDetail = () => {
   }, []);
 
   useEffect(() => {
-    // Fetch the question data using the qnaId
-    getApi
-      .get(`/qna/question/${questionId}`)
-      .then((res) => {
-        // Set the question data in state or do something with it
-        const questionData = res.data?.data || {};
-        console.log(questionData);
-        setQuestionData(questionData);
-        setAnswers(questionData.answers);
-        setComments(questionData.comments);
-        setLikeCount(questionData.likeCount || 0);
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        setIsLoading(false);
-      });
+    getData();
   }, [questionId]);
 
   if (!questionData) {
     return <div>Question not found.</div>;
   }
 
-  // 답변 작성 처리 함수
-  const handleAnswerSubmit = async (e) => {
+  const getData = async () => {
+    instance
+      .get(`/qna/question/${questionId}`)
+      .then((res) => {
+        // Set the question data in state or do something with it
+        const questionData = res.data?.data || {};
+        setQuestionData(questionData);
+        setAnswers(questionData.answers);
+        setComments(questionData.comments);
+        setLikeCount(questionData.likeCount || 0);
+        setIsLiked(questionData.likeExist || false);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsLoading(false);
+      });
+  };
+
+  const handleAnswerSubmit = (e) => {
+    // 답변 작성 코드
     e.preventDefault();
     if (newAnswer.trim() === '') return;
 
     const newAnswerObj = {
-      // id: answerId,
       content: newAnswer,
-      // author: {
-      //   userId: loggedInUser.id,
-      //   username: loggedInUser.username,
-      // },       답변 작성자 정보
     };
 
-    // 답변 작성 코드
-    try {
-      const response = await instance.post(
-        `/qna/question/${questionId}/answer`,
-        newAnswerObj
-      );
-      setAnswers((prevAnswers) => [...prevAnswers, response.data]);
-      setNewAnswer('');
-    } catch (error) {
-      console.error('Error submitting answer:', error);
-    }
+    instance
+      .post(`/qna/question/${questionId}/answer`, newAnswerObj)
+      .then((response) => {
+        setAnswers((prevAnswers) => [...prevAnswers, response.data]);
+        setNewAnswer('');
+        getData();
+      })
+      .catch((error) => {
+        console.error('Error submitting answer:', error);
+      });
   };
 
   const handleAnswerEdit = async (answerId, editedContent) => {
     // 답변 수정 코드
-    try {
-      const updatedAnswer = {
-        // id: answerId,
-        content: editedContent,
-      };
-      console.log(answerId);
-      const response = await instance.patch(
-        `/qna/answer/${answerId}`,
-        updatedAnswer
-      );
-      // setAnswers((prevAnswers) =>
-      //   prevAnswers.map((answer) =>
-      //     answer.id === answerId ? response.data : answer
-      //   )
-      // );
-      if (response.status === 200) {
-        setIsEditing(false);
-      } else {
-        console.error('Error updating answer');
-      }
-    } catch (error) {
-      console.error('Error updating answer:', error);
-    }
+    const updatedAnswer = {
+      content: editedContent,
+    };
+
+    instance
+      .patch(`/qna/answer/${answerId}`, updatedAnswer)
+      .then((response) => {
+        if (response.status === 200) {
+          setIsEditing(false);
+        } else {
+          console.error('Error updating answer');
+        }
+        getData();
+      })
+      .catch((error) => {
+        console.error('Error updating answer:', error);
+      });
   };
 
   const handleAnswerDelete = async (answerId) => {
@@ -122,6 +113,7 @@ const QuestionDetail = () => {
       setAnswers((prevAnswers) =>
         prevAnswers.filter((answer) => answer.id !== answerId)
       );
+      getData();
     } catch (error) {
       console.error('Error deleting answer:', error);
     }
@@ -135,110 +127,115 @@ const QuestionDetail = () => {
     });
   };
 
-  const handleQuestionSave = async () => {
-    // 질문 수정 코드
-    try {
-      const updatedQuestion = {
-        // id: questionId,
-        title: editedQuestion.title,
-        content: editedQuestion.content,
-      };
+  const handleQuestionSave = () => {
+    // 질문 수정 저장 코드
+    const updatedQuestion = {
+      title: editedQuestion.title,
+      content: editedQuestion.content,
+    };
 
-      const response = await instance.patch(
-        `/qna/question/${questionId}`,
-        updatedQuestion
-      );
-
-      if (response.status === 200) {
-        setIsEditing(false);
-      } else {
-        console.error('Error updating question');
-      }
-    } catch (error) {
-      console.error('Error updating question:', error);
-    }
+    instance
+      .patch(`/qna/question/${questionId}`, updatedQuestion)
+      .then((response) => {
+        if (response.status === 200) {
+          setIsEditing(false);
+          getData();
+        } else {
+          console.error('Error updating question');
+        }
+      })
+      .catch((error) => {
+        console.error('Error updating question:', error);
+      });
   };
 
   const handleQuestionCancel = () => {
     setIsEditing(false);
   };
 
-  const handleQuestionDelete = async () => {
-    alert('Question deleted');
-    navigate('/qna');
-    //   서버 완성 시 변경 할 삭제 코드
-    try {
-      const response = await instance.delete(`/qna/question/${questionId}`);
-
-      if (response.status === 200) {
-        console.log('Question deleted');
-      } else {
-        console.error('Error deleting question');
-      }
-    } catch (error) {
-      console.error('Error deleting question:', error);
-    }
-  };
-
-  const handleLikeClick = () => {
-    setIsLiked((prevIsLiked) => !prevIsLiked);
-
-    // 서버에 좋아요 상태 전송
-    const requestData = {
-      // postId: questionData.questionId, // 좋아요를 누른 게시물의 식별자 (예: 질문의 id)
-      liked: !isLiked, // 좋아요 상태
-    };
-
-    // 서버로 POST 요청 보내기
+  const handleQuestionDelete = () => {
+    // 질문 삭제 코드
     instance
-      .post(`/qna/questions/${questionId}/like`, requestData)
+      .delete(`/qna/question/${questionId}`)
       .then((response) => {
-        // POST 요청이 성공적으로 처리된 경우
-        console.log('Like status sent to server:', response.data);
+        if (response.status === 200) {
+          console.log('Question deleted');
+        } else {
+          console.error('Error deleting question');
+        }
+        alert('Question deleted');
+        navigate('/qna');
       })
       .catch((error) => {
-        // POST 요청이 실패한 경우
-        console.error('Error sending like status to server:', error);
+        console.error('Error deleting question:', error);
       });
   };
 
-  // 댓글 작성 처리 함수
-  const handleCommentSubmit = async (e) => {
+  const handleLikeClick = () => {
+    if (isLiked) {
+      // 좋아요 취소
+      instance
+        .delete(`/qna/question/${questionId}/like`, questionId)
+        .then(() => {
+          setIsLiked(false);
+          setLikeCount((prevCount) => prevCount - 1);
+          getData();
+        })
+        .catch((error) => {
+          console.error('Error sending like status to server:', error);
+        });
+    }
+    if (!isLiked) {
+      // 좋아요 추가
+      instance
+        .post(`/qna/question/${questionId}/like`, questionId)
+        .then(() => {
+          setIsLiked(true);
+          setLikeCount((prevCount) => prevCount + 1);
+          getData();
+        })
+        .catch((error) => {
+          console.error('Error sending like status to server:', error);
+        });
+    }
+  };
+
+  const handleCommentSubmit = (e) => {
+    // 댓글 작성 처리 함수
     e.preventDefault();
     if (newComment.trim() === '') return;
 
     const newCommentObj = {
       content: newComment,
-      // 작성자 정보 등 필요한 댓글 데이터 추가
     };
 
-    try {
-      const response = await instance.post(
-        `/qna/question/${questionId}/comment/`,
-        newCommentObj
-      );
-
-      const createdComment = response.data;
-
-      setComments((prevComments) => [...prevComments, createdComment]);
-      setNewComment('');
-
-      setShowCommentForm(false);
-    } catch (error) {
-      console.error(error);
-    }
+    instance
+      .post(`/qna/question/${questionId}/comment/`, newCommentObj)
+      .then((response) => {
+        const createdComment = response.data;
+        setComments((prevComments) => [...prevComments, createdComment]);
+        setNewComment('');
+        setShowCommentForm(false);
+        getData();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
-  const handleCommentDelete = async (commentId) => {
+  const handleCommentDelete = (commentId) => {
     // 서버 완성 시 변경 할 삭제 코드
-    try {
-      await instance.delete(`/qna/comment/${commentId}`);
-      setAnswers((prevComments) =>
-        prevComments.filter((comment) => comment.id !== commentId)
-      );
-    } catch (error) {
-      console.error('Error deleting comment:', error);
-    }
+    instance
+      .delete(`/qna/comment/${commentId}`)
+      .then(() => {
+        setAnswers((prevComments) =>
+          prevComments.filter((comment) => comment.id !== commentId)
+        );
+        getData();
+      })
+      .catch((error) => {
+        console.error('Error deleting comment:', error);
+      });
   };
 
   if (isLoading) {

@@ -1,55 +1,54 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import { IoMdArrowDropupCircle } from 'react-icons/io';
-// import axios from 'axios';
+import instance from '../util/ApiController';
 
 const Answer = ({ answer, onEdit, onDelete /*, author*/ }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState(answer.content);
   const [isLiked, setIsLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(0 /*answer.likeCount || 0*/);
+  const [likeCount, setLikeCount] = useState(answer.likeCount);
   const createdAt = new Date(answer.createdAt);
-
+  const answerId = answer.answerId;
   const handleEdit = () => {
     setIsEditing(true);
   };
 
   const handleSave = () => {
-    onEdit(answer.answerId, editedContent);
+    onEdit(answerId, editedContent);
     setIsEditing(false);
   };
 
   const handleDelete = () => {
-    onDelete(answer.answerId);
+    onDelete(answerId);
   };
 
-  const handleLikeButtonClick = () => {
-    // 좋아요 상태 변경 처리
-    setIsLiked((prevIsLiked) => !prevIsLiked);
-
-    // 변경 예정
-    setLikeCount((prevLikeCount) =>
-      isLiked ? prevLikeCount - 1 : prevLikeCount + 1
-    );
+  const handleLikeClick = () => {
+    if (isLiked) {
+      // 좋아요 취소
+      instance
+        .delete(`/qna/answer/${answerId}/like`, answerId)
+        .then(() => {
+          setIsLiked(false);
+          setLikeCount((prevCount) => prevCount - 1);
+        })
+        .catch((error) => {
+          console.error('Error sending like status to server:', error);
+        });
+    }
+    if (!isLiked) {
+      // 좋아요 추가
+      instance
+        .post(`/qna/answer/${answerId}/like`, answerId)
+        .then(() => {
+          setIsLiked(true);
+          setLikeCount((prevCount) => prevCount + 1);
+        })
+        .catch((error) => {
+          console.error('Error sending like status to server:', error);
+        });
+    }
   };
-
-  //   // 서버에 좋아요 상태 전송
-  //   const requestData = {
-  //     answerId: answer.id, // 좋아요를 누른 답변의 식별자
-  //     liked: !isLiked, // 좋아요 상태
-  //   };
-
-  //   // 서버로 POST 요청 보내기
-  //   axios.post('/api/like', requestData)
-  //     .then((response) => {
-  //       // POST 요청이 성공적으로 처리된 경우
-  //       console.log('Like status sent to server:', response.data);
-  //     })
-  //     .catch((error) => {
-  //       // POST 요청이 실패한 경우
-  //       console.error('Error sending like status to server:', error);
-  //     });
-  // };
 
   return (
     <AnswerContainer>
@@ -65,7 +64,7 @@ const Answer = ({ answer, onEdit, onDelete /*, author*/ }) => {
         <>
           <RowDiv>
             <LikeContainer>
-              <LikeButton onClick={handleLikeButtonClick} isLiked={isLiked}>
+              <LikeButton onClick={handleLikeClick} isLiked={isLiked}>
                 <IoMdArrowDropupCircle size="46" />
               </LikeButton>
               <LikeCount>{likeCount}</LikeCount>

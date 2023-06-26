@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 const Comment = ({ comment, onDelete }) => {
+  const createdAt = new Date(comment.createdAt);
   const handleDelete = () => {
     onDelete(comment.commentId);
   };
@@ -11,7 +12,7 @@ const Comment = ({ comment, onDelete }) => {
         <RowDiv>
           <p>{comment.content} -</p>
           <DisplayNameSpan>{comment.writerName}</DisplayNameSpan>
-          <div>작성일 {comment.createdAt}</div>
+          <div>작성일 {createdAt.toLocaleString('ko-KR')}</div>
         </RowDiv>
         <CommentButton onClick={handleDelete}>Delete</CommentButton>
       </div>

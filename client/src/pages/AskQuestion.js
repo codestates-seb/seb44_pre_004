@@ -33,9 +33,8 @@ const AskQuestion = () => {
     });
   };
 
-  const saveQna = async () => {
+  const saveQna = () => {
     const qnaData = { title, content };
-    // alert('등록되었습니다.');
 
     instance
       .post('/qna/question', qnaData)
@@ -43,28 +42,13 @@ const AskQuestion = () => {
         const { questionId } = res.data.data;
         alert('Question submitted successfully.');
         navigate(`/qna/${questionId}`);
-        // setIsLoading(false);
       })
       .catch((err) => {
         console.log(err);
         alert(
           'An error occurred while submitting the question. Please try again.'
         );
-        // setIsLoading(false);
       });
-
-    // try {
-    //   const response = await instance.post('/qna/question', qnaData);
-    //   console.log('response:', response.data);
-    //   const { questionId } = response.data.data;
-    //   navigate(`/qna/${questionId}`);
-    //   alert('Question submitted successfully.');
-    // } catch (error) {
-    //   console.error(error.response);
-    //   alert(
-    //     'An error occurred while submitting the question. Please try again.'
-    //   );
-    // }
   };
 
   return (

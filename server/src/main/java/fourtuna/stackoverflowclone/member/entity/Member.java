@@ -20,7 +20,7 @@ import java.util.List;
 public class Member extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
+    @Column(name = "memberId", nullable = false)
     private long memberId;
 
     @Column(nullable = false, unique = true, updatable = false)
@@ -46,5 +46,7 @@ public class Member extends Auditable {
 
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
+
+
 
 }

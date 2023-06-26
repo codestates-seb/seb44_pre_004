@@ -48,12 +48,35 @@ public class LikeController {
         return ResponseEntity.ok(new SingleResponseDto<>(response));
     }
 
-    @DeleteMapping("/like/{likeId}")
-    public ResponseEntity<Void> deleteLike(@Positive @PathVariable("likeId") Long likeId,
-                                           @RequestHeader("Authorization") String token) {
-        String memberEmail = jwtTokenizer.getUsername(token);
+    @DeleteMapping("/answer/{answerId}/like")
+    public ResponseEntity<Void> deleteAnswerLike(
+            @Positive @PathVariable("answerId") Long answerId , @RequestHeader("Authorization") String token) {
+        String memberEmail  = tokenProvider.getAuthentication(token).getEmail()
 
-        likeService.deleteLike(likeId, memberEmail);
+        Long memberId = 1L;
+        likeService.deleteAnswerLike(answerId, memberId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @DeleteMapping("/question/{questionId}/like")
+    public ResponseEntity<Void> deleteQuestionLike(
+            @Positive @PathVariable("questionId") Long questionId , @RequestHeader("Authorization") String token) {
+        // 토큰에서 유저정보 꺼내기
+        // ex) String memberEmail  = tokenProvider.getAuthentication(token).getEmail()
+
+        Long memberId = 1L;
+        likeService.deleteQuestionLike(questionId, memberId);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+//    @DeleteMapping("/like/{likeId}")
+//    public ResponseEntity<Void> deleteLike(@Positive @PathVariable("likeId") Long likeId/*, @RequestHeader("Authorization") String token*/) {
+//        // 토큰에서 유저정보 꺼내기
+//        // ex) String memberEmail  = tokenProvider.getAuthentication(token).getEmail();
+//
+//        String memberEmail = "test@test.com";
+//        likeService.deleteLike(likeId, memberEmail);
+//        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+//    }
 }

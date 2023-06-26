@@ -6,8 +6,8 @@ import styled from 'styled-components';
 import Answer from '../components/Answer';
 import { IoMdArrowDropupCircle } from 'react-icons/io';
 import Comment from '../components/Comment';
-import axios from 'axios';
 import LoadingSpinner from '../components/LoadingSpinner';
+import instance, { getApi } from '../util/ApiController';
 
 const QuestionDetail = () => {
   const { questionId } = useParams();
@@ -21,13 +21,15 @@ const QuestionDetail = () => {
   const [likeCount, setLikeCount] = useState(0);
   const [editedQuestion, setEditedQuestion] = useState({
     title: '',
-    body: '',
+    content: '',
   });
   const [newComment, setNewComment] = useState('');
   const [showCommentForm, setShowCommentForm] = useState(false);
   const [comments, setComments] = useState([]);
   const [questionData, setQuestionData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const createdAt = new Date(questionData.createdAt);
+  const updatedAt = new Date(questionData.updatedAt);
 
   // 처음 렌더링 될 때 Nav와 Footer 제거
   useEffect(() => {
@@ -37,12 +39,12 @@ const QuestionDetail = () => {
 
   useEffect(() => {
     // Fetch the question data using the qnaId
-    axios
-      .get(`${process.env.REACT_APP_API_URL}/qna/question/${questionId}`)
+    getApi
+      .get(`/qna/question/${questionId}`)
       .then((res) => {
         // Set the question data in state or do something with it
-        console.log(res.data);
         const questionData = res.data?.data || {};
+        console.log(questionData);
         setQuestionData(questionData);
         setAnswers(questionData.answers);
         setComments(questionData.comments);
@@ -75,15 +77,9 @@ const QuestionDetail = () => {
 
     // 답변 작성 코드
     try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/qna/question/${questionId}/answer`,
-        { newAnswerObj },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: process.env.ACCESS_TOKEN,
-          },
-        }
+      const response = await instance.post(
+        `/qna/question/${questionId}/answer`,
+        newAnswerObj
       );
       setAnswers((prevAnswers) => [...prevAnswers, response.data]);
       setNewAnswer('');
@@ -96,25 +92,24 @@ const QuestionDetail = () => {
     // 답변 수정 코드
     try {
       const updatedAnswer = {
-        id: answerId,
+        // id: answerId,
         content: editedContent,
       };
-
-      const response = await axios.put(
-        `${process.env.REACT_APP_API_URL}/qna/answer/${answerId}`,
-        { updatedAnswer },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: process.env.ACCESS_TOKEN,
-          },
-        }
+      console.log(answerId);
+      const response = await instance.patch(
+        `/qna/answer/${answerId}`,
+        updatedAnswer
       );
-      setAnswers((prevAnswers) =>
-        prevAnswers.map((answer) =>
-          answer.id === answerId ? response.data : answer
-        )
-      );
+      // setAnswers((prevAnswers) =>
+      //   prevAnswers.map((answer) =>
+      //     answer.id === answerId ? response.data : answer
+      //   )
+      // );
+      if (response.status === 200) {
+        setIsEditing(false);
+      } else {
+        console.error('Error updating answer');
+      }
     } catch (error) {
       console.error('Error updating answer:', error);
     }
@@ -123,15 +118,7 @@ const QuestionDetail = () => {
   const handleAnswerDelete = async (answerId) => {
     // 답변 삭제 코드
     try {
-      await axios.delete(
-        `${process.env.REACT_APP_API_URL}/qna/answer/${answerId}`,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: process.env.ACCESS_TOKEN,
-          },
-        }
-      );
+      await instance.delete(`/qna/answer/${answerId}`);
       setAnswers((prevAnswers) =>
         prevAnswers.filter((answer) => answer.id !== answerId)
       );
@@ -154,18 +141,12 @@ const QuestionDetail = () => {
       const updatedQuestion = {
         // id: questionId,
         title: editedQuestion.title,
-        body: editedQuestion.body,
+        content: editedQuestion.content,
       };
 
-      const response = await axios.patch(
-        `${process.env.REACT_APP_API_URL}/qna/questions/${questionId}`,
-        { updatedQuestion },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: process.env.ACCESS_TOKEN,
-          },
-        }
+      const response = await instance.patch(
+        `/qna/question/${questionId}`,
+        updatedQuestion
       );
 
       if (response.status === 200) {
@@ -187,15 +168,7 @@ const QuestionDetail = () => {
     navigate('/qna');
     //   서버 완성 시 변경 할 삭제 코드
     try {
-      const response = await axios.delete(
-        `${process.env.REACT_APP_API_URL}/qna/questions/${questionId}`,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: process.env.ACCESS_TOKEN,
-          },
-        }
-      );
+      const response = await instance.delete(`/qna/question/${questionId}`);
 
       if (response.status === 200) {
         console.log('Question deleted');
@@ -217,17 +190,8 @@ const QuestionDetail = () => {
     };
 
     // 서버로 POST 요청 보내기
-    axios
-      .post(
-        `${process.env.REACT_APP_API_URL}/qna/questions/${questionId}/like`,
-        { requestData },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: process.env.ACCESS_TOKEN,
-          },
-        }
-      )
+    instance
+      .post(`/qna/questions/${questionId}/like`, requestData)
       .then((response) => {
         // POST 요청이 성공적으로 처리된 경우
         console.log('Like status sent to server:', response.data);
@@ -239,29 +203,36 @@ const QuestionDetail = () => {
   };
 
   // 댓글 작성 처리 함수
-  const handleCommentSubmit = (e) => {
+  const handleCommentSubmit = async (e) => {
     e.preventDefault();
     if (newComment.trim() === '') return;
 
     const newCommentObj = {
-      id: Date.now(),
       content: newComment,
       // 작성자 정보 등 필요한 댓글 데이터 추가
     };
 
-    // 임시로 댓글 데이터 저장
-    setComments((prevComments) => [...prevComments, newCommentObj]);
-    setNewComment('');
+    try {
+      const response = await instance.post(
+        `/qna/question/${questionId}/comment/`,
+        newCommentObj
+      );
 
-    setShowCommentForm(false);
+      const createdComment = response.data;
+
+      setComments((prevComments) => [...prevComments, createdComment]);
+      setNewComment('');
+
+      setShowCommentForm(false);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleCommentDelete = async (commentId) => {
     // 서버 완성 시 변경 할 삭제 코드
     try {
-      await axios.delete(
-        `${process.env.REACT_APP_API_URL}/qna/comment/${commentId}`
-      );
+      await instance.delete(`/qna/comment/${commentId}`);
       setAnswers((prevComments) =>
         prevComments.filter((comment) => comment.id !== commentId)
       );
@@ -294,8 +265,8 @@ const QuestionDetail = () => {
           <></>
         ) : (
           <RowDiv>
-            <div>asked {questionData.createdAt}</div>
-            <div>Modified {questionData.updatedAt}</div>
+            <div>작성일 {createdAt.toLocaleString('ko-KR')}</div>
+            <div>수정일 {updatedAt.toLocaleString('ko-KR')}</div>
           </RowDiv>
         )}
         <BodyContainer>
@@ -322,7 +293,7 @@ const QuestionDetail = () => {
           )}
           <AuthorDiv>
             <ColumDiv>
-              <div>asked {questionData.createdAt}</div>
+              <div>작성일 {createdAt.toLocaleString('ko-KR')}</div>
               <RowDiv>
                 <div>{/* 프로필 이미지 */}🌈</div>
                 <DisplayNameSpan>{questionData.writerName}</DisplayNameSpan>
@@ -361,7 +332,7 @@ const QuestionDetail = () => {
           )}
           {comments.map((comment) => (
             <Comment
-              key={comment.id}
+              key={comment.commentId}
               comment={comment}
               onDelete={handleCommentDelete}
             />
@@ -374,9 +345,8 @@ const QuestionDetail = () => {
         <AnswerList>
           {answers.map((answer) => (
             <Answer
-              key={answer.id}
+              key={answer.answerId} // 고유한 id 값을 key prop으로 설정
               answer={answer}
-              // author={answer.author}   후에 추가 할 예정
               onEdit={handleAnswerEdit}
               onDelete={handleAnswerDelete}
             />

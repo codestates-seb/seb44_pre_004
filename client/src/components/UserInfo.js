@@ -6,8 +6,9 @@ import styled from 'styled-components';
 
 const UserInfo = ({ userData }) => {
   const dispatch = useDispatch();
-  const { memberId, image, name, title, aboutme, createdAt } = userData;
+  const { memberId, image, name, title, aboutMe, createdAt } = userData;
 
+  // 가입 기간 구하기
   const today = new Date();
   const createdDate = new Date(createdAt);
   let memberFor = Math.abs(today.getTime() - createdDate.getTime());
@@ -17,12 +18,12 @@ const UserInfo = ({ userData }) => {
     <UserContainer>
       <InfoSection>
         <Link to={`/user/${memberId}`}>
-          <img src={image} alt="profile" />
+          <img src={`${process.env.REACT_APP_API_URL}${image}`} alt="profile" />
         </Link>
         <InfoArea>
           <h2>{name}</h2>
           <h3>{title}</h3>
-          <p>{aboutme}</p>
+          <p>{aboutMe}</p>
           <p>
             <IoPeople />
             Member for <span>{memberFor}</span> days

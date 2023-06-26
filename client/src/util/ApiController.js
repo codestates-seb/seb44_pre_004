@@ -19,7 +19,7 @@ instance.interceptors.request.use(
     if (config.headers && token) {
       const { accessToken, refreshToken } = token;
       config.headers['Authorization'] = accessToken;
-      config.headers['refreshToken'] = refreshToken;
+      config.headers['Refresh'] = refreshToken;
       return config;
     }
   },
@@ -31,88 +31,46 @@ instance.interceptors.request.use(
 
 //AccessToken이 만료됐을때 처리
 instance.interceptors.response.use(
-  (response) => {
+  function (response) {
+    // Any status code that lie within the range of 2xx cause this function to trigger
+    // Do something with response data
+    console.log('get response', response);
     return response;
   },
-  async (err) => {
-    const originalConfig = err.config;
-
-    if (err.response && err.response.status === 401) {
-      const refreshToken = originalConfig.headers['refreshToken'];
-      try {
-        const data = await axios({
-          url: `refreshtoken담아 보낼 URL`, ////고민 필요////
-          method: 'GET',
-          headers: {
-            Authorization: refreshToken,
-          },
+  async (error) => {
+    const {
+      config,
+      response: { status },
+    } = error;
+    if (status === 401) {
+      if (error.response.data.message === 'expired') {
+        const originalRequest = config;
+        const token = JSON.parse(localStorage.getItem('token'));
+        const { refreshToken } = token;
+        // token refresh 요청
+        const { data } = await axios.post(
+          `/token`, // token refresh api
+          {},
+          { headers: { authorization: refreshToken } }
+        );
+        // 새로운 토큰 저장
+        // dispatch(userSlice.actions.setAccessToken(data.data.accessToken)); store에 저장
+        const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
+          data;
+        localStorage.setItem('token', {
+          accessToken: newAccessToken,
+          refreshToken: newRefreshToken,
         });
-        if (data) {
-          localStorage.setItem(
-            'token',
-            JSON.stringify(data.data, ['accessToken', 'refreshToken'])
-          );
-          return await instance.request(originalConfig);
-        }
-      } catch (err) {
-        console.log('토큰 갱신 에러');
+        originalRequest.headers.authorization = newAccessToken;
+        // 401로 요청 실패했던 요청 새로운 accessToken으로 재요청
+        return axios(originalRequest);
       }
-      return Promise.reject(err);
     }
-    return Promise.reject(err);
+    // Any status codes that falls outside the range of 2xx cause this function to trigger
+    // Do something with response error
+    console.log('response error', error);
+    return Promise.reject(error);
   }
 );
+
 export default instance;
-
-// const token = JSON.parse(localStorage.getItem('token'));
-// let accessToken = token.accessToken;
-// let refreshToken = token.refreshToken;
-
-// export const instance = axios.create({
-//   baseURL: `${process.env.REACT_APP_API_URL}`,
-//   headers: {
-//     Authorization: accessToken,
-//   },
-// });
-
-// instance.interceptors.request.use(
-//   (config) => {
-//     config.headers['Content-Type'] = 'application/json';
-//     config.headers['Authorization'] = accessToken ? accessToken : '';
-
-//     return config;
-//   },
-//   (error) => {
-//     console.log(error);
-//     return Promise.reject(error);
-//   }
-// );
-
-// instance.interceptors.response.use(
-//   (response) => {
-//     if (response.status === 404) {
-//       console.log('Error 404!');
-//     }
-
-//     return response;
-//   },
-//   async (error) => {
-//     if (error.response?.status === 401) {
-//       const { data } = await axios.get(`${children}`, {
-//         baseURL: `${process.env.REACT_APP_API_URL}`,
-//         params: {
-//           refreshToken,
-//         },
-//       });
-//       const { accessToken } = data;
-//       const token = { ...token, accessToken };
-//       localStorage.setItem(JSON.stringify('token'));
-
-//       error.config.headers['Authorization'] = accessToken;
-//       return await axios(error.config);
-//     }
-//     return Promise.reject(error);
-//   }
-// );
-
-// export default instance;

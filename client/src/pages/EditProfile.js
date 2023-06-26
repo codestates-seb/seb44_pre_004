@@ -90,7 +90,7 @@ const EditProfile = () => {
     e.persist();
 
     let formData = new FormData(); // formData 객체를 생성한다.
-    formData.append('image', imageFile);
+    formData.append('image', imageFile || null);
     const blobJson = new Blob([JSON.stringify(updatedData)], {
       type: 'application/json',
     });
@@ -105,14 +105,10 @@ const EditProfile = () => {
     // for (let value of formData.values()) {
     //   console.log(value);
     // }
-    // console.log(formData);
 
     updateUserInfo(formData);
     setUserData({ ...userData, ...updatedData });
     alert('수정이 완료되었습니다.');
-    // history.push(`/user/${memberId}`);
-    navigate(`/user/${memberId}`);
-    location.reload();
   };
 
   // 사용자 정보 변경 PATCH 요청
@@ -129,6 +125,7 @@ const EditProfile = () => {
       )
       .then((res) => {
         console.log(res);
+        navigate(`/user/${memberId}`);
       })
       .catch((err) => {
         console.error('Error update user profile', err);

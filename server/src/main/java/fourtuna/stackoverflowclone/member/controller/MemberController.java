@@ -46,11 +46,12 @@ public class MemberController {
         requestBody.setMemberId(memberId);
         //Member member = mapper.memberPatchDtoToMember(requestBody);
 
-        Member response = memberService.updateMember(requestBody);
+        Member member = memberService.updateMember(requestBody);
         //Member response = memberService.updateMember(member);
 
-        String img = memberService.write(image);
-        response.setImage(img);
+        Member response = memberService.write(member, image);
+        //String img = memberService.write(image);
+        //response.setImage(img);
 
         return new ResponseEntity<>(
                 new SingleResponseDto<>(mapper.memberToMemberResponseDto(response)),

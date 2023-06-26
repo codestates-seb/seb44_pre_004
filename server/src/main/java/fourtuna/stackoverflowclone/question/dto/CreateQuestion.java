@@ -18,7 +18,7 @@ public class CreateQuestion {
         @NotBlank // ""과 " " 모두 허용 x
         private String title;
         @NotBlank // ""과 " " 모두 허용 x
-        private String body;
+        private String content;
     }
 
     @NoArgsConstructor
@@ -28,13 +28,13 @@ public class CreateQuestion {
     public static class Response{
         private Long questionId;
         private String title;
-        private String body;
+        private String content;
 
         public static Response from(Question question) {
             return Response.builder()
                     .questionId(question.getQuestionId())
                     .title(question.getTitle())
-                    .body(question.getContent()).build();
+                    .content(question.getContent()).build();
         }
     }
 }

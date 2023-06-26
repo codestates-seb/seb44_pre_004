@@ -3,6 +3,7 @@ package fourtuna.stackoverflowclone.answer.controller;
 
 import fourtuna.stackoverflowclone.answer.dto.AnswerDto;
 import fourtuna.stackoverflowclone.answer.service.AnswerService;
+import fourtuna.stackoverflowclone.auth.JwtTokenizer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,45 +22,39 @@ import javax.validation.constraints.Positive;
 public class AnswerController {
 
     private final AnswerService answerService;
+    private final JwtTokenizer jwtTokenizer;
 
-    public AnswerController(AnswerService answerService) {
+    public AnswerController(AnswerService answerService, JwtTokenizer jwtTokenizer) {
         this.answerService = answerService;
+        this.jwtTokenizer = jwtTokenizer;
     }
 
     @PostMapping("/question/{questionId}/answer")
     public ResponseEntity postAnswer(@Positive @PathVariable("questionId") Long questionId,
-                                     @Valid @RequestBody AnswerDto.Post request/*,
-                                     @RequestHeader("Authorization") String token*/) {
+                                     @Valid @RequestBody AnswerDto.Post request,
+                                     @RequestHeader("Authorization") String token) {
 
-        // 토큰에서 유저정보 꺼내기
-        // ex) String memberEmail  = tokenProvider.getAuthentication(token).getEmail();
-
-        String memberEmail = "test@test.com";
-
+        String memberEmail = jwtTokenizer.getUsername(token);
         AnswerDto.PostResponse response = answerService.createAnswer(questionId, request, memberEmail);
         return ResponseEntity.ok(new SingleResponseDto<>(response));
     }
 
     @PatchMapping("/answer/{answerId}")
     public ResponseEntity patchAnswer(@Positive @PathVariable("answerId") Long answerId,
-                                      @Valid @RequestBody AnswerDto.Patch request/*,
-                                     @RequestHeader("Authorization") String token*/) {
-        // 토큰에서 유저정보 꺼내기
-        // ex) String memberEmail  = tokenProvider.getAuthentication(token).getEmail();
+                                      @Valid @RequestBody AnswerDto.Patch request,
+                                      @RequestHeader("Authorization") String token) {
 
-        String memberEmail = "test@test.com";
+        String memberEmail = jwtTokenizer.getUsername(token);
         AnswerDto.PatchResponse response = answerService.updateAnswer(answerId, request, memberEmail);
 
         return ResponseEntity.ok(new SingleResponseDto<>(response));
     }
 
     @DeleteMapping("/answer/{answerId}")
-    public ResponseEntity deleteAnswer(@Positive @PathVariable("answerId") long answerId/*,
-            @RequestHeader("Authorization") String token*/) {
-        // 토큰에서 유저정보 꺼내기
-        // ex) String memberEmail  = tokenProvider.getAuthentication(token).getEmail();
+    public ResponseEntity deleteAnswer(@Positive @PathVariable("answerId") long answerId,
+                                       @RequestHeader("Authorization") String token) {
 
-        String memberEmail = "test@test.com";
+        String memberEmail = jwtTokenizer.getUsername(token);
         answerService.deleteAnswer(answerId, memberEmail);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

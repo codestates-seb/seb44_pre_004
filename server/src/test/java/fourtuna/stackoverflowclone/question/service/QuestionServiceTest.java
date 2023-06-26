@@ -67,9 +67,9 @@ class QuestionServiceTest {
         // then
         verify(questionRepository, times(1)).save(captor.capture());
         assertThat(captor.getValue().getTitle()).isEqualTo(request.getTitle());
-        assertThat(captor.getValue().getContent()).isEqualTo(request.getBody());
+        assertThat(captor.getValue().getContent()).isEqualTo(request.getContent());
         assertThat(response.getTitle()).isEqualTo(question.getTitle());
-        assertThat(response.getBody()).isEqualTo(question.getContent());
+        assertThat(response.getContent()).isEqualTo(question.getContent());
     }
 
     @Test
@@ -184,7 +184,7 @@ class QuestionServiceTest {
 
         // then
         assertThat(response.getTitle()).isEqualTo(request.getTitle());
-        assertThat(response.getBody()).isEqualTo(request.getBody());
+        assertThat(response.getContent()).isEqualTo(request.getContent());
         assertThat(response.getQuestionId()).isEqualTo(question.getQuestionId());
     }
 
@@ -216,7 +216,7 @@ class QuestionServiceTest {
 
         // then
         assertThat(response.getTitle()).isEqualTo(question.getTitle());
-        assertThat(response.getBody()).isEqualTo(request.getBody());
+        assertThat(response.getContent()).isEqualTo(request.getContent());
         assertThat(response.getQuestionId()).isEqualTo(question.getQuestionId());
     }
 
@@ -248,7 +248,7 @@ class QuestionServiceTest {
 
         // then
         assertThat(response.getTitle()).isEqualTo(request.getTitle());
-        assertThat(response.getBody()).isEqualTo(question.getContent());
+        assertThat(response.getContent()).isEqualTo(question.getContent());
         assertThat(response.getQuestionId()).isEqualTo(question.getQuestionId());
     }
 }

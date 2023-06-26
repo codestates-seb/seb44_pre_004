@@ -67,8 +67,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         response.setHeader("Authorization", "Bearer " + accessToken);
         response.setHeader("Refresh", refreshToken);
         response.setCharacterEncoding("UTF-8");
-        response.setContentType("text/html; charset-UTF-8");
-        response.getWriter().write(mapper.writeValueAsString(loginResponseDto));
+        response.setContentType("application/json; charset-UTF-8");
+        response.getWriter().write(mapper.writeValueAsString(new SingleResponseDto<>(loginResponseDto)));
 
         this.getSuccessHandler().onAuthenticationSuccess(request, response, authResult);
     }
@@ -87,6 +87,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         return accessToken;
     }
+
     private String delegateRefreshToken(Member member) {
         String subject = member.getEmail();
         Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getRefreshTokenExpirationMinutes());

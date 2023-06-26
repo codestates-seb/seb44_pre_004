@@ -3,6 +3,7 @@ package fourtuna.stackoverflowclone.member.dto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.Email;
@@ -12,6 +13,7 @@ import javax.validation.constraints.Pattern;
 
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 public class MemberPostDto {
     @NotBlank

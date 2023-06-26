@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 
 import { useDispatch } from 'react-redux';
 import { setNav, setFooter } from '../store/showComponentsSlice';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { FaQuestion, FaTree, FaTags, FaTrophy, FaGithub } from 'react-icons/fa';
 
 import { FcGoogle } from 'react-icons/fc';
@@ -280,8 +280,9 @@ const SignUp = () => {
 
 const Container = styled.div`
   display: flex;
-  align-items: center;
+  flex-direction: row;
   justify-content: center;
+  align-items: center;
 `;
 const FormWrapper = styled.div`
   display: flex;
@@ -331,9 +332,6 @@ const Description = styled.div`
 
 const FormContainer = styled.form`
   max-width: 97.2307692rem;
-  /* justify-items: center;
-  flex-direction: column;
-  align-items: center; */
 
   width: 250px;
   height: 450px;
@@ -412,16 +410,5 @@ const ErrorMessageDiv = styled.div`
   margin-bottom: 20px;
   font-size: 11px;
   color: ${(props) => (props.primary ? 'green' : 'red')};
-  ${(props) =>
-    props.primary &&
-    css`
-      color: green;
-    `}
-
-  ${(props) =>
-    !props.primary &&
-    css`
-      color: red;
-    `}
 `;
 export default SignUp;

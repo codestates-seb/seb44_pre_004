@@ -32,7 +32,7 @@ const Questions = () => {
     dispatch(setFooter(true));
   }, []);
 
-  const itemsPerPage = 5; // Number of items to display per page
+  const itemsPerPage = 10; // Number of items to display per page
   const [currentPage, setCurrentPage] = useState(1);
 
   const handlePageChange = (page) => {

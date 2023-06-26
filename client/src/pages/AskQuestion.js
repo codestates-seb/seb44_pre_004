@@ -32,20 +32,22 @@ const AskQuestion = () => {
     });
   };
 
-  const saveQna = async () => {
+  const saveQna = () => {
     const qnaData = { title, content };
     alert('등록되었습니다.');
 
-    try {
-      const response = await instance.post('/qna/question', qnaData);
-      console.log('response:', response.data);
-      alert('Question submitted successfully.');
-    } catch (error) {
-      console.error(error.response);
-      alert(
-        'An error occurred while submitting the question. Please try again.'
-      );
-    }
+    instance
+      .post('/qna/question', qnaData)
+      .then((response) => {
+        console.log('response:', response.data);
+        alert('Question submitted successfully.');
+      })
+      .catch((error) => {
+        console.error(error.response);
+        alert(
+          'An error occurred while submitting the question. Please try again.'
+        );
+      });
   };
 
   return (

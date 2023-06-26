@@ -44,7 +44,6 @@ const QuestionDetail = () => {
       .then((res) => {
         // Set the question data in state or do something with it
         const questionData = res.data?.data || {};
-        console.log(questionData);
         setQuestionData(questionData);
         setAnswers(questionData.answers);
         setComments(questionData.comments);
@@ -61,58 +60,46 @@ const QuestionDetail = () => {
     return <div>Question not found.</div>;
   }
 
-  // 답변 작성 처리 함수
-  const handleAnswerSubmit = async (e) => {
+  const handleAnswerSubmit = (e) => {
+    // 답변 작성 코드
     e.preventDefault();
     if (newAnswer.trim() === '') return;
 
     const newAnswerObj = {
-      // id: answerId,
       content: newAnswer,
-      // author: {
-      //   userId: loggedInUser.id,
-      //   username: loggedInUser.username,
-      // },       답변 작성자 정보
     };
 
-    // 답변 작성 코드
-    try {
-      const response = await instance.post(
-        `/qna/question/${questionId}/answer`,
-        newAnswerObj
-      );
-      setAnswers((prevAnswers) => [...prevAnswers, response.data]);
-      setNewAnswer('');
-    } catch (error) {
-      console.error('Error submitting answer:', error);
-    }
+    instance
+      .post(`/qna/question/${questionId}/answer`, newAnswerObj)
+      .then((response) => {
+        setAnswers((prevAnswers) => [...prevAnswers, response.data]);
+        setNewAnswer('');
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.error('Error submitting answer:', error);
+      });
   };
 
   const handleAnswerEdit = async (answerId, editedContent) => {
     // 답변 수정 코드
-    try {
-      const updatedAnswer = {
-        // id: answerId,
-        content: editedContent,
-      };
-      console.log(answerId);
-      const response = await instance.patch(
-        `/qna/answer/${answerId}`,
-        updatedAnswer
-      );
-      // setAnswers((prevAnswers) =>
-      //   prevAnswers.map((answer) =>
-      //     answer.id === answerId ? response.data : answer
-      //   )
-      // );
-      if (response.status === 200) {
-        setIsEditing(false);
-      } else {
-        console.error('Error updating answer');
-      }
-    } catch (error) {
-      console.error('Error updating answer:', error);
-    }
+    const updatedAnswer = {
+      content: editedContent,
+    };
+
+    instance
+      .patch(`/qna/answer/${answerId}`, updatedAnswer)
+      .then((response) => {
+        if (response.status === 200) {
+          setIsEditing(false);
+        } else {
+          console.error('Error updating answer');
+        }
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.error('Error updating answer:', error);
+      });
   };
 
   const handleAnswerDelete = async (answerId) => {
@@ -122,6 +109,7 @@ const QuestionDetail = () => {
       setAnswers((prevAnswers) =>
         prevAnswers.filter((answer) => answer.id !== answerId)
       );
+      window.location.reload();
     } catch (error) {
       console.error('Error deleting answer:', error);
     }
@@ -135,71 +123,76 @@ const QuestionDetail = () => {
     });
   };
 
-  const handleQuestionSave = async () => {
-    // 질문 수정 코드
-    try {
-      const updatedQuestion = {
-        // id: questionId,
-        title: editedQuestion.title,
-        content: editedQuestion.content,
-      };
+  const handleQuestionSave = () => {
+    // 질문 수정 저장 코드
+    const updatedQuestion = {
+      title: editedQuestion.title,
+      content: editedQuestion.content,
+    };
 
-      const response = await instance.patch(
-        `/qna/question/${questionId}`,
-        updatedQuestion
-      );
-
-      if (response.status === 200) {
-        setIsEditing(false);
-      } else {
-        console.error('Error updating question');
-      }
-    } catch (error) {
-      console.error('Error updating question:', error);
-    }
+    instance
+      .patch(`/qna/question/${questionId}`, updatedQuestion)
+      .then((response) => {
+        if (response.status === 200) {
+          setIsEditing(false);
+          window.location.reload();
+        } else {
+          console.error('Error updating question');
+        }
+      })
+      .catch((error) => {
+        console.error('Error updating question:', error);
+      });
   };
 
   const handleQuestionCancel = () => {
     setIsEditing(false);
   };
 
-  const handleQuestionDelete = async () => {
-    alert('Question deleted');
-    navigate('/qna');
-    //   서버 완성 시 변경 할 삭제 코드
-    try {
-      const response = await instance.delete(`/qna/question/${questionId}`);
-
-      if (response.status === 200) {
-        console.log('Question deleted');
-      } else {
-        console.error('Error deleting question');
-      }
-    } catch (error) {
-      console.error('Error deleting question:', error);
-    }
-  };
-
-  const handleLikeClick = () => {
-    setIsLiked((prevIsLiked) => !prevIsLiked);
-
-    // 서버에 좋아요 상태 전송
-    const requestData = {
-      // postId: questionData.questionId, // 좋아요를 누른 게시물의 식별자 (예: 질문의 id)
-      liked: !isLiked, // 좋아요 상태
-    };
-
-    // 서버로 POST 요청 보내기
+  const handleQuestionDelete = () => {
+    // 질문 삭제 코드
     instance
-      .post(`/qna/questions/${questionId}/like`, requestData)
+      .delete(`/qna/question/${questionId}`)
       .then((response) => {
-        // POST 요청이 성공적으로 처리된 경우
-        console.log('Like status sent to server:', response.data);
+        if (response.status === 200) {
+          console.log('Question deleted');
+        } else {
+          console.error('Error deleting question');
+        }
+        alert('Question deleted');
+        navigate('/qna');
       })
       .catch((error) => {
-        // POST 요청이 실패한 경우
-        console.error('Error sending like status to server:', error);
+        console.error('Error deleting question:', error);
       });
+  };
+
+  const handleLikeClick = (questionId) => {
+    if (isLiked) {
+      // 좋아요 취소
+      instance
+        .delete(`/qna/questions/${questionId}/like`)
+        .then(() => {
+          setIsLiked(false);
+          setLikeCount((prevCount) => prevCount - 1);
+          navigator(`/qna/questions/${questionId}`);
+        })
+        .catch((error) => {
+          console.error('Error sending like status to server:', error);
+        });
+    } else {
+      // 좋아요 추가
+      instance
+        .post(`/qna/questions/${questionId}/like`)
+        .then(() => {
+          setIsLiked(true);
+          setLikeCount((prevCount) => prevCount + 1);
+          window.location.reload();
+        })
+        .catch((error) => {
+          console.error('Error sending like status to server:', error);
+        });
+    }
   };
 
   // 댓글 작성 처리 함수
@@ -211,19 +204,16 @@ const QuestionDetail = () => {
       content: newComment,
       // 작성자 정보 등 필요한 댓글 데이터 추가
     };
-
     try {
       const response = await instance.post(
         `/qna/question/${questionId}/comment/`,
         newCommentObj
       );
-
       const createdComment = response.data;
-
       setComments((prevComments) => [...prevComments, createdComment]);
       setNewComment('');
-
       setShowCommentForm(false);
+      window.location.reload();
     } catch (error) {
       console.error(error);
     }
@@ -236,6 +226,7 @@ const QuestionDetail = () => {
       setAnswers((prevComments) =>
         prevComments.filter((comment) => comment.id !== commentId)
       );
+      window.location.reload();
     } catch (error) {
       console.error('Error deleting comment:', error);
     }

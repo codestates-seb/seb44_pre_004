@@ -8,18 +8,19 @@ const Answer = ({ answer, onEdit, onDelete /*, author*/ }) => {
   const [editedContent, setEditedContent] = useState(answer.content);
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0 /*answer.likeCount || 0*/);
+  const createdAt = new Date(answer.createdAt);
 
   const handleEdit = () => {
     setIsEditing(true);
   };
 
   const handleSave = () => {
-    onEdit(answer.id, editedContent);
+    onEdit(answer.answerId, editedContent);
     setIsEditing(false);
   };
 
   const handleDelete = () => {
-    onDelete(answer.id);
+    onDelete(answer.answerId);
   };
 
   const handleLikeButtonClick = () => {
@@ -75,7 +76,7 @@ const Answer = ({ answer, onEdit, onDelete /*, author*/ }) => {
           <ButtonContainer>
             <AuthorDiv>
               <ColumDiv>
-                <div>asked {answer.createdAt}</div>
+                <div>작성일 {createdAt.toLocaleString('ko-KR')}</div>
                 <RowDiv>
                   <div>{/* 프로필 이미지 author.image? */}🌈</div>
                   <DisplayNameSpan>{answer.writerName}</DisplayNameSpan>

@@ -8,13 +8,13 @@ import lombok.NoArgsConstructor;
 
 
 import javax.validation.constraints.NotNull;
-import java.util.stream.Collectors;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Builder
 public class QuestionDto {
+    private Long questionId;
     private String title;
     private String content;
     private int answerCount;
@@ -26,6 +26,7 @@ public class QuestionDto {
 
     public static QuestionDto from(Question question) {
         return QuestionDto.builder()
+                .questionId(question.getQuestionId())
                 .title(question.getTitle())
                 .content(question.getContent())
                 .answerCount(question.getAnswers().size())

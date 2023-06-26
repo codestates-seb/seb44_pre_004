@@ -11,10 +11,4 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> handleExhibitionException(BusinessLogicException e) {
         return new ResponseEntity<>(e, HttpStatus.valueOf(e.getExceptionCode().getStatus()));
     }
-
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<?> handleException(Exception e) {
-
-        return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
 }

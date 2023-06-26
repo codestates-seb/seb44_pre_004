@@ -61,7 +61,7 @@ public class MemberService {
             memberRepository.save(member);
             return member;
         }
-        String projectPath = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\images"; // project path
+        String projectPath = System.getProperty("user.dir"); // project path
 
         UUID uuid = UUID.randomUUID(); // 식별자
 
@@ -70,7 +70,7 @@ public class MemberService {
         File saveFile = new File(projectPath, fileName); // 파일 생성
 
         file.transferTo(saveFile);
-        String image  = "/images/"+fileName;
+        String image  = "/user/images/"+fileName;
 
         member.setImage(image);
         memberRepository.save(member);

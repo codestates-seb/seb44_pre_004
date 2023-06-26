@@ -37,7 +37,6 @@ public class LikeController {
         return ResponseEntity.ok(new SingleResponseDto<>(response));
     }
 
-
     @PostMapping("/question/{questionId}/like")
     public ResponseEntity<SingleResponseDto<LikeDto.LikeQuestionResponse>> createQuestionLike(@Positive @PathVariable("questionId") Long questionId,
                                                                    @Valid @RequestBody LikeDto.LikeQuestionResponse request,

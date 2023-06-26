@@ -1,6 +1,8 @@
 package fourtuna.stackoverflowclone.auth;
 
+import fourtuna.stackoverflowclone.member.entity.Member;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -9,6 +11,7 @@ import io.jsonwebtoken.security.Keys;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
@@ -96,7 +99,34 @@ public class JwtTokenizer {
     public String getUsername(String token) {
         String jws = token.replace("Bearer ", "");
         String base64EncodedSecretKey = encodeBase64SecretKey(getSecretKey());
-        Map<String, Object> claims = getClaims(jws, base64EncodedSecretKey).getBody();
-        return (String) claims.get("username");
+        return getClaims(jws, base64EncodedSecretKey).getBody().getSubject();
+    }
+
+    public boolean validateToken(String token) {
+        if (!StringUtils.hasText(token)) return false;
+        Claims claims = parseClaims(token);
+
+        return !claims.getExpiration().before(new Date());
+    }
+
+    private Claims parseClaims(String token) {
+        try {
+            return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
+        } catch (ExpiredJwtException e) {
+            return e.getClaims();
+        }
+    }
+
+    public String delegateAccessToken(Member member) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("username", member.getEmail());
+        claims.put("roles", member.getRoles());
+
+        String subject = member.getEmail();
+        Date expiration = getTokenExpiration(getAccessTokenExpirationMinutes());
+
+        String base64EncodedSecretKey = encodeBase64SecretKey(getSecretKey());
+
+        return generateAccessToken(claims, subject, expiration, base64EncodedSecretKey);
     }
 }

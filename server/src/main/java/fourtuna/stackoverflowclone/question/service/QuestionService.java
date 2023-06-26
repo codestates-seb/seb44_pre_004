@@ -1,8 +1,6 @@
 package fourtuna.stackoverflowclone.question.service;
 
-import fourtuna.stackoverflowclone.answer.entity.Answer;
 import fourtuna.stackoverflowclone.exception.BusinessLogicException;
-import fourtuna.stackoverflowclone.like.entitiy.Like;
 import fourtuna.stackoverflowclone.member.entity.Member;
 import fourtuna.stackoverflowclone.member.service.MemberService;
 import fourtuna.stackoverflowclone.question.dto.*;
@@ -34,7 +32,7 @@ public class QuestionService {
 
         Question question = Question.builder()
                 .title(request.getTitle())
-                .content(request.getBody())
+                .content(request.getContent())
                 .member(member).build();
 
         return CreateQuestion.Response.from(questionRepository.save(question));
@@ -64,7 +62,7 @@ public class QuestionService {
 
         Optional.ofNullable(request.getTitle())
                 .ifPresent(title -> question.setTitle(title));
-        Optional.ofNullable(request.getBody())
+        Optional.ofNullable(request.getContent())
                 .ifPresent(content -> question.setContent(content));
 
         return UpdateQuestion.Response.from(question);

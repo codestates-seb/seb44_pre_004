@@ -7,6 +7,8 @@ import fourtuna.stackoverflowclone.member.mapper.MemberMapper;
 import fourtuna.stackoverflowclone.member.service.MemberService;
 import fourtuna.stackoverflowclone.response.MultiResponseDto;
 import fourtuna.stackoverflowclone.response.SingleResponseDto;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +18,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.List;
+
 import fourtuna.stackoverflowclone.member.dto.MemberPostDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,6 +34,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/user")
 @Validated
 @Slf4j
+@CrossOrigin(origins = "*")
 public class MemberController {
     private final MemberService memberService;
     private final MemberMapper mapper;
@@ -40,9 +45,10 @@ public class MemberController {
     }
 
     @PatchMapping("/edit/{memberId}")
-    public ResponseEntity patchMember(@PathVariable("memberId")  @Positive long memberId,
-                                      @Valid /*@RequestBody*/@RequestPart(required = false) MemberPatchDto requestBody,
-                                      @RequestPart(required = false) MultipartFile image) throws IOException {
+    public ResponseEntity patchMember(@PathVariable("memberId") @Positive long memberId,
+                                      @Valid @RequestPart MemberPatchDto requestBody,
+                                      @RequestPart MultipartFile image) throws IOException {
+        log.info("[MemberController] patchMember called");
         requestBody.setMemberId(memberId);
         //Member member = mapper.memberPatchDtoToMember(requestBody);
 
@@ -57,6 +63,11 @@ public class MemberController {
                 new SingleResponseDto<>(mapper.memberToMemberResponseDto(response)),
                 HttpStatus.OK
         );
+    }
+
+    @GetMapping("/images/{imageFileName}")
+    public Resource showImage(@PathVariable String imageFileName) throws MalformedURLException {
+        return new UrlResource("file:" + System.getProperty("user.dir") + "/" + imageFileName);
     }
 
     @GetMapping("/edit/{memberId}")
@@ -86,7 +97,7 @@ public class MemberController {
     }
 
     @PostMapping("/join")
-    public ResponseEntity postMember(@Valid @RequestBody MemberPostDto memberPostDto){
+    public ResponseEntity postMember(@Valid @RequestBody MemberPostDto memberPostDto) {
         Member createdMember = memberService.createMember(mapper.memberPostDtoToMember(memberPostDto));
         MemberResponseDto response = mapper.memberToMemberResponseDto(createdMember);
 

@@ -1,7 +1,10 @@
 package fourtuna.stackoverflowclone.audit.filter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import fourtuna.stackoverflowclone.auth.CustomAuthorityUtils;
 import fourtuna.stackoverflowclone.auth.JwtTokenizer;
+import fourtuna.stackoverflowclone.response.ErrorResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,23 +22,37 @@ import java.util.Map;
 public class JwtVerificationFilter extends OncePerRequestFilter {
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
+    private final ObjectMapper objectMapper;
 
     public JwtVerificationFilter(JwtTokenizer jwtTokenizer,
-                                 CustomAuthorityUtils authorityUtils) {
+                                 CustomAuthorityUtils authorityUtils,
+                                 ObjectMapper objectMapper) {
         this.jwtTokenizer = jwtTokenizer;
         this.authorityUtils = authorityUtils;
+        this.objectMapper = objectMapper;
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        Map<String, Object> claims = verifyJws(request);
-        setAuthenticationToContext(claims);
+        try {
+            Map<String, Object> claims = verifyJws(request);
+            setAuthenticationToContext(claims);
+            filterChain.doFilter(request, response);
+        } catch (Exception e) {
+            final ErrorResponse errorResponse = ErrorResponse.of(HttpStatus.BAD_REQUEST,
+                    "token expired");
+            response.setStatus(401);
+            response.getWriter().write(errorResponse.getMessage());
+        }
 
-        filterChain.doFilter(request, response);
+
     }
 
     private Map<String, Object> verifyJws(HttpServletRequest request) {
         String jws = request.getHeader("Authorization").replace("Bearer ", "");
+
+
+
         String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
         Map<String, Object> claims = jwtTokenizer.getClaims(jws, base64EncodedSecretKey).getBody();
 

@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 @Getter
 @Builder
 public class AnswerDto {
+    private Long answerId;
     private String content;
     private int likeCount;
     private String writerName;
@@ -32,6 +33,7 @@ public class AnswerDto {
                 .collect(Collectors.toList());
 
         return AnswerDto.builder()
+                .answerId(answer.getAnswerId())
                 .content(answer.getContent())
                 .writerName(answer.getMember().getName())
                 .writerImageUrl(answer.getMember().getImage())

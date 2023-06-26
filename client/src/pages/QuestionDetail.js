@@ -38,7 +38,14 @@ const QuestionDetail = () => {
   }, []);
 
   useEffect(() => {
-    // Fetch the question data using the qnaId
+    getData();
+  }, [questionId]);
+
+  if (!questionData) {
+    return <div>Question not found.</div>;
+  }
+
+  const getData = async () => {
     getApi
       .get(`/qna/question/${questionId}`)
       .then((res) => {
@@ -54,11 +61,7 @@ const QuestionDetail = () => {
         console.log(err);
         setIsLoading(false);
       });
-  }, [questionId]);
-
-  if (!questionData) {
-    return <div>Question not found.</div>;
-  }
+  };
 
   const handleAnswerSubmit = (e) => {
     // 답변 작성 코드
@@ -74,7 +77,7 @@ const QuestionDetail = () => {
       .then((response) => {
         setAnswers((prevAnswers) => [...prevAnswers, response.data]);
         setNewAnswer('');
-        window.location.reload();
+        getData();
       })
       .catch((error) => {
         console.error('Error submitting answer:', error);
@@ -95,7 +98,7 @@ const QuestionDetail = () => {
         } else {
           console.error('Error updating answer');
         }
-        window.location.reload();
+        getData();
       })
       .catch((error) => {
         console.error('Error updating answer:', error);
@@ -109,7 +112,7 @@ const QuestionDetail = () => {
       setAnswers((prevAnswers) =>
         prevAnswers.filter((answer) => answer.id !== answerId)
       );
-      window.location.reload();
+      getData();
     } catch (error) {
       console.error('Error deleting answer:', error);
     }
@@ -135,7 +138,7 @@ const QuestionDetail = () => {
       .then((response) => {
         if (response.status === 200) {
           setIsEditing(false);
-          window.location.reload();
+          getData();
         } else {
           console.error('Error updating question');
         }
@@ -167,27 +170,28 @@ const QuestionDetail = () => {
       });
   };
 
-  const handleLikeClick = (questionId) => {
+  const handleLikeClick = () => {
     if (isLiked) {
       // 좋아요 취소
       instance
-        .delete(`/qna/questions/${questionId}/like`)
+        .delete(`/qna/question/${questionId}/like`, questionId)
         .then(() => {
           setIsLiked(false);
           setLikeCount((prevCount) => prevCount - 1);
-          window.location.reload();
+          getData();
         })
         .catch((error) => {
           console.error('Error sending like status to server:', error);
         });
-    } else {
+    }
+    if (!isLiked) {
       // 좋아요 추가
       instance
-        .post(`/qna/questions/${questionId}/like`)
+        .post(`/qna/question/${questionId}/like`, questionId)
         .then(() => {
           setIsLiked(true);
           setLikeCount((prevCount) => prevCount + 1);
-          window.location.reload();
+          getData();
         })
         .catch((error) => {
           console.error('Error sending like status to server:', error);
@@ -195,8 +199,8 @@ const QuestionDetail = () => {
     }
   };
 
-  // 댓글 작성 처리 함수
   const handleCommentSubmit = (e) => {
+    // 댓글 작성 처리 함수
     e.preventDefault();
     if (newComment.trim() === '') return;
 
@@ -211,7 +215,7 @@ const QuestionDetail = () => {
         setComments((prevComments) => [...prevComments, createdComment]);
         setNewComment('');
         setShowCommentForm(false);
-        window.location.reload();
+        getData();
       })
       .catch((error) => {
         console.error(error);
@@ -226,7 +230,7 @@ const QuestionDetail = () => {
         setAnswers((prevComments) =>
           prevComments.filter((comment) => comment.id !== commentId)
         );
-        window.location.reload();
+        getData();
       })
       .catch((error) => {
         console.error('Error deleting comment:', error);

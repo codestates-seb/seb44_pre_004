@@ -7,43 +7,42 @@ const Answer = ({ answer, onEdit, onDelete /*, author*/ }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState(answer.content);
   const [isLiked, setIsLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(0 /*answer.likeCount || 0*/);
+  const [likeCount, setLikeCount] = useState(answer.likeCount);
   const createdAt = new Date(answer.createdAt);
-
+  const answerId = answer.answerId;
   const handleEdit = () => {
     setIsEditing(true);
   };
 
   const handleSave = () => {
-    onEdit(answer.answerId, editedContent);
+    onEdit(answerId, editedContent);
     setIsEditing(false);
   };
 
   const handleDelete = () => {
-    onDelete(answer.answerId);
+    onDelete(answerId);
   };
 
-  const handleLikeClick = (answerId) => {
+  const handleLikeClick = () => {
     if (isLiked) {
       // 좋아요 취소
       instance
-        .delete(`/qna/questions/${answerId}/like`)
+        .delete(`/qna/answer/${answerId}/like`, answerId)
         .then(() => {
           setIsLiked(false);
           setLikeCount((prevCount) => prevCount - 1);
-          window.location.reload();
         })
         .catch((error) => {
           console.error('Error sending like status to server:', error);
         });
-    } else {
+    }
+    if (!isLiked) {
       // 좋아요 추가
       instance
-        .post(`/qna/questions/${answerId}/like`)
+        .post(`/qna/answer/${answerId}/like`, answerId)
         .then(() => {
           setIsLiked(true);
           setLikeCount((prevCount) => prevCount + 1);
-          window.location.reload();
         })
         .catch((error) => {
           console.error('Error sending like status to server:', error);

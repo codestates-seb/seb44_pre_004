@@ -14,16 +14,17 @@ const EditProfile = () => {
 
   const [userData, setUserData] = useState({});
   const [updatedData, setUpdatedData] = useState({});
+  const [imageFile, setImageFile] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const { memberId } = userData;
-  const { imageUrl, username, title, aboutme } = updatedData;
+  const { image, username, title, aboutme } = updatedData;
 
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_API_URL}/user/${memberId}`)
       .then((res) => {
         console.log(res.data.data);
-        const { memberId, image, name, title, aboutme, createAt, updatedAt } =
+        const { memberId, image, name, title, aboutme, createdAt, updatedAt } =
           res.data.data;
         const data = {
           memberId,
@@ -31,7 +32,7 @@ const EditProfile = () => {
           name,
           title,
           aboutme,
-          createAt,
+          createdAt,
           updatedAt,
         };
         setUserData(data);
@@ -65,43 +66,64 @@ const EditProfile = () => {
   };
 
   //이미지 파일 등록 함수
+  // const handleUploadFile = (e) => {
+  //   const file = e.target.files[0];
+  //   const reader = new FileReader();
+  //   reader.readAsDataURL(file);
+
+  //   return new Promise((resolve) => {
+  //     reader.onload = () => {
+  //       setUpdatedData({
+  //         ...updatedData,
+  //         imageUrl: reader.result || null,
+  //       });
+  //       resolve();
+  //       // console.log(reader.result);
+  //     };
+  //   });
+  // };
+
   const handleUploadFile = (e) => {
     const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-
-    return new Promise((resolve) => {
-      reader.onload = () => {
-        setUpdatedData({
-          ...updatedData,
-          imageUrl: reader.result || null,
-        });
-        resolve();
-        // console.log(reader.result);
-      };
-    });
+    // console.log(file);
+    setImageFile(file);
   };
 
   const handleSubmit = (e) => {
-    updateUserInfo();
-    // console.log('Submitted');
+    e.preventDefault();
+    e.persist();
+
+    let formData = new FormData(); // formData 객체를 생성한다.
+    console.log(imageFile);
+    formData.append('files', imageFile);
+    formData.append('data', JSON.stringify(updatedData));
+
+    console.log(formData);
+
+    updateUserInfo(formData);
     setUserData({ ...userData, ...updatedData });
     alert('수정이 완료되었습니다.');
     navigate(`/user/${memberId}`);
-    e.preventDefault();
   };
 
   // 사용자 정보 변경 PATCH 요청
-  const updateUserInfo = async () => {
-    try {
-      // await axios.patch(`/user/edit/${memberId}`, inputs);
-      await axios.patch(
+  const updateUserInfo = async (formData) => {
+    await axios
+      .patch(
         `${process.env.REACT_APP_API_URL}/user/edit/${memberId}`,
-        updatedData
-      );
-    } catch (error) {
-      console.error('Error update user profile', error);
-    }
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data', // Content-Type을 반드시 이렇게 하여야 한다.
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.error('Error update user profile', err);
+      });
   };
 
   if (isLoading) {
@@ -124,9 +146,11 @@ const EditProfile = () => {
                   <input
                     type="file"
                     id="imageUrl"
+                    name="imageFile"
+                    multiple="multiple"
                     onChange={(e) => handleUploadFile(e)}
                   />
-                  <img src={imageUrl} alt="profile" />
+                  <img src={image} alt="profile" />
                 </div>
               </InputFile>
               <InputText>

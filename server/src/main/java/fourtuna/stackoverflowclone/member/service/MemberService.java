@@ -1,9 +1,9 @@
 package fourtuna.stackoverflowclone.member.service;
 
-import fourtuna.stackoverflowclone.answer.entity.Answer;
 import fourtuna.stackoverflowclone.auth.CustomAuthorityUtils;
 import fourtuna.stackoverflowclone.exception.BusinessLogicException;
 import fourtuna.stackoverflowclone.exception.ExceptionCode;
+import fourtuna.stackoverflowclone.member.dto.MemberPatchDto;
 import fourtuna.stackoverflowclone.member.entity.Member;
 import fourtuna.stackoverflowclone.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
@@ -14,9 +14,13 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import fourtuna.stackoverflowclone.config.SecurityConfiguration;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Transactional
 @Service
@@ -35,7 +39,7 @@ public class MemberService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-    public Member updateMember(Member member) {
+    public Member updateMember(MemberPatchDto member){//(Member member) {
         Member findMember = findVerifiedMember(member.getMemberId());
 
         Optional.ofNullable(member.getName())
@@ -44,13 +48,32 @@ public class MemberService {
                 .ifPresent(title -> findMember.setTitle(title));
         Optional.ofNullable(member.getAboutMe())
                 .ifPresent(aboutMe -> findMember.setAboutMe(aboutMe));
-        Optional.ofNullable(member.getImage())
-                .ifPresent(img -> findMember.setImage(img));
+        //Optional.ofNullable(member.getImage())
+        //        .ifPresent(img -> findMember.setImage(img));
 
         return memberRepository.save(findMember);
     }
 
-    //
+    public String write(MultipartFile file) throws IOException {
+
+        if(file.isEmpty()){
+            return "/images/default";
+
+        }
+        String projectPath = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\images"; // project path
+
+        UUID uuid = UUID.randomUUID(); // 식별자
+
+        String fileName = uuid + "_" + file.getOriginalFilename();
+
+        File saveFile = new File(projectPath, fileName); // 파일 생성
+
+        file.transferTo(saveFile);
+        String image  = "/images/"+fileName;
+
+        return image;
+    }
+
     public Member findMember(long memberId) {
         return findVerifiedMember(memberId);
     }
@@ -59,8 +82,6 @@ public class MemberService {
         return memberRepository.findAll(PageRequest.of(page, size,
                 Sort.by("memberId").descending()));
     }
-
-
 
     public Member createMember(Member member){
         verifyExistsMember(member.getEmail());
@@ -78,9 +99,9 @@ public class MemberService {
     }
 
     public Member findMemberByEmail(String email) {
-        Member findMember = memberRepository.findByEmail(email)
+        return memberRepository.findByEmail(email)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-        return findMember;
+
     }
 
     @Transactional(readOnly = true)
@@ -92,6 +113,5 @@ public class MemberService {
         return findMember;
 
     }
-
 }
 

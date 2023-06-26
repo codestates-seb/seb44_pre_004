@@ -6,10 +6,12 @@ import styled from 'styled-components';
 
 const UserInfo = ({ userData }) => {
   const dispatch = useDispatch();
-  const { memberId, image, name, title, aboutme, createAt, updatedAt } =
-    userData;
+  const { memberId, image, name, title, aboutme, createdAt } = userData;
 
-  console.log(updatedAt);
+  const today = new Date();
+  const createdDate = new Date(createdAt);
+  let memberFor = Math.abs(today.getTime() - createdDate.getTime());
+  memberFor = Math.ceil(memberFor / (1000 * 60 * 60 * 24));
 
   return (
     <UserContainer>
@@ -23,7 +25,7 @@ const UserInfo = ({ userData }) => {
           <p>{aboutme}</p>
           <p>
             <IoPeople />
-            Member for <span>{createAt}</span> days
+            Member for <span>{memberFor}</span> days
           </p>
         </InfoArea>
       </InfoSection>

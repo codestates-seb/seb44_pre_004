@@ -1,5 +1,6 @@
 package fourtuna.stackoverflowclone.member.controller;
 
+import fourtuna.stackoverflowclone.auth.JwtTokenizer;
 import fourtuna.stackoverflowclone.member.dto.MemberPatchDto;
 import fourtuna.stackoverflowclone.member.dto.MemberResponseDto;
 import fourtuna.stackoverflowclone.member.entity.Member;

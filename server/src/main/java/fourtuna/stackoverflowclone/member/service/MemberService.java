@@ -54,11 +54,12 @@ public class MemberService {
         return memberRepository.save(findMember);
     }
 
-    public String write(MultipartFile file) throws IOException {
+    public Member write(Member member, MultipartFile file) throws IOException {
 
         if(file.isEmpty()){
-            return "/images/default";
-
+            member.setImage("/images/default");
+            memberRepository.save(member);
+            return member;
         }
         String projectPath = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\images"; // project path
 
@@ -71,7 +72,10 @@ public class MemberService {
         file.transferTo(saveFile);
         String image  = "/images/"+fileName;
 
-        return image;
+        member.setImage(image);
+        memberRepository.save(member);
+
+        return member;
     }
 
     public Member findMember(long memberId) {

@@ -38,10 +38,12 @@ import org.springframework.web.multipart.MultipartFile;
 public class MemberController {
     private final MemberService memberService;
     private final MemberMapper mapper;
+    private final JwtTokenizer jwtTokenizer;
 
-    public MemberController(MemberService memberService, MemberMapper mapper) {
+    public MemberController(MemberService memberService, MemberMapper mapper, JwtTokenizer jwtTokenizer) {
         this.memberService = memberService;
         this.mapper = mapper;
+        this.jwtTokenizer = jwtTokenizer;
     }
 
     @PatchMapping("/edit/{memberId}")

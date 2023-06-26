@@ -51,8 +51,6 @@ public class MemberService {
                 .ifPresent(title -> findMember.setTitle(title));
         Optional.ofNullable(member.getAboutMe())
                 .ifPresent(aboutMe -> findMember.setAboutMe(aboutMe));
-        //Optional.ofNullable(member.getImage())
-        //        .ifPresent(img -> findMember.setImage(img));
 
         return memberRepository.save(findMember);
     }
@@ -99,7 +97,7 @@ public class MemberService {
 
     public void verifyExistsMember(String email) {
         boolean exsist = memberRepository.findByEmail(email).isPresent();
-        if (exsist == true) throw new BusinessLogicException(ExceptionCode.MEMBER_EXISTS);
+        if (exsist) throw new BusinessLogicException(ExceptionCode.MEMBER_EXISTS);
     }
 
     public Member findMemberByEmail(String email) {

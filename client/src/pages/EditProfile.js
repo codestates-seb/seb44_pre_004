@@ -24,7 +24,7 @@ const EditProfile = () => {
     axios
       .get(`${process.env.REACT_APP_API_URL}/user/${memberId}`)
       .then((res) => {
-        console.log(res.data.data);
+        // console.log(res.data.data);
         const { memberId, image, name, title, aboutMe, createdAt, updatedAt } =
           res.data.data;
         const data = {
@@ -67,28 +67,29 @@ const EditProfile = () => {
   };
 
   //이미지 파일 등록 함수
-  // const handleUploadFile = (e) => {
-  //   const file = e.target.files[0];
-  //   const reader = new FileReader();
-  //   reader.readAsDataURL(file);
-
-  //   return new Promise((resolve) => {
-  //     reader.onload = () => {
-  //       setUpdatedData({
-  //         ...updatedData,
-  //         imageUrl: reader.result || null,
-  //       });
-  //       resolve();
-  //       // console.log(reader.result);
-  //     };
-  //   });
-  // };
-
   const handleUploadFile = (e) => {
     const file = e.target.files[0];
-    // console.log(file);
     setImageFile(file);
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+
+    return new Promise((resolve) => {
+      reader.onload = () => {
+        setUpdatedData({
+          ...updatedData,
+          image: reader.result || null,
+        });
+        resolve();
+        // console.log(reader.result);
+      };
+    });
   };
+
+  // const handleUploadFile = (e) => {
+  //   const file = e.target.files[0];
+  //   // console.log(file);
+  //   setImageFile(file);
+  // };
 
   const handleSubmit = (e) => {
     e.preventDefault();

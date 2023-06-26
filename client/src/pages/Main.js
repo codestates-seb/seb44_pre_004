@@ -1,15 +1,16 @@
 import { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 
 import { setNav, setFooter } from '../store/showComponentsSlice';
 import { menuIdxSlice } from '../store/menuIdxSlice';
-// import BeforeLogin from '../components/BeforeLogin';
+import BeforeLogin from '../components/BeforeLogin';
 import AfterLogin from '../components/AfterLogin';
 import LoadingSpinner from '../components/LoadingSpinner';
 
 const Main = () => {
   const dispatch = useDispatch();
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
 
   const [questionData, setQuestionData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -29,9 +30,12 @@ const Main = () => {
 
   // 처음 렌더링 될 때 Nav와 Footer 제어
   useEffect(() => {
-    // 로그인 여부에 따른 네비게이션 유무 분기 처리 필요
-    dispatch(setNav(true));
-    // dispatch(setNav(false));
+    // 로그인 여부에 레이웃 분기 처리
+    if (isLoggedIn) {
+      dispatch(setNav(true));
+    } else {
+      dispatch(setNav(false));
+    }
     dispatch(setFooter(true));
     dispatch(menuIdxSlice.actions.idx(0));
   }, []);
@@ -42,9 +46,11 @@ const Main = () => {
 
   return (
     <>
-      {/* <BeforeLogin /> */}
-      <AfterLogin questionData={questionData} />
-      {/* <LoadingSpinner /> */}
+      {isLoggedIn ? (
+        <AfterLogin questionData={questionData} />
+      ) : (
+        <BeforeLogin />
+      )}
     </>
   );
 };

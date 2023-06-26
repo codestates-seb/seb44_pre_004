@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { setNav, setFooter } from '../store/showComponentsSlice';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import axios from 'axios';
+import instance from '../util/ApiController';
 
 // 로그인 시에만 이용 가능하도록 작성 필요
 
@@ -19,10 +19,10 @@ const AskQuestion = () => {
 
   const [qna, setQna] = useState({
     title: '',
-    body: '',
+    content: '',
   });
 
-  const { title, body } = qna;
+  const { title, content } = qna;
 
   const onChange = (event) => {
     const { value, name } = event.target;
@@ -33,24 +33,11 @@ const AskQuestion = () => {
   };
 
   const saveQna = async () => {
-    // 로그인된 사용자의 정보를 서버로 전
-
-    const qnaData = { title, body };
+    const qnaData = { title, content };
     alert('등록되었습니다.');
 
     try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/qna/question`,
-        // createdBy: user?.id,
-        qnaData,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: process.env.ACCESS_TOKEN,
-          },
-        }
-      );
-
+      const response = await instance.post('/qna/question', qnaData);
       console.log('response:', response.data);
       alert('Question submitted successfully.');
     } catch (error) {
@@ -86,8 +73,8 @@ const AskQuestion = () => {
         <TextAreaDiv>
           <TextDiv>Body</TextDiv>
           <BodyTextArea
-            name="body"
-            value={body}
+            name="content"
+            value={content}
             onChange={onChange}
             placeholder="내용을 작성해주세요."
           ></BodyTextArea>

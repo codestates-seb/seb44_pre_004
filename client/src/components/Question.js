@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
 const Question = ({ question }) => {
+  const createdAt = new Date(question.createdAt);
   return (
     <Container>
       <div>
@@ -18,13 +19,13 @@ const Question = ({ question }) => {
         <H3>
           <Link to={`/qna/${question.questionId}`}>{question.title}</Link>
         </H3>
-        <TextBodyDiv>{question.body}</TextBodyDiv>
+        <TextBodyDiv>{question.content}</TextBodyDiv>
         <ColumDiv>
           <AuthorDiv>
             <span>{/* 프로필 이미지 */}🌈</span>
             {/* <img src="" alt="" /> */}
-            <DisplayNameSpan>{/* 닉네임 */}kim</DisplayNameSpan>
-            <TextGreySpan>{/* 작성일 */}40 secs ago</TextGreySpan>
+            <DisplayNameSpan>{question.writerName}</DisplayNameSpan>
+            <TextGreySpan>{createdAt.toLocaleString('ko-KR')}</TextGreySpan>
           </AuthorDiv>
         </ColumDiv>
       </ColumDiv>

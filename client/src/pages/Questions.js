@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setNav, setFooter } from '../store/showComponentsSlice';
 import LoadingSpinner from '../components/LoadingSpinner';
-import axios from 'axios';
+import { getApi } from '../util/ApiController';
 
 const Questions = () => {
   const dispatch = useDispatch();
@@ -15,8 +15,8 @@ const Questions = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_API_URL}/qna/question`)
+    getApi
+      .get(`/qna/question`)
       .then((res) => {
         setQuestionData(res.data.data.questions.content);
         setIsLoading(false);

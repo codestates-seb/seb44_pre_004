@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setNav, setFooter } from '../store/showComponentsSlice';
-import axios from 'axios';
+// import axios from 'axios';
+import instance from '../util/ApiController';
 
 import { menuIdxSlice } from '../store/menuIdxSlice';
 import styled from 'styled-components';
@@ -16,7 +17,7 @@ const Mypage = () => {
   const memberId = useSelector((state) => state.user.memberId);
 
   useEffect(() => {
-    axios
+    instance
       .get(`${process.env.REACT_APP_API_URL}/user/${memberId}`)
       .then((res) => {
         // console.log(res.data.data);

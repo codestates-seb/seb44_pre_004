@@ -21,6 +21,7 @@ const Logout = () => {
   const handleLogout = (e) => {
     e.preventDefault();
     localStorage.removeItem('token');
+    localStorage.removeItem('persist:root');
     dispatch(logout());
     navigate('/');
   };

@@ -20,7 +20,7 @@ const Mypage = () => {
       .get(`${process.env.REACT_APP_API_URL}/user/${memberId}`)
       .then((res) => {
         // console.log(res.data.data);
-        const { memberId, image, name, title, aboutme, createAt, updatedAt } =
+        const { memberId, image, name, title, aboutme, createdAt, updatedAt } =
           res.data.data;
         const data = {
           memberId,
@@ -28,7 +28,7 @@ const Mypage = () => {
           name,
           title,
           aboutme,
-          createAt,
+          createdAt,
           updatedAt,
         };
         setUserData(data);

@@ -24,18 +24,17 @@ const SignUp = () => {
   const [displayName, setDisplayName] = useState('');
 
   // 오류메세지 상태저장
-  const [nameMessage, setNameMessage] = useState(''); // eslint-disable-line no-unused-vars
-  const [emailMessage, setEmailMessage] = useState(''); // eslint-disable-line no-unused-vars
-  const [passwordMessage, setPasswordMessage] = useState(''); // eslint-disable-line no-unused-vars
+  const [nameMessage, setNameMessage] = useState('');
+  const [emailMessage, setEmailMessage] = useState('');
+  const [passwordMessage, setPasswordMessage] = useState('');
 
   // 유효성 검사
-  const [isName, setIsName] = useState(false); // eslint-disable-line no-unused-vars
-  const [isEmail, setIsEmail] = useState(false); // eslint-disable-line no-unused-vars
-  const [isPassword, setIsPassword] = useState(false); // eslint-disable-line no-unused-vars
+  const [isName, setIsName] = useState(false);
+  const [isEmail, setIsEmail] = useState(false);
+  const [isPassword, setIsPassword] = useState(false);
 
   const handleDisplayNameChange = (e) => {
     const currentName = e.target.value;
-    // console.log(displayName);
     setDisplayName(currentName);
     if (currentName.length < 2 || currentName.length > 5) {
       setNameMessage('닉네임은 2글자 이상 5글자 이하로 입력해주세요');
@@ -76,7 +75,6 @@ const SignUp = () => {
       setIsEmail(true);
     }
   };
-
   const handleSignUp = () => {
     if (isEmail === false) {
       alert('이메일을 다시 확인해주세요.');
@@ -87,8 +85,6 @@ const SignUp = () => {
       setPasswordMessage('Password cannot be empty.');
       setIsPassword(false);
     } else if (isEmail && isPassword) {
-      // navigate('/user/login');
-      // console.log(displayName, email, password);
       // 회원가입 정보를 서버로 전송
       const name = displayName;
       axios

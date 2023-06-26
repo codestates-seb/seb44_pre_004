@@ -24,14 +24,13 @@ const Login = (/*{ setUserInfo, setIsLogin }*/) => {
   const [password, setPassword] = useState('');
 
   // 오류메세지 상태저장
-
   const [emailMessage, setEmailMessage] = useState(''); // eslint-disable-line no-unused-vars
   const [passwordMessage, setPasswordMessage] = useState(''); // eslint-disable-line no-unused-vars
 
   // 유효성 검사
 
-  const [isEmail, setIsEmail] = useState(false); // eslint-disable-line no-unused-vars
-  const [isPassword, setIsPassword] = useState(false); // eslint-disable-line no-unused-vars
+  const [isEmail, setIsEmail] = useState(false);
+  const [isPassword, setIsPassword] = useState(false);
 
   const onChangeEmail = (e) => {
     const currentEmail = e.target.value;
@@ -109,9 +108,6 @@ const Login = (/*{ setUserInfo, setIsLogin }*/) => {
         });
     }
   };
-
-  // const user = useSelector((state) => state.user);
-  // console.log(user);
 
   return (
     <Container>

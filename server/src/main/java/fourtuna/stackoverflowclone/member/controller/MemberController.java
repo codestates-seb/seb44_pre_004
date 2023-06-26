@@ -12,8 +12,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
+import java.io.IOException;
 import java.util.List;
 import fourtuna.stackoverflowclone.member.dto.MemberPostDto;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @RestController
@@ -38,16 +41,29 @@ public class MemberController {
 
     @PatchMapping("/edit/{memberId}")
     public ResponseEntity patchMember(@PathVariable("memberId")  @Positive long memberId,
-                                      @Valid @RequestBody MemberPatchDto requestBody){
+                                      @Valid /*@RequestBody*/@RequestPart(required = false) MemberPatchDto requestBody,
+                                      @RequestPart(required = false) MultipartFile image) throws IOException {
         requestBody.setMemberId(memberId);
-        Member member = memberService.updateMember(mapper.memberPatchDtoToMember(requestBody));
+        //Member member = mapper.memberPatchDtoToMember(requestBody);
+
+        Member response = memberService.updateMember(requestBody);
+        //Member response = memberService.updateMember(member);
+
+        String img = memberService.write(image);
+        response.setImage(img);
 
         return new ResponseEntity<>(
-                new SingleResponseDto<>(mapper.memberToMemberResponseDto(member)),
+                new SingleResponseDto<>(mapper.memberToMemberResponseDto(response)),
                 HttpStatus.OK
         );
-
     }
+
+    @GetMapping("/edit/{memberId}")
+    public ResponseEntity getMemberInfo(@PathVariable("memberId") @Positive long memberId) {
+        Member response = memberService.findMember(memberId);
+        return new ResponseEntity<>(new SingleResponseDto<>(mapper.memberToMemberResponseDto(response)), HttpStatus.OK);
+    }
+
     @GetMapping("/{memberId}")
     public ResponseEntity getMember(
             @PathVariable("memberId") @Positive long memberId) {

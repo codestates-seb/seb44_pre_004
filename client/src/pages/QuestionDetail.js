@@ -7,7 +7,7 @@ import Answer from '../components/Answer';
 import { IoMdArrowDropupCircle } from 'react-icons/io';
 import Comment from '../components/Comment';
 import LoadingSpinner from '../components/LoadingSpinner';
-import instance, { getApi } from '../util/ApiController';
+import instance from '../util/ApiController';
 
 const QuestionDetail = () => {
   const { questionId } = useParams();
@@ -46,7 +46,7 @@ const QuestionDetail = () => {
   }
 
   const getData = async () => {
-    getApi
+    instance
       .get(`/qna/question/${questionId}`)
       .then((res) => {
         // Set the question data in state or do something with it
@@ -55,6 +55,7 @@ const QuestionDetail = () => {
         setAnswers(questionData.answers);
         setComments(questionData.comments);
         setLikeCount(questionData.likeCount || 0);
+        setIsLiked(questionData.likeExist || false);
         setIsLoading(false);
       })
       .catch((err) => {

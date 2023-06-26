@@ -43,28 +43,26 @@ instance.interceptors.response.use(
       response: { status },
     } = error;
     if (status === 401) {
-      if (error.response.data.message === 'expired') {
-        const originalRequest = config;
-        const token = JSON.parse(localStorage.getItem('token'));
-        const { refreshToken } = token;
-        // token refresh 요청
-        const { data } = await axios.post(
-          `/token`, // token refresh api
-          {},
-          { headers: { authorization: refreshToken } }
-        );
-        // 새로운 토큰 저장
-        // dispatch(userSlice.actions.setAccessToken(data.data.accessToken)); store에 저장
-        const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
-          data;
-        localStorage.setItem('token', {
-          accessToken: newAccessToken,
-          refreshToken: newRefreshToken,
-        });
-        originalRequest.headers.authorization = newAccessToken;
-        // 401로 요청 실패했던 요청 새로운 accessToken으로 재요청
-        return axios(originalRequest);
-      }
+      const originalRequest = config;
+      const token = JSON.parse(localStorage.getItem('token'));
+      const { refreshToken } = token;
+      // token refresh 요청
+      const { data } = await axios.post(
+        `/token`, // token refresh api
+        {},
+        { headers: { authorization: refreshToken } }
+      );
+      // 새로운 토큰 저장
+      // dispatch(userSlice.actions.setAccessToken(data.data.accessToken)); store에 저장
+      const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
+        data;
+      localStorage.setItem('token', {
+        accessToken: newAccessToken,
+        refreshToken: newRefreshToken,
+      });
+      originalRequest.headers.authorization = newAccessToken;
+      // 401로 요청 실패했던 요청 새로운 accessToken으로 재요청
+      return axios(originalRequest);
     }
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error

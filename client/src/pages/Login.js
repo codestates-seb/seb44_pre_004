@@ -85,6 +85,7 @@ const Login = (/*{ setUserInfo, setIsLogin }*/) => {
         .then((response) => {
           const accessToken = response.headers['authorization'];
           const refreshToken = response.headers['refresh'];
+          console.log(response);
           const token = {
             accessToken,
             refreshToken,

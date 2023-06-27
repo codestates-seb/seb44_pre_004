@@ -117,7 +117,7 @@ public class InitData {
         Long answerId2 = answerService.createAnswer(questionId1, answer1, member3.getEmail()).getAnswerId();
         Long answerId3 = answerService.createAnswer(questionId2, answer2, member4.getEmail()).getAnswerId();
         Long answerId4 = answerService.createAnswer(questionId3, answer3, member5.getEmail()).getAnswerId();
-        Long answerId5 = answerService.createAnswer(questionId4, answer4, member2.getEmail()).getAnswerId();
+        Long answerId5 = answerService.createAnswer(questionId4, answer4, member1.getEmail()).getAnswerId();
         Long answerId6 = answerService.createAnswer(questionId3, answer5, member1.getEmail()).getAnswerId();
         Long answerId7 = answerService.createAnswer(questionId1, answer6, member2.getEmail()).getAnswerId();
         Long answerId8 = answerService.createAnswer(questionId7, answer7, member1.getEmail()).getAnswerId();
@@ -146,7 +146,5 @@ public class InitData {
         commentService.createCommentForAnswer(comment6, answerId11, member2.getEmail());
         commentService.createCommentForAnswer(comment7, answerId7, member1.getEmail());
         commentService.createCommentForAnswer(comment8, answerId1, member3.getEmail());
-
-
     }
 }

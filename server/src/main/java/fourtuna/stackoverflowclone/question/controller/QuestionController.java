@@ -54,11 +54,19 @@ public class QuestionController {
     }
 
     @GetMapping("/{questionId}")
-    public ResponseEntity<?> getQuestion(@PathVariable Long questionId) {
+    public ResponseEntity<?> getQuestion(@PathVariable Long questionId,
+                                         @RequestHeader(value = "Authorization", required = false) String token) {
 
         log.info("[QuestionController] getQuestion called");
+        log.info("token = {}", token);
 
-        QuestionDetailDto response = questionService.getQuestion(questionId);
+        String memberEmail = null;
+        if (jwtTokenizer.validateToken(token)) {
+            memberEmail = jwtTokenizer.getUsername(token);
+        }
+        log.info("memberEmail = {}", memberEmail);
+
+        QuestionDetailDto response = questionService.getQuestion(questionId, memberEmail);
 
         return ResponseEntity.ok(new SingleResponseDto<>(response));
     }

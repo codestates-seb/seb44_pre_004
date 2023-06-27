@@ -17,9 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.xml.namespace.QName;
-
-import static fourtuna.stackoverflowclone.exception.ExceptionCode.*;
+import static fourtuna.stackoverflowclone.exception.ExceptionCode.WRITER_IS_LIKER;
 
 @Service
 @RequiredArgsConstructor
@@ -34,10 +32,14 @@ public class LikeService {
 
 
     @Transactional
-    public LikeDto.LikeAnswerResponse createAnswerLike(Long answerId, LikeDto.LikeAnswerResponse post, String memberEmail) {
+    public LikeDto.LikeAnswerResponse createAnswerLike(Long answerId, String memberEmail) {
         Member member = memberService.findMemberByEmail(memberEmail);
         Answer answer = answerRepository.findById(answerId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ANSWER_NOT_FOUND));
+
+        if (answer.getMember().getMemberId() == member.getMemberId()) {
+            throw new BusinessLogicException(WRITER_IS_LIKER);
+        }
 
         Like existingLike = likeRepository.findByAnswerAnswerIdAndMemberEmail(answerId, member.getEmail());
         if (existingLike != null) {
@@ -56,11 +58,15 @@ public class LikeService {
 
 
     @Transactional
-    public LikeDto.LikeQuestionResponse createQuestionLike(Long questionId, LikeDto.LikeQuestionResponse post, String memberEmail) {
+    public LikeDto.LikeQuestionResponse createQuestionLike(Long questionId, String memberEmail) {
 
         Member member = memberService.findMemberByEmail(memberEmail);
         Question question = questionRepository.findById(questionId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.QUESTION_NOT_FOUND));
+
+        if (question.getMember().getMemberId() == member.getMemberId()) {
+            throw new BusinessLogicException(WRITER_IS_LIKER);
+        }
 
         Like existingLike = likeRepository.findByQuestionQuestionIdAndMemberEmail(questionId, member.getEmail());
         if (existingLike != null) {
@@ -79,12 +85,12 @@ public class LikeService {
 
 
     @Transactional
-    public void deleteAnswerLike(Long answerId, Long memberId) {
+    public void deleteAnswerLike(Long answerId, String memberEmail) {
 //        Member member = memberService.findMember(memberId);
 //        Like like = findAnswerLike(likeId);
 //        validateLiker(like, member);
 
-        Like existingLike = likeRepository.findByAnswerAnswerIdAndMemberMemberId(answerId, memberId);
+        Like existingLike = likeRepository.findByAnswerAnswerIdAndMemberEmail(answerId, memberEmail);
         if (existingLike == null) {
             throw new BusinessLogicException(ExceptionCode.NOT_LIKED);
         }
@@ -93,12 +99,12 @@ public class LikeService {
     }
 
     @Transactional
-    public void deleteQuestionLike(Long questionId, Long memberId) {
+    public void deleteQuestionLike(Long questionId, String memberEmail) {
 //        Member member = memberService.findMemberByEmail(memberId);
 //        Like like = findQuestionLike(likeId);
 //        validateLiker(like, member);
 
-        Like existingLike = likeRepository.findByQuestionQuestionIdAndMemberMemberId(questionId, memberId);
+        Like existingLike = likeRepository.findByQuestionQuestionIdAndMemberEmail(questionId, memberEmail);
         if (existingLike == null) {
             throw new BusinessLogicException(ExceptionCode.NOT_LIKED);
         }

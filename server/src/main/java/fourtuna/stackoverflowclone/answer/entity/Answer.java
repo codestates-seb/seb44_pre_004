@@ -38,6 +38,8 @@ public class Answer extends Auditable {
     @OneToMany(mappedBy = "answer", cascade = CascadeType.ALL)
     private List<Comment> comments;
 
+    @OneToMany(mappedBy = "answer", cascade = CascadeType.ALL)
+    private List<Like> likes;
 //    @OneToMany(mappedBy = "answer")
 //    private Set<Like> likes = new HashSet<>();
 

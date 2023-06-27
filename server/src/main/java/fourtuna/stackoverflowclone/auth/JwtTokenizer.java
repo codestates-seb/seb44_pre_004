@@ -103,15 +103,16 @@ public class JwtTokenizer {
     }
 
     public boolean validateToken(String token) {
-        if (!StringUtils.hasText(token)) return false;
-        Claims claims = parseClaims(token);
+        String jwt = token.replace("Bearer ", "");
+        if (!StringUtils.hasText(jwt)) return false;
+        Claims claims = parseClaims(jwt);
 
         return !claims.getExpiration().before(new Date());
     }
 
     private Claims parseClaims(String token) {
         try {
-            return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
+            return Jwts.parser().setSigningKey(getKeyFromBase64EncodedKey(encodeBase64SecretKey(secretKey))).parseClaimsJws(token).getBody();
         } catch (ExpiredJwtException e) {
             return e.getClaims();
         }

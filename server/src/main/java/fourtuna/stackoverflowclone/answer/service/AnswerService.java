@@ -31,6 +31,10 @@ public class AnswerService {
         Member member = memberService.findMemberByEmail(memberEmail);
         Question question = questionService.findQuestion(questionId);
 
+        if (question.getMember().getMemberId() == member.getMemberId()) {
+            throw new BusinessLogicException(WRITER_IS_ANSWER);
+        }
+
         Answer answer = Answer.builder()
                 .question(question)
                 .content(post.getContent())

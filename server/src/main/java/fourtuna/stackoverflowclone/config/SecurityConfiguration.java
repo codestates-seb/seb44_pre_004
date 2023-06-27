@@ -86,7 +86,9 @@ public class SecurityConfiguration {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
         configuration.setAllowedMethods(Arrays.asList("OPTIONS", "GET", "POST", "PATCH", "DELETE"));
-        configuration.setAllowedHeaders(Arrays.asList("Origin", "X-Requested-With", "Content-Type", "Accept", "Authorization", "Access-Control-Allow-Headers", "Refresh"));
+        configuration.setAllowedHeaders(Arrays.asList(
+                "Origin", "X-Requested-With", "Content-Type", "Accept", "Authorization",
+                "Access-Control-Allow-Headers", "Access-Control-Allow-Origin", "Refresh"));
         configuration.setExposedHeaders(Arrays.asList("Authorization", "Refresh"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

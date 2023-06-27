@@ -12,7 +12,7 @@
 |:--------:| :--------: | :--------: | :--------: |
 | <img src="https://github.com/hdwmumu/my-agora-states-practice/assets/121214030/44f73187-9a34-49e3-a0d3-7cd74b18bd44" alt="이기쁨" width="120" height="120">| <img src="https://github.com/codestates-seb/seb44_pre_004/assets/121214030/374ac993-2902-4d88-9ebd-04721cd365aa" alt="김리나" width="155" height="155"> | <img src="https://github.com/codestates-seb/seb44_pre_004/assets/121214030/47bb5c53-fe02-4ce1-b49c-992b88f24ec7" alt="백도담" width="130" height="130"> | <img src="https://github.com/codestates-seb/seb44_pre_004/assets/121214030/58d4df99-2ca8-4c0f-a7b4-68734803746f" alt="이명규" width="130" height="130"> | 
 |[@gibbeunLee](https://github.com/gibbeunLee) | [@LinaKK](https://github.com/LinaKK) | [@BAEKDODAM](https://github.com/BAEKDODAM) | [@myungkyulee](https://github.com/myungkyulee) | 
-| <p align="left">- <br/>- <br/>- <br/>- <br/> | <p align="left">- <br/>- <br/>- <br/>- <br/> | <p align="left">- <br/>- <br/>- <br/>- <br/> | <p align="left">- <br/>- <br/>- <br/>- <br/> | 
+| <p align="left">- <br/>- <br/>- <br/>- <br/> | <p align="left">- JWT 자격 증명 <br/>- 회원 가임 <br/>- <br/>- <br/> | <p align="left">- 회원 정보 조회 <br/>- 회원 정보 수정 <br/>- 로그인(JWT) <br/> | <p align="left">- <br/>- <br/>- <br/>- <br/> | 
 
 
 ### Front-end
@@ -30,7 +30,7 @@
 
 | JAVA | JPA | Spring<br>Framework | SpringBoot | Mysql | Gradle | IntelliJ<br>IDEA | JWT | Spring<br>Security |
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| <img src="https://static.vecteezy.com/system/resources/previews/019/899/953/non_2x/java-free-download-free-png.png" alt="JAVA" width="100"> | <img src="" alt="JPA" width="100"> | <img src="https://camo.githubusercontent.com/4545b55c7771bbd175235c80b518dcbbf2f6ee0b984a51ad9363cba8cb70e67c/68747470733a2f2f7777772e766563746f726c6f676f2e7a6f6e652f6c6f676f732f737072696e67696f2f737072696e67696f2d69636f6e2e737667" alt="SpringFramework" width="80"> | <img src="https://camo.githubusercontent.com/113f8f9d91821ab1f8b200859c76ce61336a5b0ad760721179b7a61ae9a9226e/68747470733a2f2f74312e6461756d63646e2e6e65742f6366696c652f746973746f72792f323730333444344635384536363046363136" alt="SpringBoot" width="90"> | <img src="https://camo.githubusercontent.com/b3578157355b1ac74d38d0f89d1022095ba7f7a988db091cef0fa4a62685e87e/68747470733a2f2f74656368737461636b2d67656e657261746f722e76657263656c2e6170702f6d7973716c2d69636f6e2e737667" alt="Mysql" width="100"> | <img src="" alt="Gradle" width="100"> | <img src="" alt="IntelliJ IDEA" width="100"> | <img src="" alt="JWT" width="100"> | <img src="" alt="Spring Security" width="100"> |
+| <img src="https://static.vecteezy.com/system/resources/previews/019/899/953/non_2x/java-free-download-free-png.png" alt="JAVA" width="100"> | <img src="https://camo.githubusercontent.com/5e5576796c5a9c459145c9f4aed898705cb7f2b34811057f9ebd2a458a63a573/68747470733a2f2f6e6f7469636f6e2d7374617469632e74616d6d6f6c6f2e636f6d2f6467676763726b78712f696d6167652f75706c6f61642f76313630393039343535312f6e6f7469636f6e2f676b636a63686c6f633766376b686c73797979792e706e67" alt="JPA" width="100"> | <img src="https://camo.githubusercontent.com/4545b55c7771bbd175235c80b518dcbbf2f6ee0b984a51ad9363cba8cb70e67c/68747470733a2f2f7777772e766563746f726c6f676f2e7a6f6e652f6c6f676f732f737072696e67696f2f737072696e67696f2d69636f6e2e737667" alt="SpringFramework" width="80"> | <img src="https://camo.githubusercontent.com/113f8f9d91821ab1f8b200859c76ce61336a5b0ad760721179b7a61ae9a9226e/68747470733a2f2f74312e6461756d63646e2e6e65742f6366696c652f746973746f72792f323730333444344635384536363046363136" alt="SpringBoot" width="90"> | <img src="https://camo.githubusercontent.com/b3578157355b1ac74d38d0f89d1022095ba7f7a988db091cef0fa4a62685e87e/68747470733a2f2f74656368737461636b2d67656e657261746f722e76657263656c2e6170702f6d7973716c2d69636f6e2e737667" alt="Mysql" width="100"> | <img src="https://upload.wikimedia.org/wikipedia/commons/c/cb/Gradle_logo.png" alt="Gradle" width="100"> | <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/IntelliJ_IDEA_Icon.svg/512px-IntelliJ_IDEA_Icon.svg.png?20200803071016" alt="IntelliJ IDEA" width="100"> | <img src="https://user-images.githubusercontent.com/103114936/194072927-530fe608-9089-4aa1-bf3f-5a9df029800b.png" alt="JWT" width="100"> | <img src="https://camo.githubusercontent.com/11e4f36642bf58cdd27c071e3ad51f9c70d62c74b2f27f171a0ba2cbb53c3d3d/68747470733a2f2f626c6f672e6b616b616f63646e2e6e65742f646e2f6449514451502f6274715a303945536438542f30696271746f745735324f614a5338487a6e5844514b2f696d672e706e67" alt="Spring Security" width="100"> |
 
 ## 4. 구현기능
 
@@ -57,4 +57,5 @@
 
 
 ## 8. ERD
+
 

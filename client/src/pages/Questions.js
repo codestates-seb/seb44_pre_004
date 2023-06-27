@@ -32,18 +32,16 @@ const Questions = () => {
     dispatch(setFooter(true));
   }, []);
 
-  const itemsPerPage = 10; // Number of items to display per page
+  const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(1);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
 
-  // Calculate the index range for the questions to display on the current page
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
 
-  // Get the subset of questions to display on the current page
   const displayedQuestions = questionData.slice(startIndex, endIndex);
 
   if (isLoading) {
@@ -60,7 +58,6 @@ const Questions = () => {
       </MainComponent>
       <MainComponent>
         <TotalDiv>{questionData.length} questions</TotalDiv>
-        {/* filter 버튼 추가 필요 */}
       </MainComponent>
       <MainComponent>
         <QuestionDiv>

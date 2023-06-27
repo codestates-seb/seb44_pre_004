@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setNav, setFooter } from '../store/showComponentsSlice';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
@@ -28,6 +28,8 @@ const QuestionDetail = () => {
   const [comments, setComments] = useState([]);
   const [questionData, setQuestionData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+
   const createdAt = new Date(questionData.createdAt);
   const updatedAt = new Date(questionData.updatedAt);
 
@@ -49,7 +51,6 @@ const QuestionDetail = () => {
     instance
       .get(`/qna/question/${questionId}`)
       .then((res) => {
-        // Set the question data in state or do something with it
         const questionData = res.data?.data || {};
         setQuestionData(questionData);
         setAnswers(questionData.answers);
@@ -245,7 +246,7 @@ const QuestionDetail = () => {
   return (
     <>
       <MainComponent>
-        {isEditing ? (
+        {isEditing && isLoggedIn ? (
           <QuestionInput
             value={editedQuestion.title}
             onChange={(e) =>
@@ -258,7 +259,7 @@ const QuestionDetail = () => {
         ) : (
           <H2>{questionData.title}</H2>
         )}
-        {isEditing ? (
+        {isEditing && isLoggedIn ? (
           <></>
         ) : (
           <RowDiv>
@@ -267,7 +268,7 @@ const QuestionDetail = () => {
           </RowDiv>
         )}
         <BodyContainer>
-          {isEditing ? (
+          {isEditing && isLoggedIn ? (
             <QuestionTextArea
               value={editedQuestion.content}
               onChange={(e) =>
@@ -292,12 +293,12 @@ const QuestionDetail = () => {
             <ColumDiv>
               <div>작성일 {createdAt.toLocaleString('ko-KR')}</div>
               <RowDiv>
-                <div>{/* 프로필 이미지 */}🌈</div>
+                <div>🌈</div>
                 <DisplayNameSpan>{questionData.writerName}</DisplayNameSpan>
               </RowDiv>
             </ColumDiv>
           </AuthorDiv>
-          {isEditing ? (
+          {isEditing && isLoggedIn ? (
             <ButtonContainer>
               <SaveButton onClick={handleQuestionSave}>Save</SaveButton>
               <CancelButton onClick={handleQuestionCancel}>Cancel</CancelButton>
@@ -314,7 +315,7 @@ const QuestionDetail = () => {
               Add a comment
             </AddComment>
           </CommentButton>
-          {showCommentForm && (
+          {showCommentForm && isLoggedIn ? (
             <>
               <CommentForm onSubmit={handleCommentSubmit}>
                 <CommentTextArea
@@ -324,8 +325,9 @@ const QuestionDetail = () => {
                 />
                 <CommentButton type="submit">Post Comment</CommentButton>
               </CommentForm>
-              {/* 댓글 목록 렌더링 */}
             </>
+          ) : (
+            <></>
           )}
           {comments.map((comment) => (
             <Comment
@@ -338,11 +340,10 @@ const QuestionDetail = () => {
       </MainComponent>
       <MainComponent>
         <H3>{answers.length} Answer</H3>{' '}
-        {/* 답변의 총 개수 표시 후에 변경 필요 */}
         <AnswerList>
           {answers.map((answer) => (
             <Answer
-              key={answer.answerId} // 고유한 id 값을 key prop으로 설정
+              key={answer.answerId}
               answer={answer}
               onEdit={handleAnswerEdit}
               onDelete={handleAnswerDelete}

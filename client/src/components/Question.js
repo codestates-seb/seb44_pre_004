@@ -7,10 +7,6 @@ const Question = ({ question }) => {
     <Container>
       <div>
         <RowDiv>
-          <span>{question.voteCount} vote</span>
-        </RowDiv>
-
-        <RowDiv>
           <TextGreySpan>{question.answerCount} answer</TextGreySpan>
         </RowDiv>
       </div>
@@ -22,8 +18,7 @@ const Question = ({ question }) => {
         <TextBodyDiv>{question.content}</TextBodyDiv>
         <ColumDiv>
           <AuthorDiv>
-            <span>{/* 프로필 이미지 */}🌈</span>
-            {/* <img src="" alt="" /> */}
+            <span>🌈</span>
             <DisplayNameSpan>{question.writerName}</DisplayNameSpan>
             <TextGreySpan>{createdAt.toLocaleString('ko-KR')}</TextGreySpan>
           </AuthorDiv>

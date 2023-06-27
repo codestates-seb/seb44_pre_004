@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 
 
@@ -48,6 +47,7 @@ public class LikeController {
     @DeleteMapping("/answer/{answerId}/like")
     public ResponseEntity<Void> deleteAnswerLike(@Positive @PathVariable("answerId") Long answerId,
                                                  @RequestHeader("Authorization") String token) {
+        log.info("[LikeController] deleteAnswerLike called");
         String memberEmail = jwtTokenizer.getUsername(token);
 
         likeService.deleteAnswerLike(answerId, memberEmail);

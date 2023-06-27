@@ -12,10 +12,12 @@ import lombok.NoArgsConstructor;
 @Getter
 @Builder
 public class CommentDto {
+    private Long commentId;
     private String content;
 
     public static CommentDto from(Comment comment) {
         return CommentDto.builder()
+                .commentId(comment.getCommentId())
                 .content(comment.getContent()).build();
     }
 }

@@ -12,7 +12,7 @@ public class UpdateQuestion {
     @Setter
     public static class Request {
         private String title;
-        private String body;
+        private String content;
     }
 
     @NoArgsConstructor
@@ -22,13 +22,13 @@ public class UpdateQuestion {
     public static class Response {
         private Long questionId;
         private String title;
-        private String body;
+        private String content;
 
         public static Response from(Question question) {
             return Response.builder()
                     .questionId(question.getQuestionId())
                     .title(question.getTitle())
-                    .body(question.getContent()).build();
+                    .content(question.getContent()).build();
         }
     }
 }

@@ -2,14 +2,16 @@ import styled from 'styled-components';
 import Question from '../components/Question';
 import Paging from '../components/Paging/Paging';
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { setNav, setFooter } from '../store/showComponentsSlice';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { getApi } from '../util/ApiController';
 
 const Questions = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
 
   const [questionData, setQuestionData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -44,6 +46,15 @@ const Questions = () => {
 
   const displayedQuestions = questionData.slice(startIndex, endIndex);
 
+  const handleAskQuestion = () => {
+    if (isLoggedIn) {
+      navigate('/qna/ask');
+    } else {
+      alert('로그인 후 작성 가능합니다.');
+      navigate('/user/login');
+    }
+  };
+
   if (isLoading) {
     return <LoadingSpinner />;
   }
@@ -52,9 +63,7 @@ const Questions = () => {
     <>
       <MainComponent>
         <H1>All Questions</H1>
-        <AskButton>
-          <Link to="/qna/ask">Ask Question</Link>
-        </AskButton>
+        <AskButton onClick={handleAskQuestion}>Ask Question</AskButton>
       </MainComponent>
       <MainComponent>
         <TotalDiv>{questionData.length} questions</TotalDiv>
@@ -89,12 +98,8 @@ const AskButton = styled.button`
   height: 2.5rem;
   background-color: var(--bright-blue);
   border-radius: 5px;
-  a {
-    color: white;
-    border: none;
-    cursor: pointer;
-    text-decoration: none;
-  }
+  color: white;
+  cursor: pointer;
   :hover {
     background-color: var(--dark-blue);
   }

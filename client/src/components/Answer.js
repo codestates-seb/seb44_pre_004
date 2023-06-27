@@ -48,6 +48,7 @@ const Answer = ({ answer, onEdit, onDelete }) => {
         })
         .catch((error) => {
           console.error('Error sending like status to server:', error);
+          alert('자신이 작성한 글에는 좋아요를 누를 수 없습니다.');
         });
     }
   };

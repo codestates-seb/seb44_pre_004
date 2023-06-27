@@ -83,6 +83,7 @@ const QuestionDetail = () => {
       })
       .catch((error) => {
         console.error('Error submitting answer:', error);
+        alert('자신이 질문한 글에는 답변할 수 없습니다.');
       });
   };
 
@@ -104,6 +105,7 @@ const QuestionDetail = () => {
       })
       .catch((error) => {
         console.error('Error updating answer:', error);
+        alert('작성자만 수정할 수 있습니다.');
       });
   };
 
@@ -117,6 +119,7 @@ const QuestionDetail = () => {
       getData();
     } catch (error) {
       console.error('Error deleting answer:', error);
+      alert('작성자만 삭제할 수 있습니다.');
     }
   };
 
@@ -147,6 +150,7 @@ const QuestionDetail = () => {
       })
       .catch((error) => {
         console.error('Error updating question:', error);
+        alert('작성자만 수정할 수 있습니다.');
       });
   };
 
@@ -169,6 +173,7 @@ const QuestionDetail = () => {
       })
       .catch((error) => {
         console.error('Error deleting question:', error);
+        alert('작성자만 삭제할 수 있습니다.');
       });
   };
 
@@ -197,6 +202,7 @@ const QuestionDetail = () => {
         })
         .catch((error) => {
           console.error('Error sending like status to server:', error);
+          alert('자신이 작성한 글에는 좋아요를 누를 수 없습니다.');
         });
     }
   };

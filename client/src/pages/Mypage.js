@@ -20,7 +20,7 @@ const Mypage = () => {
     instance
       .get(`${process.env.REACT_APP_API_URL}/user/${memberId}`)
       .then((res) => {
-        console.log(res.data.data);
+        // console.log(res.data.data);
         const { memberId, image, name, title, aboutMe, createdAt, updatedAt } =
           res.data.data;
         const data = {

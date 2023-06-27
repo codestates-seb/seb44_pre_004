@@ -111,9 +111,6 @@ const Login = (/*{ setUserInfo, setIsLogin }*/) => {
     }
   };
 
-  // const user = useSelector((state) => state.user);
-  // console.log(user);
-
   return (
     <Container>
       <div>
@@ -284,7 +281,6 @@ const Button = styled.button`
 `;
 const DivBox3 = styled.div`
   justify-items: center;
-  /* text-align: center; */
   margin-top: 40px;
   padding-left: 55px;
   width: 300px;

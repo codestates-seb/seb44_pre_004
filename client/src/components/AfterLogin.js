@@ -1,23 +1,20 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-// import { questionData } from '../pages/Questions';
 import styled from 'styled-components';
 import Question from './Question';
 import Paging from './Paging/Paging';
 
 const AfterLogin = ({ questionData }) => {
-  const itemsPerPage = 5; // Number of items to display per page
+  const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(1);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
 
-  // Calculate the index range for the questions to display on the current page
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
 
-  // Get the subset of questions to display on the current page
   const displayedQuestions = questionData.slice(startIndex, endIndex);
 
   return (
@@ -28,7 +25,7 @@ const AfterLogin = ({ questionData }) => {
           <Link to="/qna/ask">Ask Question</Link>
         </AskButton>
       </MainComponent>
-      <MainComponent>{/* filter 버튼 추가 필요 */}</MainComponent>
+      <MainComponent></MainComponent>
       <MainComponent>
         <QuestionDiv>
           {displayedQuestions.map((question, index) => (

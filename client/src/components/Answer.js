@@ -2,12 +2,14 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { IoMdArrowDropupCircle } from 'react-icons/io';
 import instance from '../util/ApiController';
+import { useSelector } from 'react-redux';
 
-const Answer = ({ answer, onEdit, onDelete /*, author*/ }) => {
+const Answer = ({ answer, onEdit, onDelete }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState(answer.content);
-  const [isLiked, setIsLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(answer.likeCount);
+  const [isLiked, setIsLiked] = useState(answer.likeExist || false);
+  const [likeCount, setLikeCount] = useState(answer.likeCount || 0);
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const createdAt = new Date(answer.createdAt);
   const answerId = answer.answerId;
   const handleEdit = () => {
@@ -52,7 +54,7 @@ const Answer = ({ answer, onEdit, onDelete /*, author*/ }) => {
 
   return (
     <AnswerContainer>
-      {isEditing ? (
+      {isEditing && isLoggedIn ? (
         <>
           <AnswerTextArea
             value={editedContent}
@@ -77,7 +79,7 @@ const Answer = ({ answer, onEdit, onDelete /*, author*/ }) => {
               <ColumDiv>
                 <div>작성일 {createdAt.toLocaleString('ko-KR')}</div>
                 <RowDiv>
-                  <div>{/* 프로필 이미지 author.image? */}🌈</div>
+                  <div>🌈</div>
                   <DisplayNameSpan>{answer.writerName}</DisplayNameSpan>
                 </RowDiv>
               </ColumDiv>

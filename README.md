@@ -15,18 +15,19 @@
 ### Back-end
 | 이기쁨<br>(BE Leader) | 김리나<br>(BE) | 백도담<br>(BE) | 이명규<br>(BE) |
 |:--------:| :--------: | :--------: | :--------: |
-| <img src="https://github.com/hdwmumu/my-agora-states-practice/assets/121214030/44f73187-9a34-49e3-a0d3-7cd74b18bd44" alt="이기쁨" width="120" height="120">| <img src="" alt="김리나" width="100" height="100"> | <img src="" alt="백도담" width="100" height="100"> | <img src="" alt="이명규" width="100" height="100"> | 
+| <img src="https://github.com/hdwmumu/my-agora-states-practice/assets/121214030/44f73187-9a34-49e3-a0d3-7cd74b18bd44" alt="이기쁨" width="120" height="120">| <img src="https://github.com/codestates-seb/seb44_pre_004/assets/121214030/374ac993-2902-4d88-9ebd-04721cd365aa" alt="김리나" width="155" height="155"> | <img src="https://github.com/codestates-seb/seb44_pre_004/assets/121214030/47bb5c53-fe02-4ce1-b49c-992b88f24ec7" alt="백도담" width="130" height="130"> | <img src="https://github.com/codestates-seb/seb44_pre_004/assets/121214030/58d4df99-2ca8-4c0f-a7b4-68734803746f" alt="이명규" width="130" height="130"> | 
 |[@gibbeunLee](https://github.com/gibbeunLee) | [@LinaKK](https://github.com/LinaKK) | [@BAEKDODAM](https://github.com/BAEKDODAM) | [@myungkyulee](https://github.com/myungkyulee) | 
 | <p align="left">- <br/>- <br/>- <br/>- <br/> | <p align="left">- <br/>- <br/>- <br/>- <br/> | <p align="left">- <br/>- <br/>- <br/>- <br/> | <p align="left">- <br/>- <br/>- <br/>- <br/> | 
+
 
 
 
 ### Front-end
 | 유지원<br>(FE Leader) | 김민기<br>(FE) | 허금희<br>(FE) |
 | :--------: | :--------: | :--------: |
-| <img src="https://github.com/hdwmumu/my-agora-states-practice/assets/121214030/4a3d7705-82a6-499a-b493-d61eb7554484" alt="유지원" width="130" height="130"> | <img src="https://github.com/hdwmumu/my-agora-states-practice/assets/121214030/3aa80746-ff63-49b2-b5de-ad65574b0717" alt="김민기" width="130" height="130"> | <img src="https://github.com/hdwmumu/my-agora-states-practice/assets/121214030/4e853322-bd76-4fa4-a96c-3dc3ee9bdb0e" alt="허금희" width="155" height="155"> |
+| <img src="https://github.com/hdwmumu/my-agora-states-practice/assets/121214030/4a3d7705-82a6-499a-b493-d61eb7554484" alt="유지원" width="130" height="130"> | <img src="https://github.com/hdwmumu/my-agora-states-practice/assets/121214030/3aa80746-ff63-49b2-b5de-ad65574b0717" alt="김민기" width="130" height="130"> | <img src="https://github.com/hdwmumu/my-agora-states-practice/assets/121214030/4e853322-bd76-4fa4-a96c-3dc3ee9bdb0e" alt="허금희" width="160" height="160"> |
 | [@yyjjvv](https://github.com/yyjjvv) | [@alsrl1371](https://github.com/alsrl1371) | [@hdwmumu](https://github.com/hdwmumu) |
-| <p align="left">- <br/>- <br/>- <br/>- <br/>|<p align="left">- <br/>- <br/>- <br/>- <br/>|<p align="left">- <br/>- <br/>- <br/>- <br/>|
+| <p align="left">- <br/>- <br/>- <br/>- <br/>|<p align="left">- <br/>- <br/>- <br/>- <br/>|<p align="left">- 회원가입 <br/>- 로그인 <br/>- <br/>- <br/>|
 
 
 

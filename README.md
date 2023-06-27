@@ -20,7 +20,7 @@
 | :--------: | :--------: | :--------: |
 | <img src="https://github.com/hdwmumu/my-agora-states-practice/assets/121214030/4a3d7705-82a6-499a-b493-d61eb7554484" alt="유지원" width="130" height="130"> | <img src="https://github.com/hdwmumu/my-agora-states-practice/assets/121214030/3aa80746-ff63-49b2-b5de-ad65574b0717" alt="김민기" width="130" height="130"> | <img src="https://github.com/hdwmumu/my-agora-states-practice/assets/121214030/4e853322-bd76-4fa4-a96c-3dc3ee9bdb0e" alt="허금희" width="160" height="160"> |
 | [@yyjjvv](https://github.com/yyjjvv) | [@alsrl1371](https://github.com/alsrl1371) | [@hdwmumu](https://github.com/hdwmumu) |
-| <p align="left">- 공통 컴포넌트 <br/>- 메인 (로그인 전, 후) <br/>- 마이페이지 사용자 정보 <br/>- 회원정보 수정/ 이미지 업로드 <br/>- 로그아웃 <br/>- Axios.interceptors <br/>|<p align="left">- 질문 리스트 페이지 <br/>- 질문 CRUD <br/>- 질문 컴포넌트 <br/>- 질문 상세 페이지<br/>- 답변 CRUD <br/>- 답변 컴포넌트 <br/>- 댓글 CRUD <br/>- 댓글 컴포넌트 <br/>- 질문, 답변 좋아요 기능 |<p align="left">- 회원가입 <br/>- 로그인 <br/>- <br/>- <br/>|
+| <p align="left">- 공통 컴포넌트 <br/>- 메인 (로그인 전, 후) <br/>- 마이페이지 사용자 정보 <br/>- 회원정보 수정/ 이미지 업로드 <br/>- 로그아웃 <br/>- Axios.interceptors <br/>|<p align="left">- 질문 리스트 페이지 <br/>- 질문 CRUD <br/>- 질문 상세 페이지<br/>- 답변 CRUD <br/>- 댓글 CRUD <br/>- 질문, 답변 좋아요 기능 |<p align="left">- 회원가입 <br/>- 로그인 <br/>- <br/>- <br/>|
 
 
 ## 3. 사용기술스택

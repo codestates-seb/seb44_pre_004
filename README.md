@@ -30,10 +30,9 @@
 
 | JAVA | JPA | Spring<br>Framework | SpringBoot | Mysql | Gradle | IntelliJ<br>IDEA | JWT | Spring<br>Security |
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| <img src="https://static.vecteezy.com/system/resources/previews/019/899/953/non_2x/java-free-download-free-png.png" alt="JAVA" width="100"> | <img src="https://github.com/codestates-seb/seb44_pre_004/assets/121214030/5517fbe5-2b3b-4e3f-b5e3-6aa90860a1b9" alt="JPA" width=""> | <img src="" alt="SpringFramework" width=""> | <img src="" alt="SpringBoot" width=""> | <img src="" alt="Mysql" width=""> | <img src="" alt="Gradle" width=""> | <img src="" alt="IntelliJ IDEA" width=""> | <img src="" alt="JWT" width=""> | <img src="" alt="Spring Security" width=""> |
+| <img src="https://static.vecteezy.com/system/resources/previews/019/899/953/non_2x/java-free-download-free-png.png" alt="JAVA" width="100"> | <img src="" alt="JPA" width="100"> | <img src="https://camo.githubusercontent.com/4545b55c7771bbd175235c80b518dcbbf2f6ee0b984a51ad9363cba8cb70e67c/68747470733a2f2f7777772e766563746f726c6f676f2e7a6f6e652f6c6f676f732f737072696e67696f2f737072696e67696f2d69636f6e2e737667" alt="SpringFramework" width="100"> | <img src="https://camo.githubusercontent.com/113f8f9d91821ab1f8b200859c76ce61336a5b0ad760721179b7a61ae9a9226e/68747470733a2f2f74312e6461756d63646e2e6e65742f6366696c652f746973746f72792f323730333444344635384536363046363136" alt="SpringBoot" width="100"> | <img src="https://camo.githubusercontent.com/b3578157355b1ac74d38d0f89d1022095ba7f7a988db091cef0fa4a62685e87e/68747470733a2f2f74656368737461636b2d67656e657261746f722e76657263656c2e6170702f6d7973716c2d69636f6e2e737667" alt="Mysql" width="100"> | <img src="" alt="Gradle" width="100"> | <img src="" alt="IntelliJ IDEA" width="100"> | <img src="" alt="JWT" width="100"> | <img src="" alt="Spring Security" width="100"> |
 
 ## 4. 구현기능
-![2194362225](https://github.com/codestates-seb/seb44_pre_004/assets/121214030/5517fbe5-2b3b-4e3f-b5e3-6aa90860a1b9)
 
 
 ## 5. git commit rule

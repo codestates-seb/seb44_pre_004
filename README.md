@@ -30,9 +30,10 @@
 
 | JAVA | JPA | Spring<br>Framework | SpringBoot | Mysql | Gradle | IntelliJ<br>IDEA | JWT | Spring<br>Security |
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| <img src="https://static.vecteezy.com/system/resources/previews/019/899/953/non_2x/java-free-download-free-png.png" alt="JAVA" width="100"> | <img src="" alt="" width=""> | <img src="" alt="" width=""> | <img src="" alt="" width=""> | <img src="" alt="" width=""> | <img src="" alt="" width=""> | <img src="" alt="" width=""> | <img src="" alt="" width=""> | <img src="" alt="" width=""> |
+| <img src="https://static.vecteezy.com/system/resources/previews/019/899/953/non_2x/java-free-download-free-png.png" alt="JAVA" width="100"> | <img src="https://github.com/codestates-seb/seb44_pre_004/assets/121214030/5517fbe5-2b3b-4e3f-b5e3-6aa90860a1b9" alt="JPA" width=""> | <img src="" alt="SpringFramework" width=""> | <img src="" alt="SpringBoot" width=""> | <img src="" alt="Mysql" width=""> | <img src="" alt="Gradle" width=""> | <img src="" alt="IntelliJ IDEA" width=""> | <img src="" alt="JWT" width=""> | <img src="" alt="Spring Security" width=""> |
 
 ## 4. 구현기능
+![2194362225](https://github.com/codestates-seb/seb44_pre_004/assets/121214030/5517fbe5-2b3b-4e3f-b5e3-6aa90860a1b9)
 
 
 ## 5. git commit rule

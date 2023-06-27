@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setNav, setFooter } from '../store/showComponentsSlice';
-// import axios from 'axios';
 import instance from '../util/ApiController';
 
 import { menuIdxSlice } from '../store/menuIdxSlice';
@@ -20,7 +19,6 @@ const Mypage = () => {
     instance
       .get(`${process.env.REACT_APP_API_URL}/user/${memberId}`)
       .then((res) => {
-        // console.log(res.data.data);
         const { memberId, image, name, title, aboutMe, createdAt, updatedAt } =
           res.data.data;
         const data = {
@@ -60,26 +58,12 @@ const Mypage = () => {
           <h3>Answers</h3>
           <ul>
             <EmptyMsg>You have not answered any questions</EmptyMsg>
-            {/* {!answers && (
-              <EmptyMsg>You have not answered any questions</EmptyMsg>
-            )}
-            {answers &&
-              answers
-                .slice(0, 3)
-                .map((answer, idx) => <li key={idx}>{answer}</li>)} */}
           </ul>
         </InfoElement>
         <InfoElement>
           <h3>Questions</h3>
           <ul>
             <EmptyMsg>You have not asked any questions</EmptyMsg>
-            {/* {!questions && (
-              <EmptyMsg>You have not asked any questions</EmptyMsg>
-            )}
-            {questions &&
-              questions
-                .slice(0, 3)
-                .map((question, idx) => <li key={idx}>{question}</li>)} */}
           </ul>
         </InfoElement>
       </ContentsContainer>

@@ -19,7 +19,6 @@ const Header = () => {
       <HeaderWrapper>
         {showNav && <ToggleNav setShowNav={setShowNav} />}
         <FlexLeft>
-          {/* TODO: 로그인 상태값에 따른 숨김 처리 필요 */}
           {!showHamberger && (
             <button onClick={() => setShowNav((prev) => !prev)}>
               {!showNav && <IoMenuSharp className="hamburger" />}
@@ -38,8 +37,6 @@ const Header = () => {
         </FlexLeft>
 
         <FlexRight>
-          {/* TODO: 로그인 상태값에 따른 변경 필요 */}
-
           {!isLoggedIn && (
             <div>
               <Link to="/user/login" onClick={() => setShowNav(false)}>
@@ -50,7 +47,6 @@ const Header = () => {
               </Link>
             </div>
           )}
-          {/* 로그인 후 버튼 */}
           {isLoggedIn && (
             <div>
               <Link

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-// import axios from 'axios';
+
 import instance from '../util/ApiController';
 
 import { setNav, setFooter } from '../store/showComponentsSlice';
@@ -28,7 +28,6 @@ const EditProfile = () => {
     instance
       .get(`${process.env.REACT_APP_API_URL}/user/${memberId}`)
       .then((res) => {
-        // console.log(res.data.data);
         const { memberId, image, name, title, aboutMe, createdAt, updatedAt } =
           res.data.data;
         const data = {
@@ -67,7 +66,6 @@ const EditProfile = () => {
       ...updatedData, // 기존의 input 객체를 복사
       [id]: value || '', // id 키를 가진 값을 value 로 설정
     });
-    // console.log(updatedData);
   };
 
   //이미지 파일 등록 함수
@@ -96,16 +94,6 @@ const EditProfile = () => {
     });
     formData.append('requestBody', blobJson);
 
-    // FormData의 key 확인
-    // for (let key of formData.keys()) {
-    //   console.log(key);
-    // }
-
-    // FormData의 value 확인
-    // for (let value of formData.values()) {
-    //   console.log(value);
-    // }
-
     updateUserInfo(formData);
     setUserData({ ...userData, ...updatedData });
     alert('수정이 완료되었습니다.');
@@ -123,8 +111,7 @@ const EditProfile = () => {
           },
         }
       )
-      .then((res) => {
-        console.log(res);
+      .then(() => {
         navigate(`/user/${memberId}`);
       })
       .catch((err) => {

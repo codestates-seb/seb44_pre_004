@@ -35,7 +35,6 @@ const SignUp = () => {
 
   const handleDisplayNameChange = (e) => {
     const currentName = e.target.value;
-    // console.log(displayName);
     setDisplayName(currentName);
     if (currentName.length < 2 || currentName.length > 5) {
       setNameMessage('닉네임은 2글자 이상 5글자 이하로 입력해주세요');
@@ -87,8 +86,6 @@ const SignUp = () => {
       setPasswordMessage('Password cannot be empty.');
       setIsPassword(false);
     } else if (isEmail && isPassword) {
-      // navigate('/user/login');
-      // console.log(displayName, email, password);
       // 회원가입 정보를 서버로 전송
       const name = displayName;
       axios
@@ -102,16 +99,12 @@ const SignUp = () => {
           {
             headers: {
               'Content-Type': 'application/json',
-              // 'Access-Control-Allow-Origin': '*',
               'Access-Control-Allow-Headers':
                 'Origin, X-Requested-With, Content-Type, Accept',
             },
           }
-
-          // { withCredentials: true }
         )
-        .then((response) => {
-          console.log(response);
+        .then(() => {
           alert('회원가입이 정상적으로 완료되었습니다.');
           navigate('/user/login');
         })

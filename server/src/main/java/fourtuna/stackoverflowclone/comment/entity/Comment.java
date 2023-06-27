@@ -21,6 +21,7 @@ public class Comment extends Auditable {
     @Column(nullable = false)
     private Long commentId;
 
+    @Column(nullable = false)
     private String content;
 
     @ManyToOne

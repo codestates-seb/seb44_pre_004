@@ -1,6 +1,5 @@
 package fourtuna.stackoverflowclone.question.dto;
 
-
 import fourtuna.stackoverflowclone.answer.dto.AnswerDto;
 import fourtuna.stackoverflowclone.comment.dto.CommentDto;
 import fourtuna.stackoverflowclone.member.entity.Member;
@@ -33,7 +32,7 @@ public class QuestionDetailDto {
 
     public static QuestionDetailDto from(Question question, Member member) {
         List<AnswerDto> answers = question.getAnswers().stream()
-                .map(answer -> AnswerDto.from(answer))
+                .map(answer -> AnswerDto.from(answer, member))
                 .collect(Collectors.toList());
 
         List<CommentDto> comments = question.getComments().stream()

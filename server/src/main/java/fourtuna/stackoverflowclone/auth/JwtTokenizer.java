@@ -103,8 +103,8 @@ public class JwtTokenizer {
     }
 
     public boolean validateToken(String token) {
+        if (!StringUtils.hasText(token)) return false;
         String jwt = token.replace("Bearer ", "");
-        if (!StringUtils.hasText(jwt)) return false;
         Claims claims = parseClaims(jwt);
 
         return !claims.getExpiration().before(new Date());

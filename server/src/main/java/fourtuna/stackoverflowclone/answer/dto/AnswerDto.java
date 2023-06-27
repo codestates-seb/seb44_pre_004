@@ -1,7 +1,9 @@
 package fourtuna.stackoverflowclone.answer.dto;
 
+
 import fourtuna.stackoverflowclone.answer.entity.Answer;
 import fourtuna.stackoverflowclone.comment.dto.CommentDto;
+import fourtuna.stackoverflowclone.member.entity.Member;
 import fourtuna.stackoverflowclone.question.entity.Question;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,20 +30,24 @@ public class AnswerDto {
 
     private List<CommentDto> comments;
 
-    public static AnswerDto from(Answer answer) {
+    public static AnswerDto from(Answer answer, Member member) {
         List<CommentDto> comments = answer.getComments().stream()
                 .map(comment -> CommentDto.from(comment))
                 .collect(Collectors.toList());
 
-        long count = answer.getLikes().stream()
-                .filter(like -> like.getMember().getMemberId() == answer.getMember().getMemberId())
-                .count();
+        boolean exist = false;
+        if (member != null) {
+            long count = answer.getLikes().stream()
+                    .filter(like -> like.getMember().getMemberId() == member.getMemberId())
+                    .count();
+            exist = count != 0;
+        }
 
         return AnswerDto.builder()
                 .answerId(answer.getAnswerId())
                 .content(answer.getContent())
                 .likeCount(answer.getLikes().size())
-                .likeExist(count != 0)
+                .likeExist(exist)
                 .writerName(answer.getMember().getName())
                 .writerImageUrl(answer.getMember().getImage())
                 .createdAt(answer.getCreatedAt().toString())
@@ -100,5 +106,4 @@ public class AnswerDto {
                     .content(answer.getContent()).build();
         }
     }
-
 }

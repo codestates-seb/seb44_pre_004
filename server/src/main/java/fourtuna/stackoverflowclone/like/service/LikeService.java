@@ -14,11 +14,13 @@ import fourtuna.stackoverflowclone.question.entity.Question;
 import fourtuna.stackoverflowclone.question.repository.QuestionRepository;
 import fourtuna.stackoverflowclone.question.service.QuestionService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import static fourtuna.stackoverflowclone.exception.ExceptionCode.WRITER_IS_LIKER;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class LikeService {
@@ -89,6 +91,7 @@ public class LikeService {
 //        Member member = memberService.findMember(memberId);
 //        Like like = findAnswerLike(likeId);
 //        validateLiker(like, member);
+        log.info("[LikeService] deleteAnswerLike called");
 
         Like existingLike = likeRepository.findByAnswerAnswerIdAndMemberEmail(answerId, memberEmail);
         if (existingLike == null) {

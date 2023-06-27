@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.Optional;
 
@@ -68,12 +69,17 @@ public class QuestionService {
         return UpdateQuestion.Response.from(question);
     }
 
-    @Cacheable(key = "#questionId", value = "questions")
-    public QuestionDetailDto getQuestion(Long questionId) {
+//    @Cacheable(key = "#questionId", value = "questions")
+    public QuestionDetailDto getQuestion(Long questionId, String memberEmail) {
         log.info("[QuestionService] getQuestion called");
         Question question = findQuestion(questionId);
+        Member member = null;
+        if (StringUtils.hasText(memberEmail)) {
+            member = memberService.findMemberByEmail(memberEmail);
+        }
 
-        return QuestionDetailDto.from(question);
+
+        return QuestionDetailDto.from(question, member);
     }
 
     public GetQuestions.Response getQuestions(final Pageable pageable) {

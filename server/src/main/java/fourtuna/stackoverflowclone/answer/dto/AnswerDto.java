@@ -20,6 +20,7 @@ public class AnswerDto {
     private Long answerId;
     private String content;
     private int likeCount;
+    private boolean likeExist;
     private String writerName;
     private String writerImageUrl;
     private String createdAt;
@@ -32,9 +33,15 @@ public class AnswerDto {
                 .map(comment -> CommentDto.from(comment))
                 .collect(Collectors.toList());
 
+        long count = answer.getLikes().stream()
+                .filter(like -> like.getMember().getMemberId() == answer.getMember().getMemberId())
+                .count();
+
         return AnswerDto.builder()
                 .answerId(answer.getAnswerId())
                 .content(answer.getContent())
+                .likeCount(answer.getLikes().size())
+                .likeExist(count != 0)
                 .writerName(answer.getMember().getName())
                 .writerImageUrl(answer.getMember().getImage())
                 .createdAt(answer.getCreatedAt().toString())

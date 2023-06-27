@@ -28,55 +28,38 @@ public class LikeController {
     }
 
     @PostMapping("/answer/{answerId}/like")
-    public ResponseEntity<SingleResponseDto<LikeDto.LikeAnswerResponse>> createAnswerLike(@Positive @PathVariable("answerId") Long answerId,
-                                                           @Valid @RequestBody LikeDto.LikeAnswerResponse request,
-                                                           @RequestHeader("Authorization") String token) {
+    public ResponseEntity<?> createAnswerLike(@Positive @PathVariable("answerId") Long answerId,
+                                              @RequestHeader("Authorization") String token) {
         String memberEmail = jwtTokenizer.getUsername(token);
 
-        LikeDto.LikeAnswerResponse response = likeService.createAnswerLike(answerId, request, memberEmail);
+        LikeDto.LikeAnswerResponse response = likeService.createAnswerLike(answerId, memberEmail);
         return ResponseEntity.ok(new SingleResponseDto<>(response));
     }
 
     @PostMapping("/question/{questionId}/like")
-    public ResponseEntity<SingleResponseDto<LikeDto.LikeQuestionResponse>> createQuestionLike(@Positive @PathVariable("questionId") Long questionId,
-                                                                   @Valid @RequestBody LikeDto.LikeQuestionResponse request,
-                                     @RequestHeader("Authorization") String token) {
-
+    public ResponseEntity<?> createQuestionLike(@Positive @PathVariable("questionId") Long questionId,
+                                                @RequestHeader("Authorization") String token) {
         String memberEmail = jwtTokenizer.getUsername(token);
 
-        LikeDto.LikeQuestionResponse response = likeService.createQuestionLike(questionId, request, memberEmail);
+        LikeDto.LikeQuestionResponse response = likeService.createQuestionLike(questionId, memberEmail);
         return ResponseEntity.ok(new SingleResponseDto<>(response));
     }
 
     @DeleteMapping("/answer/{answerId}/like")
-    public ResponseEntity<Void> deleteAnswerLike(
-            @Positive @PathVariable("answerId") Long answerId , @RequestHeader("Authorization") String token) {
-        String memberEmail  = tokenProvider.getAuthentication(token).getEmail()
+    public ResponseEntity<Void> deleteAnswerLike(@Positive @PathVariable("answerId") Long answerId,
+                                                 @RequestHeader("Authorization") String token) {
+        String memberEmail = jwtTokenizer.getUsername(token);
 
-        Long memberId = 1L;
-        likeService.deleteAnswerLike(answerId, memberId);
+        likeService.deleteAnswerLike(answerId, memberEmail);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/question/{questionId}/like")
-    public ResponseEntity<Void> deleteQuestionLike(
-            @Positive @PathVariable("questionId") Long questionId , @RequestHeader("Authorization") String token) {
-        // 토큰에서 유저정보 꺼내기
-        // ex) String memberEmail  = tokenProvider.getAuthentication(token).getEmail()
+    public ResponseEntity<Void> deleteQuestionLike(@Positive @PathVariable("questionId") Long questionId,
+                                                   @RequestHeader("Authorization") String token) {
+        String memberEmail = jwtTokenizer.getUsername(token);
 
-        Long memberId = 1L;
-        likeService.deleteQuestionLike(questionId, memberId);
-
+        likeService.deleteQuestionLike(questionId, memberEmail);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
-//    @DeleteMapping("/like/{likeId}")
-//    public ResponseEntity<Void> deleteLike(@Positive @PathVariable("likeId") Long likeId/*, @RequestHeader("Authorization") String token*/) {
-//        // 토큰에서 유저정보 꺼내기
-//        // ex) String memberEmail  = tokenProvider.getAuthentication(token).getEmail();
-//
-//        String memberEmail = "test@test.com";
-//        likeService.deleteLike(likeId, memberEmail);
-//        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//    }
 }

@@ -14,10 +14,13 @@ import lombok.NoArgsConstructor;
 public class CommentDto {
     private Long commentId;
     private String content;
+    private String createdAt;
+    private String writerName;
 
     public static CommentDto from(Comment comment) {
         return CommentDto.builder()
-                .commentId(comment.getCommentId())
+                .writerName(comment.getMember().getName())
+                .createdAt(comment.getCreatedAt().toString())
                 .content(comment.getContent()).build();
     }
 }

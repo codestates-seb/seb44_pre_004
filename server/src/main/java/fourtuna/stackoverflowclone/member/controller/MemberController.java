@@ -52,6 +52,7 @@ public class MemberController {
                                       @Valid @RequestPart(required = false) MemberPatchDto requestBody,
                                       @RequestPart(required = false) MultipartFile image) throws IOException {
         log.info("[MemberController] patchMember called");
+
         requestBody.setMemberId(memberId);
         //Member member = mapper.memberPatchDtoToMember(requestBody);
 

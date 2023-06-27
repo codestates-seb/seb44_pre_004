@@ -13,6 +13,8 @@ public enum ExceptionCode {
     ALREADY_LIKED(400, "Already liked"),
     NOT_LIKED(404, "Not liked"),
     UNMATCHED_LIKER(403, "좋아요를 누른 회원이 아닙니다."),
+    WRITER_IS_LIKER(403, "작성자가 좋아요 누를 수 없습니다."),
+    WRITER_IS_ANSWER(403, "작성자가 답변을 달 수 없습니다."),
     INVALID_TOKEN(404, "유효하지 않은 토큰입니다.");
 
     @Getter

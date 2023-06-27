@@ -30,6 +30,5 @@ public class Like {
     @ManyToOne
     @JoinColumn(name = "question_id")
     private Question question;
-
 }
 

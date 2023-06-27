@@ -36,6 +36,12 @@
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | <img src="https://github.com/hdwmumu/my-agora-states-practice/assets/121214030/1b0b5d26-23ce-4358-a570-9301cb558b03" alt="HTML" width="80"> | <img src="https://camo.githubusercontent.com/edc736634dd35b0f4008e2f7db456136b9fc0e1e7a4078bb72c7352b1bdf8a7e/68747470733a2f2f776f726c64766563746f726c6f676f2e636f6d2f6c6f676f732f6373732d332e737667" alt="CSS" width="70"> |<img src="https://logos-download.com/wp-content/uploads/2019/01/JavaScript_Logo.png" alt="JS" width="80"> | <img src="https://camo.githubusercontent.com/cbb0ed4ed73eb0bdf880019fe4fd13e0e0b0812435f11ac0d920c8f523a8d8d0/68747470733a2f2f74656368737461636b2d67656e657261746f722e76657263656c2e6170702f72656163742d69636f6e2e737667" alt="React" width="80"> | <img src="https://blog.kakaocdn.net/dn/bPZYdy/btqZDPL6LOM/cnT3tT7MBvCr7IBqr7yce1/img.png" alt="redux toolkit" width="80">| <img src="https://camo.githubusercontent.com/b55c889cdac7759f0e61882c5b533d701ab8bd7a7c8153d824abe52d28ddc5a9/68747470733a2f2f7374796c65642d636f6d706f6e656e74732e636f6d2f6c6f676f2e706e67" alt="styled components" width="80"> | <img src="https://camo.githubusercontent.com/e7eb6839f0d42fffcd7435133609f4fe6a2cad787439321d809c273d66ac4c77/68747470733a2f2f74656368737461636b2d67656e657261746f722e76657263656c2e6170702f65736c696e742d69636f6e2e737667" alt="esLint" width="80"> | <img src="https://camo.githubusercontent.com/82935f72bd8f7a84991ceeb91cba325f0ae3b00f7fb2af42da60a81d3ff631b4/68747470733a2f2f74656368737461636b2d67656e657261746f722e76657263656c2e6170702f70726574746965722d69636f6e2e737667" alt="Prettier" width="80"> |
 
+| JSVA | JPA | Spring<br>Framework | SpringBoot | Mysql | Gradle | IntelliJ<br>IDEA | JWT | Spring<br>Security |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| <img src="https://static.vecteezy.com/system/resources/previews/019/899/953/non_2x/java-free-download-free-png.png" alt="JAVA" width="100"> | <img src="" alt="" width=""> | <img src="" alt="" width=""> | <img src="" alt="" width=""> | <img src="" alt="" width=""> | <img src="" alt="" width=""> | <img src="" alt="" width=""> | <img src="" alt="" width=""> | <img src="" alt="" width=""> |
+
+
+
 # 5. 구현기능
 
 

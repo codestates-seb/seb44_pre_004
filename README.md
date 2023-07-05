@@ -12,7 +12,7 @@
 |:--------:| :--------: | :--------: | :--------: |
 | <img src="https://github.com/hdwmumu/my-agora-states-practice/assets/121214030/44f73187-9a34-49e3-a0d3-7cd74b18bd44" alt="이기쁨" width="120" height="120">| <img src="https://github.com/codestates-seb/seb44_pre_004/assets/121214030/374ac993-2902-4d88-9ebd-04721cd365aa" alt="김리나" width="155" height="155"> | <img src="https://github.com/codestates-seb/seb44_pre_004/assets/121214030/47bb5c53-fe02-4ce1-b49c-992b88f24ec7" alt="백도담" width="130" height="130"> | <img src="https://github.com/codestates-seb/seb44_pre_004/assets/121214030/58d4df99-2ca8-4c0f-a7b4-68734803746f" alt="이명규" width="130" height="130"> | 
 |[@gibbeunLee](https://github.com/gibbeunLee) | [@LinaKK](https://github.com/LinaKK) | [@BAEKDODAM](https://github.com/BAEKDODAM) | [@myungkyulee](https://github.com/myungkyulee) | 
-| <p align="left">- <br/>- <br/>- <br/>- <br/> | <p align="left">- JWT 자격 증명 <br/>- 회원 가임 <br/>- <br/>- <br/> | <p align="left">- 회원 정보 조회 <br/>- 회원 정보 수정 <br/>- 로그인(JWT) <br/> | <p align="left">- <br/>- <br/>- <br/>- <br/> | 
+| <p align="left">- answer CRUD  <br/>- Like <br/>- <br/>- <br/> | <p align="left">- JWT 자격 증명 <br/>- 회원 가임 <br/>- <br/>- <br/> | <p align="left">- 회원 정보 조회 <br/>- 회원 정보 수정 <br/>- 로그인(JWT) <br/> | <p align="left">- <br/>- <br/>- <br/>- <br/> | 
 
 
 ### Front-end
